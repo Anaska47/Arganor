@@ -17,6 +17,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Arganor | Luxury Organic Beauty",
   description: "Experience the purest organic argan oil and luxury beauty products.",
+  verification: {
+    google: "wnL49Tuf54VQIr6HH6XVw5pLTpq9O8rs8da7eEf401g",
+  },
 };
 
 export default function RootLayout({
