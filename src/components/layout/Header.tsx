@@ -8,8 +8,14 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="header">
-      <div className="container header-container">
+    <>
+      {/* Premium Announcement Bar */}
+      <div className="top-bar">
+        <p>✨ Livraison Premium Gratuite Worldwide | 100% Huile d&apos;Argan Bio certifiée ✨</p>
+      </div>
+      
+      <header className={`header ${isMenuOpen ? "menu-open" : ""}`}>
+        <div className="container header-container">
         <div className="mobile-menu-btn" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </div>
@@ -34,6 +40,7 @@ export default function Header() {
           </button>
         </div>
       </div>
-    </header>
+      </header>
+    </>
   );
 }

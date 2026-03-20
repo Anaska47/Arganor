@@ -2,9 +2,8 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getBlogPostBySlug, getBlogPosts } from "@/lib/blog";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
-import { Calendar, User, ArrowLeft } from "lucide-react";
+import { Calendar, User, ArrowLeft, Star } from "lucide-react";
 import { getProductById } from "@/lib/data";
 import { getAffiliateLink } from "@/lib/affiliate";
 
@@ -43,7 +42,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
     if (!post) notFound();
 
-    const relatedProduct = post.relatedProductId ? getProductById(post.relatedProductId) : null;
+    // Try finding the related product, if not found (e.g. new DB), fallback to the absolute #1 best-seller
+    let relatedProduct = post.relatedProductId ? getProductById(post.relatedProductId) : null;
+    if (!relatedProduct) {
+        const allProducts = getProductById("real-1000") ? [getProductById("real-1000")] : [];
+        const fallbackProducts = require("@/lib/data").getProducts();
+        relatedProduct = fallbackProducts.length > 0 ? fallbackProducts[0] : null;
+    }
 
     const jsonLd = {
         "@context": "https://schema.org",
@@ -79,43 +84,46 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     </div>
 
                     <div className="post-hero-image">
-                        <div className="container">
-                            <div className="hero-img-wrapper">
-                                <Image
+                        <div className="container" style={{maxWidth: '900px'}}>
+                            <div className="hero-img-wrapper" style={{ position: 'relative', width: '100%', height: '500px', borderRadius: '12px', overflow: 'hidden', marginTop: '20px' }}>
+                                <img
                                     src={post.image}
                                     alt={post.title}
-                                    fill
-                                    className="img"
-                                    sizes="100vw"
-                                    priority
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                 />
                             </div>
                         </div>
                     </div>
 
-                    <div className="container post-body-container">
-                        <div className="post-content">
-                            <p className="lead">{post.excerpt}</p>
-                            <div className="content-text" dangerouslySetInnerHTML={{
+                    <div className="container post-body-container" style={{maxWidth: '800px', margin: '0 auto', padding: '3rem 1rem'}}>
+                        <div className="post-content" style={{ fontSize: '1.15rem', lineHeight: '1.9', color: '#333' }}>
+                            <p className="lead" style={{ fontSize: '1.4rem', fontStyle: 'italic', fontWeight: '300', marginBottom: '2.5rem', borderLeft: '3px solid var(--color-gold)', paddingLeft: '1.5rem' }}>{post.excerpt}</p>
+                            
+                            <div className="content-text" style={{ marginBottom: '3rem' }} dangerouslySetInnerHTML={{
                                 __html: post.content
-                                    .replace(/^# (.*)/gm, '<h2>$1</h2>')
-                                    .replace(/^## (.*)/gm, '<h3>$1</h3>')
-                                    .replace(/^### (.*)/gm, '<h4>$1</h4>')
-                                    .replace(/- \*\*(.*?)\*\*:/g, '<strong>• $1:</strong>')
+                                    .replace(/^# (.*)/gm, '<h2 style="font-size: 2rem; margin-top: 2.5rem; margin-bottom: 1.5rem; color: var(--color-black);">$1</h2>')
+                                    .replace(/^## (.*)/gm, '<h3 style="font-size: 1.6rem; margin-top: 2rem; margin-bottom: 1rem;">$1</h3>')
+                                    .replace(/^### (.*)/gm, '<h4 style="font-size: 1.3rem; margin-top: 1.5rem; margin-bottom: 1rem;">$1</h4>')
+                                    .replace(/- \*\*(.*?)\*\*:/g, '<strong style="display:block; margin-top: 1rem; color: var(--color-gold-dark);">• $1:</strong>')
                                     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                                    .replace(/> "(.*?)"/g, '<blockquote>"$1"</blockquote>')
+                                    .replace(/> "(.*?)"/g, '<blockquote style="font-size: 1.3rem; margin: 2rem 0; padding: 1.5rem; background: var(--color-light-grey); border-left: 4px solid var(--color-gold); font-style: italic;">"$1"</blockquote>')
                                     .replace(/\n\n/g, '<br /><br />')
                             }} />
 
-                            {/* Affiliate Block */}
+                            {/* Prominent Affiliate Block */}
                             {relatedProduct && (
-                                <div className="affiliate-box">
-                                    <h4>Recommended for this Routine</h4>
-                                    <p>Experience the pure benefits mentioned in this article.</p>
-                                    <h3 style={{ marginBottom: "1rem" }}>{relatedProduct.name}</h3>
-                                    <a href={getAffiliateLink(relatedProduct, 'fr')} className="btn btn-primary" target="_blank" rel="noopener noreferrer">
-                                        Voir le produit sur Amazon
+                                <div className="affiliate-box" style={{ background: 'var(--color-cream)', padding: '2.5rem', borderRadius: '12px', border: '1px solid #E8D2A6', textAlign: 'center', margin: '4rem 0' }}>
+                                    <span style={{ textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '2px', color: 'var(--color-gold-dark)' }}>Le produit recommandé dans cet article</span>
+                                    <h3 style={{ fontSize: '1.8rem', margin: '1rem 0', fontFamily: 'var(--font-heading)' }}>{relatedProduct.name}</h3>
+                                    
+                                    <div style={{ display: 'flex', justifyContent: 'center', gap: '5px', color: 'var(--color-gold)', marginBottom: '1.5rem' }}>
+                                        <Star size={20} fill="var(--color-gold)" /><Star size={20} fill="var(--color-gold)" /><Star size={20} fill="var(--color-gold)" /><Star size={20} fill="var(--color-gold)" /><Star size={20} fill="var(--color-gold)" />
+                                    </div>
+                                    
+                                    <a href={getAffiliateLink(relatedProduct, 'fr')} className="btn btn-primary" style={{ padding: '1.2rem 3rem', fontSize: '1.1rem', backgroundColor: '#FF9900', color: 'black', width: '100%', maxWidth: '400px' }} target="_blank" rel="noopener noreferrer">
+                                        🛒 Commander sur Amazon 
                                     </a>
+                                    <p style={{ fontSize: '0.85rem', color: '#666', marginTop: '1rem' }}>Livraison Premium gratuite et retour garanti.</p>
                                 </div>
                             )}
                         </div>

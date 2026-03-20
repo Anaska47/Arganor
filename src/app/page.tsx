@@ -13,12 +13,12 @@ export default function Home() {
       <Header />
       <main>
         {/* Hero Section */}
-        <section className="hero">
+        <section className="hero reveal">
           <div className="container hero-content">
-            <span className="hero-subtitle">L&apos;Héritage de l&apos;Atlas</span>
-            <h1>L&apos;Arganor : L&apos;Élixir de Jeunesse Éternelle</h1>
-            <p>Découvrez la puissance transformatrice de l&apos;or liquide du Maroc. Bio, durable et d&apos;un luxe absolu pour votre peau et vos cheveux.</p>
-            <div className="hero-cta">
+            <span className="hero-subtitle reveal-delay-1">L&apos;Héritage de l&apos;Atlas</span>
+            <h1 className="reveal-delay-2">L&apos;Arganor : L&apos;Élixir de Jeunesse Éternelle</h1>
+            <p className="reveal-delay-3">Découvrez la puissance transformatrice de l&apos;or liquide du Maroc. Bio, durable et d&apos;un luxe absolu pour votre peau et vos cheveux.</p>
+            <div className="hero-cta reveal-delay-3">
               <Link href="/products" className="btn btn-primary">Explorer la Collection</Link>
               <Link href="/blog" className="btn btn-outline">Notre Histoire</Link>
             </div>
@@ -65,7 +65,7 @@ export default function Home() {
         </section>
 
         {/* Brand Values */}
-        <section className="section values-section">
+        <section className="section values-section reveal">
           <div className="container values-grid">
             <div className="value-item">
               <div className="value-icon"><Star size={24} /></div>
@@ -81,6 +81,30 @@ export default function Home() {
               <div className="value-icon"><ShieldCheck size={24} /></div>
               <h3>Qualité Supérieure</h3>
               <p>Extraction à froid pour préserver chaque molécule active.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Testimonials */}
+        <section className="testimonials reveal">
+          <div className="container">
+            <h2>L&apos;Excellence Prouvée</h2>
+            <div className="testimonials-grid">
+              <div className="testim-card">
+                <div className="stars">★★★★★</div>
+                <p>&quot;Cette huile a complètement transformé la texture de ma peau. Le packaging respire le luxe et l&apos;efficacité est au rendez-vous. Impératif.&quot;</p>
+                <div className="testim-author">— Claire V.</div>
+              </div>
+              <div className="testim-card">
+                <div className="stars">★★★★★</div>
+                <p>&quot;J&apos;ai jeté toutes mes autres crèmes. L&apos;application est un pur moment de bonheur végétal. Mes cheveux n&apos;ont jamais été aussi vigoureux.&quot;</p>
+                <div className="testim-author">— Sarah M.</div>
+              </div>
+              <div className="testim-card">
+                <div className="stars">★★★★★</div>
+                <p>&quot;Un standard de qualité époustouflant. La pureté se ressent dès la première goutte. Livraison impeccable via Amazon.&quot;</p>
+                <div className="testim-author">— Sophie L.</div>
+              </div>
             </div>
           </div>
         </section>

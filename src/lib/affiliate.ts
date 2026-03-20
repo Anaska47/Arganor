@@ -13,18 +13,17 @@ export const getAffiliateLink = (product: Product, region: 'fr' | 'us' = 'fr'): 
     const tag = region === 'fr' ? FR_TAG : US_TAG;
     const domain = region === 'fr' ? 'amazon.fr' : 'amazon.com';
 
-    // 1. Direct ASIN Link (Priority)
-    // Ensure ASIN is valid (basic check: 10 chars)
-    if (product.asin && product.asin.length === 10) {
-        return `https://www.${domain}/dp/${product.asin}?tag=${tag}`;
-    }
+    // SOLUTION ANTI-404: 
+    // On ignore volontairement les anciens ASINs aléatoires qui causent des erreurs.
+    // On force la recherche directe du nom du produit sur Amazon. 
+    // Cela garantit que la page Amazon s'ouvrira TOUJOURS avec les bons résultats + votre tag d'affiliation.
+    
+    // Clean search name for better results on Amazon
+    let cleanName = product.name;
+    // Remove volume/weight strings like "250ml", "100ml", "50ml" for broader matches just in case
+    cleanName = cleanName.replace(/\b\d+(ml|g|oz)\b/ig, '').trim();
 
-    // 2. Fallback to Search Link
-    // Use existing link if present (from generator), otherwise generate fresh search link
-    // The generator fills `affiliateLinks`, so we can default to that, or force search logic here.
-    // To be safe and consistent, we regenerate the search link if ASIN is missing.
-
-    const searchName = encodeURIComponent(product.name);
+    const searchName = encodeURIComponent(cleanName);
     return `https://www.${domain}/s?k=${searchName}&tag=${tag}`;
 };
 

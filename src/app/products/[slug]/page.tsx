@@ -4,7 +4,7 @@ import { getProductBySlug, getProducts } from "@/lib/data";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Star, Check, Truck, ShieldCheck } from "lucide-react";
+import { Star, Check, Truck, ShieldCheck, Clock, Award, Shield } from "lucide-react";
 import ProductCard from "@/components/ui/ProductCard";
 import { getAffiliateLink } from "@/lib/affiliate";
 
@@ -99,15 +99,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     <div className="product-layout">
                         {/* Image Section */}
                         <div className="product-gallery">
+                            {/* Product Image Clickable to Amazon */}
                             <div className="main-image">
-                                <Image
-                                    src={product.image}
-                                    alt={product.name}
-                                    fill
-                                    className="img"
-                                    sizes="(max-width: 768px) 100vw, 50vw"
-                                    priority
-                                />
+                                <a href={getAffiliateLink(product, 'fr')} target="_blank" rel="noopener noreferrer" style={{ display: 'block', width: '100%', height: '100%' }}>
+                                    <img
+                                        src={product.image}
+                                        alt={product.name}
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px', cursor: 'pointer' }}
+                                    />
+                                </a>
                             </div>
                         </div>
 
@@ -137,12 +137,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
                             </div>
 
                             <div className="features-list">
-                                <h3>Key Features</h3>
+                                <h3>Avantages Clés</h3>
                                 <ul>
                                     {product.features.map((feature, index) => (
                                         <li key={index}><Check size={16} color="var(--color-gold)" /> {feature}</li>
                                     ))}
                                 </ul>
+                            </div>
+
+                            <div className="scarcity-alert">
+                                <Clock size={20} />
+                                <span><strong>Forte Demande :</strong> Plus que quelques articles disponibles. Commandez vite avant rupture de stock !</span>
                             </div>
 
                             <div className="actions">
@@ -156,14 +161,22 @@ export default async function ProductPage({ params }: ProductPageProps) {
                                 </div>
                             </div>
 
-                            <div className="guarantees">
-                                <div className="guarantee-item">
-                                    <Truck size={20} />
-                                    <span>Fast Delivery</span>
+                            <div className="trust-badges">
+                                <div className="trust-badge-item">
+                                    <Truck size={22} color="var(--color-gold-dark)" />
+                                    <span>Livraison Gratuite & Rapide</span>
                                 </div>
-                                <div className="guarantee-item">
-                                    <ShieldCheck size={20} />
-                                    <span>Authenticity Guaranteed</span>
+                                <div className="trust-badge-item">
+                                    <Shield size={22} color="var(--color-gold-dark)" />
+                                    <span>Paiement 100% Sécurisé</span>
+                                </div>
+                                <div className="trust-badge-item">
+                                    <Award size={22} color="var(--color-gold-dark)" />
+                                    <span>Label de Qualité Bio</span>
+                                </div>
+                                <div className="trust-badge-item">
+                                    <ShieldCheck size={22} color="var(--color-gold-dark)" />
+                                    <span>Garantie Satisfait ou Remboursé</span>
                                 </div>
                             </div>
                         </div>

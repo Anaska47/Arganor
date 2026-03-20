@@ -2,7 +2,6 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getBlogPosts } from "@/lib/blog";
 import Link from "next/link";
-import Image from "next/image";
 import { Calendar, User, ArrowRight } from "lucide-react";
 
 export const metadata = {
@@ -11,15 +10,28 @@ export const metadata = {
     keywords: ["beauté bio", "huile d'argan", "soins naturels", "routine beauté", "arganor"],
 };
 
-export default function BlogPage() {
-    const posts = getBlogPosts();
+interface BlogPageProps {
+    searchParams: Promise<{ category?: string }>;
+}
+
+export default async function BlogPage({ searchParams }: BlogPageProps) {
+    const params = await searchParams;
+    const activeCategory = params.category || "All";
+    const allPosts = getBlogPosts();
 
     // Simple category extraction
-    const categories = ["All", ...Array.from(new Set(posts.map(p => p.category)))];
+    const categories = ["All", ...Array.from(new Set(allPosts.map(p => p.category)))];
 
-    // First post is featured
-    const featuredPost = posts[0];
-    const regularPosts = posts.slice(1);
+    // Filter posts
+    let displayPosts = allPosts;
+    if (activeCategory !== "All") {
+        displayPosts = allPosts.filter(p => p.category === activeCategory);
+    }
+
+    // First post is featured (only when showing All)
+    const showingAll = activeCategory === "All";
+    const featuredPost = showingAll && displayPosts.length > 0 ? displayPosts[0] : null;
+    const regularPosts = showingAll ? displayPosts.slice(1) : displayPosts;
 
     return (
         <>
@@ -38,13 +50,10 @@ export default function BlogPage() {
                         <div className="container">
                             <div className="featured-post" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', alignItems: 'center', background: 'var(--color-cream)', borderRadius: '8px', overflow: 'hidden' }}>
                                 <div className="featured-image" style={{ position: 'relative', aspectRatio: '4/3', width: '100%', height: '100%' }}>
-                                    <Image
+                                    <img
                                         src={featuredPost.image}
                                         alt={featuredPost.title}
-                                        fill
-                                        style={{ objectFit: 'cover' }}
-                                        sizes="(max-width: 768px) 100vw, 50vw"
-                                        priority
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                     />
                                 </div>
                                 <div className="featured-content" style={{ padding: '2rem 3rem 2rem 0' }}>
@@ -69,24 +78,27 @@ export default function BlogPage() {
                 <section className="section" style={{ paddingTop: '2rem' }}>
                     <div className="container">
                         <div className="category-filters" style={{ display: 'flex', gap: '1rem', marginBottom: '3rem', overflowX: 'auto', paddingBottom: '10px' }}>
-                            {categories.map((cat, idx) => (
-                                <button key={idx} className={`btn-outline ${idx === 0 ? 'active' : ''}`} style={{ padding: '8px 20px', borderRadius: '30px', whiteSpace: 'nowrap', border: idx === 0 ? '1px solid var(--color-gold)' : '1px solid var(--color-grey)', background: idx === 0 ? 'var(--color-gold)' : 'transparent', color: idx === 0 ? 'white' : 'var(--color-black)' }}>
+                            {categories.map((cat, idx) => {
+                                const isActive = cat === activeCategory;
+                                const linkHref = cat === 'All' ? '/blog' : `/blog?category=${encodeURIComponent(cat)}`;
+                                return (
+                                <Link key={idx} href={linkHref} className={`btn-outline ${isActive ? 'active' : ''}`} style={{ padding: '8px 20px', borderRadius: '30px', whiteSpace: 'nowrap', border: isActive ? '1px solid var(--color-gold)' : '1px solid var(--color-grey)', background: isActive ? 'var(--color-gold)' : 'transparent', color: isActive ? 'white' : 'var(--color-black)' }}>
                                     {cat}
-                                </button>
-                            ))}
+                                </Link>
+                                );
+                            })}
                         </div>
 
                         <div className="blog-grid">
                             {regularPosts.map((post) => (
                                 <article key={post.id} className="blog-card" style={{ border: '1px solid var(--color-light-grey)', borderRadius: '8px', overflow: 'hidden' }}>
                                     <div className="blog-image-container">
-                                        <Link href={`/blog/${post.slug}`}>
-                                            <Image
+                                        <Link href={`/blog/${post.slug}`} style={{ display: 'block', width: '100%', height: '100%' }}>
+                                            <img
                                                 src={post.image}
                                                 alt={post.title}
-                                                fill
-                                                className="blog-image"
-                                                sizes="(max-width: 768px) 100vw, 33vw"
+                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                loading="lazy"
                                             />
                                         </Link>
                                         <span className="blog-category">{post.category}</span>
