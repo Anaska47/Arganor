@@ -3,7 +3,7 @@ import { getProducts } from '@/lib/data';
 import { getBlogPosts } from '@/lib/blog';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://arganor.com'; // Change this to your actual production URL
+    const baseUrl = 'https://arganor.vercel.app'; // URL de production exacte
 
     // Get all products
     const products = getProducts();
@@ -37,7 +37,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '',
         '/products',
         '/blog',
-        '/about',
     ].map((route) => ({
         url: `${baseUrl}${route}`,
         lastModified: new Date(),
