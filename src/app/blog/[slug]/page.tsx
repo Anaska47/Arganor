@@ -110,6 +110,25 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                                     .replace(/\n\n/g, '<br /><br />')
                             }} />
 
+                            {/* Pinterest Pin-It Block (Optimized for "Save from URL") */}
+                            {(post as any).pinterestImage && (
+                                <div className="pinterest-share-box" style={{ background: '#FFF5F5', padding: '2rem', borderRadius: '12px', border: '1px solid #FFDFDF', textAlign: 'center', margin: '3rem 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <h3 style={{ fontSize: '1.4rem', color: '#E60023', marginBottom: '1rem', fontFamily: 'var(--font-playfair)' }}>
+                                        📌 Épinglez pour lire plus tard !
+                                    </h3>
+                                    <p style={{ fontSize: '0.95rem', color: '#555', marginBottom: '1.5rem', maxWidth: '400px' }}>
+                                        Utilisez l'extension Pinterest ou la fonction "Créer depuis une URL" pour partager instantanément cette affiche avec votre communauté.
+                                    </p>
+                                    <div style={{ maxWidth: '300px', width: '100%', boxShadow: '0 10px 30px rgba(0,0,0,0.15)', borderRadius: '8px', overflow: 'hidden' }}>
+                                        <img 
+                                            src={(post as any).pinterestImage} 
+                                            alt={`Épingle Pinterest : ${post.title}`} 
+                                            style={{ width: '100%', height: 'auto', display: 'block' }}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Prominent Affiliate Block */}
                             {relatedProduct && (
                                 <div className="affiliate-box" style={{ background: 'var(--color-cream)', padding: '2.5rem', borderRadius: '12px', border: '1px solid #E8D2A6', textAlign: 'center', margin: '4rem 0' }}>

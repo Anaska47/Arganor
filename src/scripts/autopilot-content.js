@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
 const fs = require('fs');
+const path = require('path');
+const { generatePinterestImage } = require('./pinterest-image-gen.js');
 const path = require('path');
 
 const PRODUCTS_FILE = path.join(__dirname, '../data/products.json');
@@ -68,6 +69,11 @@ async function runAutopilot() {
 
     // Générer le post
     const newPost = generateSEOArticleForProduct(randomProduct);
+
+    // NOUVEAU : Auto-générer l'affiche Pinterest verticale
+    const pinPath = await generatePinterestImage(newPost.slug, newPost.image, newPost.title);
+    if (pinPath) newPost.pinterestImage = pinPath;
+
     posts.unshift(newPost); // Ajouter au début
 
     // Sauvegarder
