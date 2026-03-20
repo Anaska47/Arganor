@@ -87,7 +87,7 @@ async function generatePinterestImage(postSlug, productImageUrl, title) {
 if (require.main === module) {
     generatePinterestImage(
         'test-viral-arganor', 
-        'https://images.unsplash.com/photo-1542452255-1f5462c4b868?q=80&w=2070&auto=format&fit=crop', 
+        'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1887&auto=format&fit=crop', 
         "Les 5 Raisons Chocs D'Adopter L'Or Liquide Arganor"
     );
 }
