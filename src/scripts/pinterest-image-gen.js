@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
-const Jimp = require('jimp');
+const { Jimp, loadFont, HorizontalAlign, VerticalAlign } = require('jimp');
 const fs = require('fs');
 const path = require('path');
 
@@ -21,8 +20,8 @@ async function generatePinterestImage(postSlug, productImageUrl, title) {
         const width = 1000;
         const height = 1500;
         
-        // 1. Fond noir profond luxueux
-        const image = new Jimp(width, height, '#0F0F0F');
+        // 1. Fond noir profond luxueux (Style Jimp v1)
+        const image = new Jimp({ width, height, color: 0x0F0F0FFF });
         
         // 2. Récupérer l'image produit (ou une image par défaut si echec)
         let productImg;
@@ -35,44 +34,45 @@ async function generatePinterestImage(postSlug, productImageUrl, title) {
         }
         
         // Couvrir la partie haute de l'affiche (1000x1000px)
-        productImg.cover(1000, 1000);
+        productImg.cover({ w: 1000, h: 1000 });
         image.composite(productImg, 0, 0);
 
         // 3. Ajouter la typographie (texte d'accroche)
-        // Utilisation de la police intégrée BOLD et BLANCHE
-        const font = await Jimp.loadFont(Jimp.FONT_SANS_64_WHITE);
-        const fontSmall = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE);
+        // Utilisation des polices Jimp v1
+        const { SANS_64_WHITE, SANS_32_WHITE } = require('jimp/fonts');
+        const font = await loadFont(SANS_64_WHITE);
+        const fontSmall = await loadFont(SANS_32_WHITE);
         
         // Titre - Centré dans la zone noire du bas (Y=1050)
-        image.print(
+        image.print({
             font, 
-            0, 
-            1050, 
-            {
+            x: 0, 
+            y: 1050, 
+            text: {
                 text: title.toUpperCase(),
-                alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
-                alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE
+                alignmentX: HorizontalAlign.CENTER,
+                alignmentY: VerticalAlign.MIDDLE
             },
-            width,
-            300
-        );
+            maxWidth: width,
+            maxHeight: 300
+        });
 
         // Sous-titre Call-to-action
-        image.print(
-            fontSmall,
-            0,
-            1380,
-            {
+        image.print({
+            font: fontSmall,
+            x: 0,
+            y: 1380,
+            text: {
                 text: "✨ CLIQUER POUR DÉCOUVRIR LE SECRET ✨",
-                alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
-                alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE
+                alignmentX: HorizontalAlign.CENTER,
+                alignmentY: VerticalAlign.MIDDLE
             },
-            width
-        );
+            maxWidth: width
+        });
 
         // Sauvegarder dans /public/pins
         const finalPath = path.join(OUTPUT_DIR, `${postSlug}.jpg`);
-        await image.writeAsync(finalPath);
+        await image.write(finalPath);
         
         console.log(`✅ Image Virale Pinterest générée avec succès : /pins/${postSlug}.jpg`);
         return `/pins/${postSlug}.jpg`;
