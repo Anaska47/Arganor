@@ -132,8 +132,8 @@ export default function AdminDashboardClient() {
                 <div className="activity-panel">
                     <h2 className="panel-title">📋 Flux d'activité en direct</h2>
                     <div className="activity-list">
-                        {activities.map((act) => (
-                            <div key={act.id} className="activity-item-new">
+                        {activities.map((act, i) => (
+                            <div key={i} className="activity-item-new">
                                 <div className={`activity-dot ${act.status}`}></div>
                                 <div className="activity-content">
                                     <p className="activity-text">{act.text}</p>

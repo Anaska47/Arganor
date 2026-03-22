@@ -272,8 +272,8 @@ export default function AdminPinterestClient() {
                                 onClick={() => publishOne(selectedPin)}
                             >
                                 {publishing === selectedPin.productId
-                                    ? <><span className="pin-mini-spinner"></span> Envoi...</>
-                                    : <><Send size={14} /> Envoyer à Make.com</>}
+                                    ? <span><span className="pin-mini-spinner"></span> Envoi...</span>
+                                    : <span><Send size={14} /> Envoyer à Make.com</span>}
                             </button>
                         </div>
 
