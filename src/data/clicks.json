@@ -1,0 +1,14 @@
+{
+  "totalClicks": 1,
+  "productClicks": {
+    "real-1002": 1
+  },
+  "recentClicks": [
+    {
+      "productId": "real-1002",
+      "productName": "Pranarôm - Huile de Jojoba Bio 100ml",
+      "source": "test-system",
+      "time": "2026-03-22T02:27:18.649Z"
+    }
+  ]
+}

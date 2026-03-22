@@ -101,7 +101,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                         <div className="product-gallery">
                             {/* Product Image Clickable to Amazon */}
                             <div className="main-image">
-                                <a href={getAffiliateLink(product, 'fr')} target="_blank" rel="noopener noreferrer" style={{ display: 'block', width: '100%', height: '100%' }}>
+                                <a href={`/api/track?id=${product.id}&s=product-image`} target="_blank" rel="noopener noreferrer" style={{ display: 'block', width: '100%', height: '100%' }}>
                                     <img
                                         src={product.image}
                                         alt={product.name}
@@ -150,12 +150,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
                                 <span><strong>Forte Demande :</strong> Plus que quelques articles disponibles. Commandez vite avant rupture de stock !</span>
                             </div>
 
-                            <div className="actions">
-                                <a href={getAffiliateLink(product, 'us')} className="btn btn-primary buy-btn" target="_blank" rel="noopener noreferrer">
+                             <div className="actions">
+                                <a href={`/api/track?id=${product.id}&s=buy-us`} className="btn btn-primary buy-btn" target="_blank" rel="noopener noreferrer">
                                     Buy on Amazon US
                                 </a>
                                 <div style={{ marginTop: '10px' }}>
-                                    <a href={getAffiliateLink(product, 'fr')} className="btn btn-outline buy-btn" target="_blank" rel="noopener noreferrer">
+                                    <a href={`/api/track?id=${product.id}&s=buy-fr`} className="btn btn-outline buy-btn" target="_blank" rel="noopener noreferrer">
                                         Acheter sur Amazon FR
                                     </a>
                                 </div>
@@ -214,12 +214,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 )}
 
                 {/* Mobile Sticky Action Bar */}
-                <div className="mobile-sticky-buy">
+                 <div className="mobile-sticky-buy">
                     <div className="price-info">
                         <span className="price">${product.price.toFixed(2)}</span>
                         <span className="rating-text">★ {product.rating}</span>
                     </div>
-                    <a href={getAffiliateLink(product, 'fr')} className="btn btn-primary buy-btn" target="_blank" rel="noopener noreferrer">
+                    <a href={`/api/track?id=${product.id}&s=mobile-sticky`} className="btn btn-primary buy-btn" target="_blank" rel="noopener noreferrer">
                         Acheter 
                     </a>
                 </div>
