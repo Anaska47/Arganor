@@ -10,47 +10,46 @@ export default function Footer() {
         <div className="footer-brand">
           <h3 className="footer-logo">ARGANOR</h3>
           <p className="footer-desc">
-            Discover the liquid gold of Morocco. Premium organic argan oil and luxury beauty products for timeless skin.
+            Découvrez l'or liquide du Maroc. Huile d'argan bio premium et soins de beauté de luxe pour une peau intemporelle.
           </p>
           <div className="footer-contact-info" style={{ marginTop: '1rem', fontSize: '0.9rem', color: 'var(--color-dark-muted)' }}>
-            <p><strong>Contact Us:</strong></p>
+            <p><strong>Nous Contacter :</strong></p>
             <p>📧 purorganicoil@gmail.com</p>
-            <p>📱 +33 1 23 45 67 89</p>
-            <p>📍 15 Avenue des Champs-Élysées, 75008 Paris, France</p>
-            <p>Available Mon-Fri, 9AM-6PM (CET)</p>
+            <p>📱 06 19 92 69 23</p>
+            <p>📍 100 av du 11 novembre 1918, 83170 Brignoles</p>
+            <p>Disponible Lun-Ven, 9h-18h</p>
           </div>
         </div>
 
 
         <div className="footer-links">
-          <h4>Shop</h4>
-          <Link href="/products">All Products</Link>
-          <Link href="/category/face">Face Care</Link>
-          <Link href="/category/hair">Hair Care</Link>
-          <Link href="/category/body">Body Care</Link>
+          <h4>Boutique</h4>
+          <Link href="/products">Tous les Produits</Link>
+          <Link href="/category/face">Soins du Visage</Link>
+          <Link href="/category/hair">Soins des Cheveux</Link>
+          <Link href="/category/body">Soins du Corps</Link>
         </div>
 
         <div className="footer-links">
-          <h4>Company</h4>
-          <Link href="/blog">Journal</Link>
-          <Link href="/contact">Contact Us</Link>
-          <Link href="/about">About Arganor</Link>
+          <h4>Entreprise</h4>
+          <Link href="/blog">Le Journal</Link>
+          <Link href="/contact">Nous Contacter</Link>
+          <Link href="/about">À propos d'Arganor</Link>
         </div>
 
         <div className="footer-links">
-          <h4>Legal</h4>
-          <Link href="/legal/terms">Terms of Service</Link>
-          <Link href="/legal/privacy">Privacy Policy</Link>
-          <Link href="/legal/shipping">Shipping Policy</Link>
-          <Link href="/legal/refund">Return & Refund Policy</Link>
+          <h4>Légal</h4>
+          <Link href="/legal/terms">Conditions d'Utilisation</Link>
+          <Link href="/legal/privacy">Confidentialité</Link>
+          <Link href="/legal/shipping">Politique d'Expédition</Link>
+          <Link href="/legal/refund">Retours & Remboursements</Link>
         </div>
-
 
         <div className="footer-newsletter">
-          <h4>Stay Connected</h4>
-          <p>Join our newsletter for exclusive offers and beauty tips.</p>
+          <h4>Restons Connectés</h4>
+          <p>Rejoignez notre newsletter pour des offres exclusives et astuces beauté.</p>
           <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
-            <input type="email" placeholder="Your email address" />
+            <input type="email" placeholder="Votre adresse e-mail" />
             <button type="submit" aria-label="Subscribe">
               <Send size={18} />
             </button>
@@ -66,7 +65,7 @@ export default function Footer() {
 
       <div className="footer-bottom">
         <div className="container">
-          <p>&copy; {new Date().getFullYear()} Arganor. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Arganor. Tous droits réservés.</p>
         </div>
       </div>
 
