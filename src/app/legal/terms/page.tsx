@@ -36,7 +36,7 @@ export default function TermsPage() {
 
         <section style={{ marginTop: "2rem" }}>
           <h2>5. Contact Information</h2>
-          <p>Questions about the Terms of Service should be sent to us at contact@arganor.com.</p>
+          <p>Questions about the Terms of Service should be sent to us at purorganicoil@gmail.com.</p>
         </section>
       </main>
       <Footer />

@@ -37,13 +37,13 @@ export default function RefundPage() {
         <section style={{ marginTop: "2rem" }}>
           <h2>3. Damaged or Defective Items</h2>
           <p>
-            If your direct order arrives damaged, please contact us within 48 hours with photographic evidence at <strong>contact@arganor.com</strong>, and we will issue a replacement at no extra cost.
+            If your direct order arrives damaged, please contact us within 48 hours with photographic evidence at <strong>purorganicoil@gmail.com</strong>, and we will issue a replacement at no extra cost.
           </p>
         </section>
 
         <section style={{ marginTop: "2rem" }}>
           <h2>4. Contact Us</h2>
-          <p>If you have any questions about our Returns and Refunds Policy, please contact us: contact@arganor.com.</p>
+          <p>If you have any questions about our Returns and Refunds Policy, please contact us: purorganicoil@gmail.com.</p>
         </section>
       </main>
       <Footer />

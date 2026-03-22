@@ -43,7 +43,7 @@ export default function ShippingPage() {
 
         <section style={{ marginTop: "2rem" }}>
           <h2>4. Contact Us</h2>
-          <p>If you have questions regarding a direct shipment from Arganor, contact us at contact@arganor.com. For questions regarding an Amazon shipment, please check your Amazon Orders page.</p>
+          <p>If you have questions regarding a direct shipment from Arganor, contact us at purorganicoil@gmail.com. For questions regarding an Amazon shipment, please check your Amazon Orders page.</p>
         </section>
 
       </main>

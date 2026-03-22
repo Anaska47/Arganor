@@ -43,7 +43,7 @@ export default function PrivacyPage() {
 
         <section style={{ marginTop: "2rem" }}>
           <h2>5. Contact Us</h2>
-          <p>If you have any questions about this Privacy Policy, please contact us: contact@arganor.com.</p>
+          <p>If you have any questions about this Privacy Policy, please contact us: purorganicoil@gmail.com.</p>
         </section>
 
       </main>

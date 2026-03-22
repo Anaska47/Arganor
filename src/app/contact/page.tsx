@@ -16,7 +16,7 @@ export default function ContactPage() {
         <div style={{ display: "grid", gap: "2rem", marginBottom: "3rem" }}>
           <div style={{ padding: "2rem", background: "#fdf8f0", borderRadius: "8px" }}>
             <h2 style={{ marginBottom: "1rem" }}>Our Information</h2>
-            <p><strong>Email:</strong> contact@arganor.com</p>
+            <p><strong>Email:</strong> purorganicoil@gmail.com</p>
             <p><strong>Phone:</strong> +33 1 23 45 67 89</p>
             <p><strong>Address:</strong> 15 Avenue des Champs-Élysées, 75008 Paris, France</p>
             <p><strong>Support Hours:</strong> Monday to Friday, 9:00 AM - 6:00 PM (CET)</p>

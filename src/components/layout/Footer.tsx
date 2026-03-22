@@ -14,7 +14,7 @@ export default function Footer() {
           </p>
           <div className="footer-contact-info" style={{ marginTop: '1rem', fontSize: '0.9rem', color: 'var(--color-dark-muted)' }}>
             <p><strong>Contact Us:</strong></p>
-            <p>📧 contact@arganor.com</p>
+            <p>📧 purorganicoil@gmail.com</p>
             <p>📱 +33 1 23 45 67 89</p>
             <p>📍 15 Avenue des Champs-Élysées, 75008 Paris, France</p>
             <p>Available Mon-Fri, 9AM-6PM (CET)</p>
