@@ -55,8 +55,8 @@ export default function Footer() {
             </button>
           </form>
           <div className="social-icons">
-            <a href="https://instagram.com/arganor" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><Instagram size={20} /></a>
-            <a href="https://facebook.com/arganor" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><Facebook size={20} /></a>
+            <a href="https://www.instagram.com/1arganor" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><Instagram size={20} /></a>
+            <a href="https://www.facebook.com/Purorganicoil" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><Facebook size={20} /></a>
             <a href="https://pinterest.com/arganor" target="_blank" rel="noopener noreferrer" aria-label="Pinterest"><Twitter size={20} /></a>
           </div>
 
