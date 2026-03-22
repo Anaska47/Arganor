@@ -58,6 +58,15 @@ export default function AdminPinterestClient() {
         }
     }, []);
 
+    const [apiKey, setApiKey] = useState<string>("");
+
+    useEffect(() => {
+        // Fetch the API key safely from a server config endpoint
+        fetch('/api/admin/config').then(res => res.json()).then(data => {
+            if (data.apiKey) setApiKey(data.apiKey);
+        });
+    }, []);
+
     useEffect(() => {
         fetchPins();
         fetch("/api/products").then(r => r.json()).then(setProducts);
@@ -77,7 +86,10 @@ export default function AdminPinterestClient() {
         try {
             const res = await fetch(`/api/pinterest/publish?productId=${pin.productId}`, {
                 method: "POST",
-                headers: { "Authorization": "Bearer ZG58DirMq40KBzV7nFmkbI9CpSNvLooOYalyR2gJuTAjch3x1" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${apiKey}`
+                },
             });
             const data = await res.json();
             setPublishLog(prev => [{

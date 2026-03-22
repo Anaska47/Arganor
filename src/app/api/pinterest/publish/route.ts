@@ -50,7 +50,11 @@ export async function POST(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const productId = searchParams.get("productId");
     const batchSize = parseInt(searchParams.get("batch") || "0");
-    const baseUrl = `${req.headers.get("x-forwarded-proto") || "https"}://${req.headers.get("host")}`;
+    
+    // Force production URL for Pinterest (can't use localhost for public pins)
+    const baseUrl = process.env.VERCEL_URL 
+        ? `https://${process.env.VERCEL_URL}` 
+        : "https://arganor.vercel.app";
 
     // ── Single product publish ──────────────────────────────────
     if (productId) {
