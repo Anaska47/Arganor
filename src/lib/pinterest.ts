@@ -42,8 +42,11 @@ export function buildPinData(product: Product, baseUrl: string = "https://argano
 
     const hashtags = HASHTAGS_BY_CATEGORY[product.category] || DEFAULT_HASHTAGS;
 
+    // Using the real product image directly for Pinterest (avoiding font/svg build issues)
+    const productImg = product.image.startsWith("http") ? product.image : `${baseUrl}${product.image}`;
+
     return {
-        imageUrl: `${baseUrl}/api/pinterest/pin-image?productId=${product.id}`,
+        imageUrl: productImg,
         title,
         description,
         link: productUrl,
