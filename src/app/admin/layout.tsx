@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LayoutDashboard, Package, FileText, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, Package, FileText, Settings, LogOut, Pin } from "lucide-react";
 
 export const metadata = {
     title: "Admin Dashboard | Arganor",
@@ -24,6 +24,9 @@ export default function AdminLayout({
                     </Link>
                     <Link href="/admin/blog" className="admin-link">
                         <FileText size={20} /> Blog
+                    </Link>
+                    <Link href="/admin/pinterest" className="admin-link" style={{ color: '#e60023' }}>
+                        <Pin size={20} /> Pinterest 📌
                     </Link>
                     <Link href="/admin/settings" className="admin-link">
                         <Settings size={20} /> Settings

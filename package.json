@@ -10,12 +10,15 @@
     "autopilot": "node src/scripts/autopilot-content.js && node src/scripts/pinterest-bot.js"
   },
   "dependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "clsx": "^2.1.1",
     "jimp": "^1.6.0",
     "lucide-react": "^0.563.0",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "satori": "^0.26.0",
+    "sharp": "^0.34.5",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {

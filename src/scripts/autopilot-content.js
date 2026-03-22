@@ -42,7 +42,7 @@ function generateSEOArticleForProduct(product, otherProduct = null) {
 
     const style = styles[Math.floor(Math.random() * styles.length)];
     const title = style.titles[Math.floor(Math.random() * style.titles.length)];
-    const slug = title.toLowerCase().replace(/[^a-z0-9àâéèêëîïôûùç]+/g, '-').replace(/(^-|-$)/g, '');
+    const slug = title.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
     // Métadonnées SEO
     const metaTitle = `${title} | Arganor Beauté`;
