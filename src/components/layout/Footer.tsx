@@ -12,7 +12,15 @@ export default function Footer() {
           <p className="footer-desc">
             Discover the liquid gold of Morocco. Premium organic argan oil and luxury beauty products for timeless skin.
           </p>
+          <div className="footer-contact-info" style={{ marginTop: '1rem', fontSize: '0.9rem', color: 'var(--color-dark-muted)' }}>
+            <p><strong>Contact Us:</strong></p>
+            <p>📧 contact@arganor.com</p>
+            <p>📱 +33 1 23 45 67 89</p>
+            <p>📍 15 Avenue des Champs-Élysées, 75008 Paris, France</p>
+            <p>Available Mon-Fri, 9AM-6PM (CET)</p>
+          </div>
         </div>
+
 
         <div className="footer-links">
           <h4>Shop</h4>
@@ -25,7 +33,18 @@ export default function Footer() {
         <div className="footer-links">
           <h4>Company</h4>
           <Link href="/blog">Journal</Link>
+          <Link href="/contact">Contact Us</Link>
+          <Link href="/about">About Arganor</Link>
         </div>
+
+        <div className="footer-links">
+          <h4>Legal</h4>
+          <Link href="/legal/terms">Terms of Service</Link>
+          <Link href="/legal/privacy">Privacy Policy</Link>
+          <Link href="/legal/shipping">Shipping Policy</Link>
+          <Link href="/legal/refund">Return & Refund Policy</Link>
+        </div>
+
 
         <div className="footer-newsletter">
           <h4>Stay Connected</h4>
@@ -37,10 +56,11 @@ export default function Footer() {
             </button>
           </form>
           <div className="social-icons">
-            <a href="#" aria-label="Instagram"><Instagram size={20} /></a>
-            <a href="#" aria-label="Facebook"><Facebook size={20} /></a>
-            <a href="#" aria-label="Twitter"><Twitter size={20} /></a>
+            <a href="https://instagram.com/arganor" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><Instagram size={20} /></a>
+            <a href="https://facebook.com/arganor" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><Facebook size={20} /></a>
+            <a href="https://pinterest.com/arganor" target="_blank" rel="noopener noreferrer" aria-label="Pinterest"><Twitter size={20} /></a>
           </div>
+
         </div>
       </div>
 

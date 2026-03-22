@@ -150,9 +150,10 @@ export default function AdminPinterestClient() {
                         disabled={batchPublishing}
                         title="Envoie les 5 produits les plus populaires à Make.com maintenant"
                     >
-                        {batchPublishing
-                            ? <><span className="pin-mini-spinner"></span> Publication...</>
-                            : <><Zap size={16} /> Publier 5 Pins</>}
+                        <span className="btn-label-steady" translate="no">
+                            {batchPublishing && <span className="pin-mini-spinner"></span>}
+                            {batchPublishing ? " Publication..." : <span><Zap size={16} style={{marginRight: '8px'}} /> Publier 5 Pins</span>}
+                        </span>
                     </button>
                     <button className="btn btn-outline pin-action-btn" onClick={fetchPins}>
                         <RefreshCw size={16} /> Régénérer
@@ -271,9 +272,10 @@ export default function AdminPinterestClient() {
                                 disabled={!!publishing || batchPublishing}
                                 onClick={() => publishOne(selectedPin)}
                             >
-                                {publishing === selectedPin.productId
-                                    ? <span><span className="pin-mini-spinner"></span> Envoi...</span>
-                                    : <span><Send size={14} /> Envoyer à Make.com</span>}
+                                <span className="btn-label-steady" translate="no">
+                                    {publishing === selectedPin.productId && <span className="pin-mini-spinner"></span>}
+                                    {publishing === selectedPin.productId ? " Envoi..." : <span><Send size={14} style={{marginRight: '8px'}} /> Envoyer à Make.com</span>}
+                                </span>
                             </button>
                         </div>
 
