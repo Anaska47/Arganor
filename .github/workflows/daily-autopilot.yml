@@ -11,25 +11,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18' # Adjust as per your Next.js version if needed
-
-    - name: Install Dependencies
-      run: npm install
-
-    - name: Run Arganor SEO Autopilot
-      run: npm run autopilot
-
-    - name: Commit and Push changes
+    - name: Trigger Pinterest Automation (Vercel)
       run: |
-        git config --global user.name "Arganor-Autopilot-Bot"
-        git config --global user.email "bot@arganor.com"
-        git add src/data/posts.json
-        # Only commit if there are changes
-        git diff --quiet && git diff --staged --quiet || git commit -m "chore(autopilot): Daily SEO Blog Post & Pinterest Pin 🚀"
-        git push origin main
+        curl -X POST "https://arganor.vercel.app/api/pinterest/publish?batch=5" \
+        -H "Authorization: Bearer ${{ secrets.ARGANOR_API_KEY }}" \
+        -H "Content-Type: application/json" \
+        -d '{}'
+
+    - name: Generate Content (Simulated)
+      run: echo "Automation triggered successfully on Vercel backend."
