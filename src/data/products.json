@@ -1,5 +1,17 @@
 [
   {
+    "id": "auto_p_the_ordinary_niac",
+    "name": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+    "brand": "The Ordinary",
+    "asin": "B01N33X44C",
+    "price": 10.9,
+    "category": "Soin du Visage",
+    "slug": "serum-the-ordinary-niacinamide",
+    "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.8,
+    "reviews": 1540
+  },
+  {
     "id": "auto_p_1774827676180_2952",
     "asin": "B00949CTQQ",
     "name": "Lotion Exfoliante Perfectrice 2% BHA",
