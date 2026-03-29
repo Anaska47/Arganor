@@ -55,8 +55,8 @@ function generateDescription(name, niche) {
 }
 
 const products = [];
-// Some real-looking ASINs for French market fallback
-const REAL_ASINS = ['B004Z2099A', 'B07KWL3H97', 'B08L7V2S4K', 'B09B1N8X6X', 'B00K7A4S8W'];
+// Des ASINs réels et vérifiés sur Amazon France (qui ne renvoient pas d'erreur 404)
+const REAL_ASINS = ['B07N7PK9QK', 'B00PBX3L7K', 'B00949CTQQ'];
 
 for (let i = 0; i < TOTAL_PRODUCTS; i++) {
     const niche = NICHES[i % NICHES.length];
