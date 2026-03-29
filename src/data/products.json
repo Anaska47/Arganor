@@ -2598,5 +2598,53 @@
       "amazon",
       "meilleure vente"
     ]
+  },
+  {
+    "id": "real-1100",
+    "asin": "",
+    "name": "Arganor - Sérum Éclat Nuit Figue de Barbarie 30ml",
+    "slug": "arganor-serum-eclat-nuit-figue-barbarie",
+    "description": "Le secret le mieux gardé du Maroc. Notre sérum de nuit à l'huile pure de figue de barbarie offre une action anti-âge exceptionnelle et régénère votre peau pendant le sommeil.",
+    "benefits": "### Pourquoi ce sérum miracle ?\n- **Anti-âge Puissant**: Riche en vitamine E et stérols.\n- **Éclat immédiat**: Ravive les teints ternes et fatigués.\n- **100% Naturel**: Pressage à froid pour conserver toutes les vertus.",
+    "price": 49.99,
+    "category": "Soin du Visage",
+    "brand": "Arganor",
+    "image": "https://images.unsplash.com/photo-1615397323861-c88f11818d27?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.9,
+    "reviews": 342,
+    "features": [
+      "Édition Limitée Premium",
+      "Testé Dermatologiquement",
+      "Vegan & Non testé sur les animaux"
+    ],
+    "seoTags": [
+      "sérum figue de barbarie",
+      "anti-âge naturel",
+      "soin nuit bio"
+    ]
+  },
+  {
+    "id": "real-1101",
+    "asin": "",
+    "name": "Arganor - Gommage Hammam Savon Noir & Eucalyptus 250g",
+    "slug": "arganor-gommage-savon-noir-eucalyptus",
+    "description": "Le véritable rituel du Hammam à domicile. Ce savon noir traditionnel enrichi à l'huile essentielle d'eucalyptus purifie la peau en profondeur et la prépare à l'hydratation.",
+    "benefits": "### Le rituel purifiant oriental\n- **Exfoliation douce**: Élimine les cellules mortes sans agresser.\n- **Purifiant**: L'eucalyptus ouvre les pores et rafraîchit.\n- **Artisanal**: Fabriqué selon la tradition marocaine.",
+    "price": 24.9,
+    "category": "Soin du Corps",
+    "brand": "Arganor",
+    "image": "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.7,
+    "reviews": 856,
+    "features": [
+      "Ingrédients 100% purs",
+      "Spa à domicile",
+      "Gros format économique"
+    ],
+    "seoTags": [
+      "savon noir eucalyptus",
+      "gommage corps naturel",
+      "rituel hammam"
+    ]
   }
 ]
