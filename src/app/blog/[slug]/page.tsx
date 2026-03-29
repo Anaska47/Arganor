@@ -139,7 +139,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                                         <Star size={20} fill="var(--color-gold)" /><Star size={20} fill="var(--color-gold)" /><Star size={20} fill="var(--color-gold)" /><Star size={20} fill="var(--color-gold)" /><Star size={20} fill="var(--color-gold)" />
                                     </div>
                                     
-                                    <a href={getAffiliateLink(relatedProduct, 'fr')} className="btn btn-primary" style={{ padding: '1.2rem 3rem', fontSize: '1.1rem', backgroundColor: '#FF9900', color: 'black', width: '100%', maxWidth: '400px' }} target="_blank" rel="noopener noreferrer">
+                                    <a href={`/api/track?id=${relatedProduct.id}&s=blog-cta`} className="btn btn-primary" style={{ padding: '1.2rem 3rem', fontSize: '1.1rem', backgroundColor: '#FF9900', color: 'black', width: '100%', maxWidth: '400px' }} target="_blank" rel="noopener noreferrer">
                                         🛒 Commander sur Amazon 
                                     </a>
                                     <p style={{ fontSize: '0.85rem', color: '#666', marginTop: '1rem' }}>Livraison Premium gratuite et retour garanti.</p>

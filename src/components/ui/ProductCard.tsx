@@ -11,7 +11,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="product-card">
       <div className="image-container">
-        <a href={getAffiliateLink(product, 'fr')} target="_blank" rel="noopener noreferrer">
+        <Link href={`/products/${product.slug}`}>
           <img
             src={product.image}
             alt={product.name}
@@ -19,7 +19,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             style={{ width: '100%', height: '100%', objectFit: 'cover', cursor: 'pointer' }}
             loading="lazy"
           />
-        </a>
+        </Link>
         <span className="category-tag">{product.category}</span>
       </div>
 
@@ -35,9 +35,9 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         <p className="price">${product.price.toFixed(2)}</p>
 
-        <a href={getAffiliateLink(product, 'fr')} className="btn-view" target="_blank" rel="noopener noreferrer">
+        <Link href={`/products/${product.slug}`} className="btn-view">
           Voir le Produit
-        </a>
+        </Link>
       </div>
     </div>
   );
