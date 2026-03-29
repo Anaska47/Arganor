@@ -20,14 +20,15 @@ const ADJECTIVES = ['Velours', 'Doré', 'Pur', 'Lumineux', 'Royal', 'Divin', 'So
 const NOUNS = ['Nectar', 'Sérum', 'Essence', 'Rituel', 'Infusion', 'Éclat', 'Secret', 'Luxe', 'Miracle', 'Thérapie', 'Oasis', 'Ambrosie'];
 
 const IMAGES = [
-    'https://images.unsplash.com/photo-1542452255-1f5462c4b868?q=80&w=2070&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop',
     'https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1974&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1608248597279-f99d160bfbc8?q=80&w=1974&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop',
     'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop',
     'https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1974&auto=format&fit=crop',
     'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1887&auto=format&fit=crop',
     'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?q=80&w=1887&auto=format&fit=crop',
     'https://images.unsplash.com/photo-1629198688000-71f23e745b6e?q=80&w=2080&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=1974&auto=format&fit=crop'
 ];
 
 const BRANDS = ['Arganor Héritage', 'Arganor Luxe', 'Arganor Professionnel', 'Arganor Spa', 'Arganor Botanique', 'Arganor Or Pur'];
