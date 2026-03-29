@@ -136,7 +136,7 @@ async function runAutopilot() {
         // Mise à jour du listing CSV au format Pinterest OFFICIEL
         const SITE_URL = 'https://arganor.vercel.app';
         const BOARD_NAME = 'Arganor - Beauté Naturelle';
-        const LISTING_FILE = path.join(MEDIA_DIR, 'pinterest-bulk-upload.csv');
+        const BULK_UPLOAD_CSV = path.join(MEDIA_DIR, 'pinterest-bulk-upload.csv');
         
         const escapeCsv = (str) => `"${String(str || '').replace(/"/g, '""')}"`;
 
@@ -156,11 +156,11 @@ async function runAutopilot() {
 
         const csvContent = row.join(',');
 
-        if (fs.existsSync(LISTING_FILE)) {
-            fs.appendFileSync(LISTING_FILE, '\n' + csvContent);
+        if (fs.existsSync(BULK_UPLOAD_CSV)) {
+            fs.appendFileSync(BULK_UPLOAD_CSV, '\n' + csvContent);
         } else {
             const header = 'Media URL,Title,Description,Link,Pinterest board,Publish date,Keywords,Video title,Thumbnail,Section,Image alt text\n';
-            fs.writeFileSync(LISTING_FILE, header + csvContent);
+            fs.writeFileSync(BULK_UPLOAD_CSV, header + csvContent);
         }
         console.log(`📊 [Media] Listing mis à jour au format valide Pinterest.`);
     }
