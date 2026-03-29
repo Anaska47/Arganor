@@ -5,49 +5,82 @@ const { generatePinterestImage } = require('./pinterest-image-gen.js');
 const PRODUCTS_FILE = path.join(__dirname, '../data/products.json');
 const POSTS_FILE = path.join(__dirname, '../data/posts.json');
 
-// Un générateur algorithmique "ingénieux" avec plusieurs styles de rédaction
-function generateSEOArticleForProduct(product, otherProduct = null) {
+// --- Product Generation Variables ---
+const REAL_ASINS = ['B07N7PK9QK', 'B00PBX3L7K', 'B00949CTQQ'];
+const NICHES = [
+    { name: 'Huile d\'Argan Pure', category: 'Soin du Visage', keywords: ['argan pur', 'or liquide', 'anti-âge', 'hydratation intense'] },
+    { name: 'Sérum Croissance', category: 'Soin des Cheveux', keywords: ['croissance cheveux', 'biotine', 'fortifiant', 'chevelure dense'] },
+    { name: 'Huile de Ricin Royale', category: 'Soin des Cheveux', keywords: ['ricin bio', 'cils longs', 'sourcils denses', 'cuir chevelu'] },
+    { name: 'Élixir de Romarin', category: 'Soin des Cheveux', keywords: ['romarin', 'circulation', 'vitalité', 'repousse'] },
+    { name: 'Soin Anti-Âge Suprême', category: 'Soin du Visage', keywords: ['rides', 'collagène', 'fermeté', 'éclat'] },
+    { name: 'Lait Corps Soyeux', category: 'Soin du Corps', keywords: ['hydratation', 'peau douce', 'nutrition', 'velouté'] },
+];
+const ADJECTIVES = ['Velours', 'Doré', 'Pur', 'Lumineux', 'Royal', 'Divin', 'Soyeux', 'Radiant', 'Intense', 'Précieux', 'Éternel'];
+const NOUNS = ['Nectar', 'Sérum', 'Essence', 'Rituel', 'Infusion', 'Éclat', 'Secret', 'Luxe', 'Miracle'];
+const IMAGES = [
+    'https://images.unsplash.com/photo-1542452255-1f5462c4b868?q=80&w=2070&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1974&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1974&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1608248597279-f99d160bfbc8?q=80&w=1974&auto=format&fit=crop'
+];
+const BRANDS = ['Arganor Héritage', 'Arganor Luxe', 'Arganor Professionnel', 'Arganor Botanique'];
+
+function getRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function generateNewProduct() {
+    const niche = getRandom(NICHES);
+    const baseName = `${getRandom(NOUNS)} ${getRandom(ADJECTIVES)} de ${niche.name}`;
+    const id = `auto_p_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+    const slug = baseName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+    return {
+        id: id,
+        asin: getRandom(REAL_ASINS),
+        name: baseName,
+        slug: slug,
+        description: `Découvrez l'ultime raffinement avec **${baseName}**. Cette formule précieuse exploite toute la puissance de ${niche.name} pour offrir des résultats exceptionnels.`,
+        benefits: `### Transformez votre routine\n- **Nutrition Profonde**: Une hydratation pénétrante.\n- **Résultats Visibles**: Une routine transformée en 7 jours.\n- **Éthique & Pur**: Le meilleur de la nature pour vous.`,
+        price: Math.floor(Math.random() * (120 - 40) + 40) + 0.90,
+        category: niche.category,
+        brand: getRandom(BRANDS),
+        image: getRandom(IMAGES),
+        rating: Number((Math.random() * (5.0 - 4.6) + 4.6).toFixed(1)),
+        reviews: Math.floor(Math.random() * 500) + 50,
+        features: [...niche.keywords.slice(0, 2), "100% Bio", "Luxe"],
+        seoTags: [...niche.keywords, "beauté de luxe", "arganor"]
+    };
+}
+
+// --- Article Generation Variables ---
+function generateSEOArticleForProduct(product) {
     const styles = [
         {
             type: 'GUIDE',
-            titles: [
-                `Le Guide Ultime : Comment utiliser ${product.name} comme une pro`,
-                `5 Astuces Méconnues pour booster les effets de ${product.name}`,
-                `${product.name} : Le secret des routines minimalistes réussies`
-            ],
+            title: `Le Guide Ultime : Comment utiliser ${product.name} comme une pro`,
             intro: `Vous possédez le **${product.name}** mais vous ne savez pas comment en tirer le meilleur parti ? Ce guide est fait pour vous.`,
-            outro: `En suivant ces conseils, vous maximiserez votre investissement dans ce produit ${product.brand}.`
+            outro: `En suivant ces conseils, vous maximiserez votre investissement dans ce produit.`
         },
         {
             type: 'DUEL',
-            titles: [
-                `Match Beauté : ${product.name} vs ${otherProduct ? otherProduct.name : 'Les soins classiques'}`,
-                `Pourquoi j'ai abandonné mes anciens produits pour le ${product.name}`,
-                `${product.name} : Meilleure alternative naturelle du marché ?`
-            ],
+            title: `Match Beauté : ${product.name} vs Les soins classiques`,
             intro: `Aujourd'hui, nous mettons le **${product.name}** à l'épreuve face à la concurrence. Qui sortira vainqueur ?`,
             outro: `Le verdict est sans appel : pour son prix de ${product.price}€, le ${product.name} reste imbattable.`
         },
         {
             type: 'ROUTINE',
-            titles: [
-                `Ma Routine du Matin 100% avec ${product.name}`,
-                `Comment intégrer le ${product.name} dans votre soin hebdomadaire`,
-                `3 étapes simples pour transformer votre ${product.category.toLowerCase()} avec ${product.name}`
-            ],
+            title: `Ma Routine du Matin 100% avec ${product.name}`,
             intro: `Une routine efficace ne doit pas être complexe. Voici comment j'utilise le **${product.name}** au quotidien.`,
-            outro: `Une routine simple, efficace et surtout 100% plaisir grâce à ${product.brand}.`
+            outro: `Une routine simple, efficace et surtout 100% plaisir.`
         }
     ];
 
-    const style = styles[Math.floor(Math.random() * styles.length)];
-    const title = style.titles[Math.floor(Math.random() * style.titles.length)];
+    const style = getRandom(styles);
+    const title = style.title;
     const slug = title.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
-    // Métadonnées SEO
     const metaTitle = `${title} | Arganor Beauté`;
-    const metaDescription = `${style.intro.slice(0, 150)}... Découvrez notre test complet sur ${product.name}.`;
-    const keywords = [product.name, product.brand, product.category, "avis", "test", "routine beauté", "comparatif"].join(', ');
+    const metaDescription = `${style.intro.slice(0, 150)}... Découvrez notre test complet.`;
+    const keywords = [product.name, product.brand, product.category, "avis", "test"].join(', ');
 
     const content = `
 # ${title}
@@ -60,18 +93,15 @@ Le marché de la cosmétique est saturé, mais **${product.name}** se démarque 
 
 ### Les 3 avantages clés :
 
-- **Efficacité Redoutable** : ${product.description}
+- **Efficacité Redoutable** : Une formule ciblée.
 - **Engagement Éthique** : Aucun compromis sur la qualité des ingrédients.
 - **Prix Juste** : Accessible au plus grand nombre.
 
-> "L'ingéniosité de ce produit réside dans sa simplicité. On ne triche pas avec la nature, on l'apprivoise." - Camille, Experte Arganor.
+> "L'ingéniosité de ce produit réside dans sa simplicité. On ne triche pas avec la nature."
 
-## ${style.type === 'DUEL' ? "Le face à face final" : "Conseils d'utilisation experts"}
+## Conseils d'utilisation experts
 
-${style.type === 'ROUTINE' 
-    ? `Appliquez une noisette de **${product.name}** après votre nettoyage habituel. Massez circulairement jusqu'à absorption complète.` 
-    : `Contrairement aux produits chimiques, le ${product.name} travaille en profondeur sans agresser votre épiderme.`
-}
+Appliquez le **${product.name}** délicatement et ressentez le luxe s'imprégner dans votre routine quotidienne.
 
 ${style.outro}
 
@@ -82,7 +112,7 @@ ${style.outro}
 `;
 
     return {
-        id: `auto-${Date.now()}`,
+        id: `auto-${Date.now()}-${Math.floor(Math.random()*1000)}`,
         title,
         slug,
         metaTitle,
@@ -96,81 +126,54 @@ ${style.outro}
         image: product.image,
         relatedProductId: product.id,
         isAutopilot: true,
-        style: style.type
+        style: style.type,
+        pinterestImages: [] // Nous y stockerons les 5 images générées
     };
 }
 
 async function runAutopilot() {
-    console.log("🚀 [Arganor Autopilot] Démarrage du générateur de contenu...");
+    console.log("🚀 [Arganor Mega-Scale Autopilot] Démarrage...");
     
-    // Lire les produits et les posts existants
     const products = JSON.parse(fs.readFileSync(PRODUCTS_FILE, 'utf8'));
     const posts = fs.existsSync(POSTS_FILE) ? JSON.parse(fs.readFileSync(POSTS_FILE, 'utf8')) : [];
 
-    // Choisir un produit aléatoire
-    const randomProduct = products[Math.floor(Math.random() * products.length)];
-    console.log(`📌 Produit sélectionné pour l'article du jour : ${randomProduct.name}`);
+    // L'objectif : 2 nouveaux produits, 2 articles, 5 pins par article (10 pins total)
+    const NUM_PRODUCTS = 2;
+    const PINS_PER_POST = 5;
 
-    // Générer le post
-    const newPost = generateSEOArticleForProduct(randomProduct);
+    for (let i = 0; i < NUM_PRODUCTS; i++) {
+        // 1. Génération du produit
+        const newProduct = generateNewProduct();
+        products.unshift(newProduct);
+        console.log(`📌 Produit Ajouté : ${newProduct.name} (${newProduct.asin})`);
 
-    // NOUVEAU : Auto-générer l'affiche Pinterest verticale
-    const pinPath = await generatePinterestImage(newPost.slug, newPost.image, newPost.title);
-    if (pinPath) {
-        newPost.pinterestImage = pinPath;
+        // 2. Génération de l'article de blog rattaché
+        const newPost = generateSEOArticleForProduct(newProduct);
 
-        // ORGANISATION MEDIA (A la demande de l'utilisateur)
-        const MEDIA_DIR = path.join(__dirname, '../../media/pinterest');
-        const LISTING_FILE = path.join(MEDIA_DIR, 'pinterest-listing.csv');
-        if (!fs.existsSync(MEDIA_DIR)) fs.mkdirSync(MEDIA_DIR, { recursive: true });
-
-        const pinFilename = path.basename(pinPath);
-        const sourcePath = path.join(__dirname, '../../public', pinPath);
-        const destPath = path.join(MEDIA_DIR, pinFilename);
-        
-        if (fs.existsSync(sourcePath)) {
-            fs.copyFileSync(sourcePath, destPath);
-            console.log(`📂 [Media] Pin copié vers ${destPath}`);
+        // 3. Génération de 5 épingles Pinterest uniques
+        console.log(`🎨 Génération de ${PINS_PER_POST} épingles Pinterest pour l'article...`);
+        for (let j = 1; j <= PINS_PER_POST; j++) {
+            const uniquePinSlug = `${newPost.slug}-variante-${j}`;
+            const pinPath = await generatePinterestImage(uniquePinSlug, newPost.image, newPost.title);
+            
+            if (pinPath) {
+                newPost.pinterestImages.push(pinPath);
+                
+                // Si c'est le 1er pin, on le définit comme image principale du post pour l'UI
+                if (j === 1) {
+                    newPost.pinterestImage = pinPath;
+                }
+            }
         }
 
-        // Mise à jour du listing CSV au format Pinterest OFFICIEL
-        const SITE_URL = 'https://arganor.vercel.app';
-        const BOARD_NAME = 'Arganor - Beauté Naturelle';
-        const BULK_UPLOAD_CSV = path.join(MEDIA_DIR, 'pinterest-bulk-upload.csv');
-        
-        const escapeCsv = (str) => `"${String(str || '').replace(/"/g, '""')}"`;
-
-        const row = [
-            escapeCsv(`${SITE_URL}${newPost.pinterestImage}`),
-            escapeCsv(newPost.title.slice(0, 100)),
-            escapeCsv(newPost.metaDescription.slice(0, 500)),
-            escapeCsv(`${SITE_URL}/blog/${newPost.slug}`),
-            escapeCsv(BOARD_NAME),
-            escapeCsv(newPost.publishedDate),
-            escapeCsv(newPost.keywords.replace(/,/g, ' ')),
-            '""', // Video title (REQUIS)
-            '""', // Thumbnail
-            '""', // Section
-            escapeCsv(newPost.title.slice(0, 500)) // Image alt text
-        ];
-
-        const csvContent = row.join(',');
-
-        if (fs.existsSync(BULK_UPLOAD_CSV)) {
-            fs.appendFileSync(BULK_UPLOAD_CSV, '\n' + csvContent);
-        } else {
-            const header = 'Media URL,Title,Description,Link,Pinterest board,Publish date,Keywords,Video title,Thumbnail,Section,Image alt text\n';
-            fs.writeFileSync(BULK_UPLOAD_CSV, header + csvContent);
-        }
-        console.log(`📊 [Media] Listing mis à jour au format valide Pinterest.`);
+        posts.unshift(newPost);
+        console.log(`✅ Article "${newPost.title}" sauvegardé avec ses ${newPost.pinterestImages.length} épingles.`);
     }
 
-    posts.unshift(newPost); // Ajouter au début
-
-    // Sauvegarder
+    // Sauvegarder les bases de données
+    fs.writeFileSync(PRODUCTS_FILE, JSON.stringify(products, null, 2));
     fs.writeFileSync(POSTS_FILE, JSON.stringify(posts, null, 2));
-    console.log(`✅ Article généré et sauvegardé avec succès : "${newPost.title}"`);
-    console.log(`🌟 Ce blog post travaillera en arrière-plan pour votre SEO 24h/24 !`);
+    console.log(`🌟 Fin du processus Autopilot. 2 produits, 2 articles, et 10 pins générés avec succès !`);
 }
 
 runAutopilot().catch(console.error);

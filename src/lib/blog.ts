@@ -13,6 +13,7 @@ export interface BlogPost {
     relatedProductId?: string; // New: Link to product
     seoTags?: string[]; // Added for SEO
     pinterestImage?: string; // Added for RSS
+    pinterestImages?: string[]; // Mega-scale: Multiple pins
     metaDescription?: string; // Added for RSS
 }
 

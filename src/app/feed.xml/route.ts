@@ -13,30 +13,36 @@ export async function GET() {
     const recentPosts = posts.slice(0, 50);
 
     recentPosts.forEach(post => {
-        // Encodage strict de l'URL pour être valide selon les standards RSS (Pinterest rejette les caractères accentués purs)
         const url = encodeURI(`${siteUrl}/blog/${post.slug}`);
         
-        // On s'assure d'avoir l'URL absolue pour l'image (obligatoire pour Pinterest)
-        let imageUrl = '';
-        if (post.pinterestImage) {
-            imageUrl = post.pinterestImage.startsWith('http') ? post.pinterestImage : `${siteUrl}${post.pinterestImage}`;
-        } else if (post.image) {
-            imageUrl = post.image.startsWith('http') ? post.image : `${siteUrl}${post.image}`;
-        }
-        
-        // Encoder l'image URL pour Pinterest
-        imageUrl = encodeURI(imageUrl);
+        // S'il y a plusieurs images (méga-scale de 5 pins), on les publie toutes comme entités distinctes
+        const imagesToPin = post.pinterestImages && post.pinterestImages.length > 0 
+            ? post.pinterestImages 
+            : [post.pinterestImage || post.image];
 
-        rssItems += `
+        imagesToPin.forEach((pinPath: string | undefined, index: number) => {
+            if (!pinPath) return;
+
+            // URL absolue de l'image
+            let imageUrl = pinPath.startsWith('http') ? pinPath : `${siteUrl}${pinPath}`;
+            imageUrl = encodeURI(imageUrl);
+
+            // Pour que Pinterest ne les voit pas comme des doublons absolus, on ajoute l'index au lien permaLink (tout en redirigeant vers le même article)
+            const uniqueGuid = index > 0 ? `${url}?pin=${index}` : url;
+            // On peut même faire varier légèrement le titre !
+            const variantTitle = index > 0 ? `${post.title} (Astuce #${index + 1})` : post.title;
+
+            rssItems += `
         <item>
-            <title><![CDATA[${post.title}]]></title>
+            <title><![CDATA[${variantTitle}]]></title>
             <link>${url}</link>
-            <guid isPermaLink="true">${url}</guid>
+            <guid isPermaLink="true">${uniqueGuid}</guid>
             <pubDate>${new Date(post.publishedDate).toUTCString()}</pubDate>
             <description><![CDATA[${post.metaDescription || post.excerpt}]]></description>
-            ${imageUrl ? `<enclosure url="${imageUrl.replace(/&/g, '&amp;')}" type="image/jpeg" />` : ''}
-            ${imageUrl ? `<media:content url="${imageUrl.replace(/&/g, '&amp;')}" type="image/jpeg" medium="image" />` : ''}
+            <enclosure url="${imageUrl.replace(/&/g, '&amp;')}" type="image/jpeg" />
+            <media:content url="${imageUrl.replace(/&/g, '&amp;')}" type="image/jpeg" medium="image" />
         </item>`;
+        });
     });
 
     const rssFeed = `<?xml version="1.0" encoding="UTF-8" ?>
