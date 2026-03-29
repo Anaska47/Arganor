@@ -8,9 +8,10 @@ import {
     TrendingUp, 
     Star, 
     Users, 
-    ArrowUpRight, 
-    ArrowDownRight,
-    Zap
+    Zap,
+    PlusCircle,
+    RefreshCw,
+    CheckCircle
 } from "lucide-react";
 
 interface Stats {
@@ -35,24 +36,49 @@ export default function AdminDashboardClient() {
     const [stats, setStats] = useState<Stats | null>(null);
     const [loading, setLoading] = useState(true);
     const [activities, setActivities] = useState<Activity[]>([]);
+    const [generatingStatus, setGeneratingStatus] = useState<{type: string, status: 'loading' | 'success' | 'error' | null, message: string}>({ type: '', status: null, message: '' });
+
+    const fetchStats = async () => {
+        try {
+            const res = await fetch("/api/admin/stats");
+            const data = await res.json();
+            setStats(data);
+            if (data.activities && data.activities.length > 0) {
+                setActivities(data.activities);
+            }
+        } catch (err) {
+            console.error("Failed to fetch stats", err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchStats = async () => {
-            try {
-                const res = await fetch("/api/admin/stats");
-                const data = await res.json();
-                setStats(data);
-                if (data.activities && data.activities.length > 0) {
-                    setActivities(data.activities);
-                }
-            } catch (err) {
-                console.error("Failed to fetch stats", err);
-            } finally {
-                setLoading(false);
-            }
-        };
         fetchStats();
     }, []);
+
+    const handleGenerate = async (type: 'product' | 'article' | 'pin') => {
+        setGeneratingStatus({ type, status: 'loading', message: 'Génération en cours...' });
+        try {
+            const res = await fetch("/api/admin/generate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ type })
+            });
+            const data = await res.json();
+            
+            if (data.success) {
+                setGeneratingStatus({ type, status: 'success', message: data.message });
+                // Rafraîchir les stats
+                fetchStats();
+                setTimeout(() => setGeneratingStatus({ type: '', status: null, message: '' }), 5000);
+            } else {
+                setGeneratingStatus({ type, status: 'error', message: "Erreur : " + data.error });
+            }
+        } catch (error) {
+            setGeneratingStatus({ type, status: 'error', message: "Erreur inattendue" });
+        }
+    };
 
     if (loading) {
         return (
@@ -78,13 +104,11 @@ export default function AdminDashboardClient() {
                 <div className="stat-card accent-card">
                     <div className="stat-header">
                         <div className="stat-icon-bg bg-gold"><DollarSign size={20} /></div>
-                        <div className="stat-trend trend-up">
-                            <ArrowUpRight size={14} /> +12%
-                        </div>
                     </div>
                     <div className="stat-info-main">
                         <p className="stat-label">Revenus Estimés (Amazon)</p>
                         <h3 className="stat-number">{stats?.revenue || "0.00"}€</h3>
+                        <p className="stat-sub">Basé sur les {stats?.clicks} clics réels</p>
                     </div>
                 </div>
 
@@ -96,7 +120,7 @@ export default function AdminDashboardClient() {
                     <div className="stat-info-main">
                         <p className="stat-label">Catalogue Produits</p>
                         <h3 className="stat-number">{stats?.totalProducts || 0}</h3>
-                        <p className="stat-sub">Tous actifs et tagués arganor-21</p>
+                        <p className="stat-sub">Tous actifs sur le site</p>
                     </div>
                 </div>
 
@@ -104,13 +128,11 @@ export default function AdminDashboardClient() {
                 <div className="stat-card">
                     <div className="stat-header">
                         <div className="stat-icon-bg bg-green"><TrendingUp size={20} /></div>
-                        <div className="stat-trend trend-up">
-                            <ArrowUpRight size={14} /> +24%
-                        </div>
                     </div>
                     <div className="stat-info-main">
-                        <p className="stat-label">Clics affiliés (estimés)</p>
+                        <p className="stat-label">Clics affiliés cumulés</p>
                         <h3 className="stat-number">{stats?.clicks || 0}</h3>
+                        <p className="stat-sub">Trafic réel converti</p>
                     </div>
                 </div>
 
@@ -122,7 +144,7 @@ export default function AdminDashboardClient() {
                     <div className="stat-info-main">
                         <p className="stat-label">Avis Clients Importés</p>
                         <h3 className="stat-number">{stats?.totalReviews?.toLocaleString() || 0}</h3>
-                        <p className="stat-sub">Score moyen : {stats?.avgRating || "4.5"}/5</p>
+                        <p className="stat-sub">Score moyen global : {stats?.avgRating || "4.5"}/5</p>
                     </div>
                 </div>
             </div>
@@ -130,9 +152,9 @@ export default function AdminDashboardClient() {
             <div className="dashboard-main-content">
                 {/* ── Recent Activity ── */}
                 <div className="activity-panel">
-                    <h2 className="panel-title">📋 Flux d'activité en direct</h2>
+                    <h2 className="panel-title">📋 Flux d'activité des clics</h2>
                     <div className="activity-list">
-                        {activities.map((act, i) => (
+                        {activities.length > 0 ? activities.map((act, i) => (
                             <div key={i} className="activity-item-new">
                                 <div className={`activity-dot ${act.status}`}></div>
                                 <div className="activity-content">
@@ -140,37 +162,75 @@ export default function AdminDashboardClient() {
                                     <span className="activity-time">{act.time}</span>
                                 </div>
                             </div>
-                        ))}
+                        )) : (
+                            <p className="text-muted" style={{fontSize: '12px', color: '#666'}}>Aucune activité récente. Les clics apparaîtront ici en temps réel.</p>
+                        )}
                     </div>
                 </div>
 
-                {/* ── Meta Section ── */}
+                {/* ── Meta Section & Generative Actions ── */}
                 <div className="quick-stats-panel">
-                    <h2 className="panel-title">🦾 Automatisation & SEO</h2>
-                    <div className="quick-stats-inner">
-                        <div className="mini-stat">
-                            <Zap size={16} className="text-orange" />
-                            <div className="mini-info">
-                                <strong>5 Pins/jour</strong>
-                                <p>Make.com Trigger</p>
-                            </div>
+                    <h2 className="panel-title">🦾 Générateurs IA</h2>
+                    
+                    {generatingStatus.message ? (
+                        <div className={`status-message ${generatingStatus.status || ''}`}>
+                            {generatingStatus.status === 'loading' && <RefreshCw size={14} className="spin-icon" />}
+                            {generatingStatus.status !== 'loading' && <CheckCircle size={14} />}
+                            <span>{generatingStatus.message}</span>
                         </div>
-                        <div className="mini-stat">
-                            <FileText size={16} className="text-blue" />
-                            <div className="mini-info">
-                                <strong>{stats?.blogPosts || 0} articles</strong>
-                                <p>Blog Arganor</p>
+                    ) : null}
+
+                    <div className="quick-stats-inner" style={{marginTop: '15px'}}>
+                        {/* Produit */}
+                        <div className="mini-stat admin-generate-row">
+                            <Package size={18} className="text-blue" />
+                            <div className="mini-info" style={{flex: 1}}>
+                                <strong>Générer de Nouveaux Produits</strong>
+                                <p>Catalogue Luxe Complet (40)</p>
                             </div>
+                            <button 
+                                className="action-btn-small" 
+                                disabled={generatingStatus.status === 'loading'}
+                                onClick={() => handleGenerate('product')}
+                            >
+                                <PlusCircle size={16} /> Créer
+                            </button>
                         </div>
-                        <div className="mini-stat">
-                            <Users size={16} className="text-green" />
-                            <div className="mini-info">
-                                <strong>100% Organique</strong>
-                                <p>Source du trafic</p>
+                        
+                        {/* Article */}
+                        <div className="mini-stat admin-generate-row">
+                            <FileText size={18} className="text-orange" />
+                            <div className="mini-info" style={{flex: 1}}>
+                                <strong>Générer un Nouvel Article</strong>
+                                <p>Blogging SEO Autopilot</p>
                             </div>
+                            <button 
+                                className="action-btn-small" 
+                                disabled={generatingStatus.status === 'loading'}
+                                onClick={() => handleGenerate('article')}
+                            >
+                                <PlusCircle size={16} /> Créer
+                            </button>
+                        </div>
+
+                        {/* Épingles Pinterest */}
+                        <div className="mini-stat admin-generate-row">
+                            <Zap size={18} className="text-green" />
+                            <div className="mini-info" style={{flex: 1}}>
+                                <strong>Générer de Nouvelles Épingles</strong>
+                                <p>Création massive d'images Pinterest</p>
+                            </div>
+                            <button 
+                                className="action-btn-small" 
+                                disabled={generatingStatus.status === 'loading'}
+                                onClick={() => handleGenerate('pin')}
+                            >
+                                <PlusCircle size={16} /> Créer
+                            </button>
                         </div>
                     </div>
-                    <div className="dashboard-cta">
+                    
+                    <div className="dashboard-cta" style={{marginTop: '25px'}}>
                         <button className="btn btn-primary w-full" onClick={() => window.location.href='/admin/pinterest'}>
                             Gérer les Pins Pinterest →
                         </button>
@@ -181,6 +241,7 @@ export default function AdminDashboardClient() {
             <style jsx>{`
                 .dashboard-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 300px; gap: 15px; }
                 .spinner { width: 30px; height: 30px; border: 3px solid #eee; border-top-color: #c9973a; border-radius: 50%; animation: spin 0.8s linear infinite; }
+                .spin-icon { animation: spin 1s linear infinite; }
                 @keyframes spin { to { transform: rotate(360deg); } }
 
                 .live-badge { background: #dcfce7; color: #15803d; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; margin-left: 10px; border: 1px solid #bdf2cc; }
@@ -197,15 +258,12 @@ export default function AdminDashboardClient() {
                 .bg-green { background: #dcfce7; color: #15803d; }
                 .bg-red { background: #fee2e2; color: #991b1b; }
                 
-                .stat-trend { font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 3px; }
-                .trend-up { color: #15803d; }
-                
                 .stat-info-main { display: flex; flex-direction: column; }
                 .stat-label { font-size: 12px; color: #666; margin: 0 0 5px 0; font-weight: 500; }
                 .stat-number { font-size: 24px; font-weight: 800; margin: 0; color: #111; }
                 .stat-sub { font-size: 11px; color: #999; margin: 5px 0 0 0; }
 
-                .dashboard-main-content { display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
+                .dashboard-main-content { display: grid; grid-template-columns: 1fr 350px; gap: 20px; }
                 .panel-title { font-size: 14px; font-weight: 700; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; color: #333; }
                 
                 .activity-panel { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #e5e5e5; }
@@ -219,13 +277,26 @@ export default function AdminDashboardClient() {
                 .activity-time { font-size: 11px; color: #999; }
 
                 .quick-stats-panel { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #e5e5e5; }
-                .quick-stats-inner { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
-                .mini-stat { display: flex; align-items: flex-start; gap: 12px; padding: 10px; background: #f9fafb; border-radius: 8px; }
-                .mini-info strong { display: block; font-size: 12px; }
-                .mini-info p { font-size: 10px; color: #888; margin: 0; }
-                .text-orange { color: #f97316; }
-                .text-blue { color: #3b82f6; }
+                .quick-stats-inner { display: flex; flex-direction: column; gap: 15px; }
+                
+                .admin-generate-row { display: flex; align-items: center; gap: 15px; justify-content: space-between; }
+                .mini-stat { padding: 12px; background: #fafafa; border-radius: 8px; border: 1px solid #eee; transition: all 0.2s; }
+                .mini-stat:hover { border-color: #ddd; background: #fdfdfd; }
+                .mini-info strong { display: block; font-size: 13px; color: #222; margin-bottom: 2px; }
+                .mini-info p { font-size: 11px; color: #777; margin: 0; }
+                
+                .text-orange { color: #ea580c; }
+                .text-blue { color: #2563eb; }
                 .text-green { color: #16a34a; }
+
+                .action-btn-small { display: flex; align-items: center; gap: 6px; background: #fff; border: 1px solid #ddd; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; color: #444; transition: all 0.2s; }
+                .action-btn-small:hover:not(:disabled) { background: #f5f5f5; border-color: #ccc; }
+                .action-btn-small:disabled { opacity: 0.5; cursor: not-allowed; }
+                
+                .status-message { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; margin-bottom: 15px; transition: all 0.3s ease; }
+                .status-message.loading { background: #f0f9ff; color: #0369a1; border: 1px solid #bae6fd; }
+                .status-message.success { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+                .status-message.error { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
 
                 .btn-primary { background: linear-gradient(135deg, #111, #333); color: #fff; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; }
                 .w-full { width: 100%; }

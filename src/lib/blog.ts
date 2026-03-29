@@ -12,6 +12,8 @@ export interface BlogPost {
     image: string;
     relatedProductId?: string; // New: Link to product
     seoTags?: string[]; // Added for SEO
+    pinterestImage?: string; // Added for RSS
+    metaDescription?: string; // Added for RSS
 }
 
 export const getBlogPosts = (): BlogPost[] => {

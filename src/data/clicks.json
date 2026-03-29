@@ -1,9 +1,85 @@
 {
-  "totalClicks": 1,
+  "totalClicks": 12,
   "productClicks": {
-    "real-1002": 1
+    "real-1002": 1,
+    "real-1070": 1,
+    "real-1022": 1,
+    "real-1063": 1,
+    "real-1032": 1,
+    "real-1007": 1,
+    "real-1081": 1,
+    "real-1056": 1,
+    "real-1082": 1,
+    "real-1000": 2,
+    "real-1005": 1
   },
   "recentClicks": [
+    {
+      "productId": "real-1005",
+      "productName": "The Ordinary - Masque Cheveux Kératine 100ml",
+      "source": "buy-fr",
+      "time": "2026-03-29T21:19:29.260Z"
+    },
+    {
+      "productId": "real-1000",
+      "productName": "Bionoble - Eau Florale de Rose 250ml",
+      "source": "blog-cta",
+      "time": "2026-03-29T21:18:13.322Z"
+    },
+    {
+      "productId": "real-1000",
+      "productName": "Bionoble - Eau Florale de Rose 250ml",
+      "source": "blog-cta",
+      "time": "2026-03-29T21:17:29.035Z"
+    },
+    {
+      "productId": "real-1082",
+      "productName": "La Roche-Posay - Huile de Ricin Pure 500ml",
+      "source": "blog-cta",
+      "time": "2026-03-29T21:16:32.857Z"
+    },
+    {
+      "productId": "real-1056",
+      "productName": "Kerargan - Sérum Acide Hyaluronique 500ml",
+      "source": "blog-cta",
+      "time": "2026-03-29T21:16:12.500Z"
+    },
+    {
+      "productId": "real-1081",
+      "productName": "CeraVe - Crème Hydratante Visage 100ml",
+      "source": "blog-cta",
+      "time": "2026-03-29T21:15:54.461Z"
+    },
+    {
+      "productId": "real-1007",
+      "productName": "La Roche-Posay - Huile de Ricin Pure 250ml",
+      "source": "blog-cta",
+      "time": "2026-03-29T21:15:29.932Z"
+    },
+    {
+      "productId": "real-1032",
+      "productName": "Pranarôm - Huile de Romarin 100ml",
+      "source": "blog-cta",
+      "time": "2026-03-29T21:14:56.106Z"
+    },
+    {
+      "productId": "real-1063",
+      "productName": "Puressentiel - Crème Hydratante Visage 250ml",
+      "source": "blog-cta",
+      "time": "2026-03-29T21:14:21.265Z"
+    },
+    {
+      "productId": "real-1022",
+      "productName": "La Roche-Posay - Masque Cheveux Kératine 50ml",
+      "source": "blog-cta",
+      "time": "2026-03-29T21:13:14.859Z"
+    },
+    {
+      "productId": "real-1070",
+      "productName": "Moroccanoil - Huile d'Amande Douce 50ml",
+      "source": "direct",
+      "time": "2026-03-29T13:48:39.882Z"
+    },
     {
       "productId": "real-1002",
       "productName": "Pranarôm - Huile de Jojoba Bio 100ml",

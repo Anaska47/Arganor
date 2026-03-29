@@ -21,7 +21,8 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: ProductPageProps) {
     const { slug } = await params;
-    const product = getProductBySlug(slug);
+    const decodedSlug = decodeURIComponent(slug);
+    const product = getProductBySlug(decodedSlug);
 
     if (!product) {
         return {
@@ -43,7 +44,8 @@ export async function generateMetadata({ params }: ProductPageProps) {
 
 export default async function ProductPage({ params }: ProductPageProps) {
     const { slug } = await params;
-    const product = getProductBySlug(slug);
+    const decodedSlug = decodeURIComponent(slug);
+    const product = getProductBySlug(decodedSlug);
 
     if (!product) {
         notFound();
@@ -201,7 +203,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 {relatedProducts.length > 0 && (
                     <section className="section related-section">
                         <div className="container">
-                            <h2 className="section-title">You May Also Like</h2>
+                            <h2 className="section-title">Vous aimerez aussi</h2>
                             <div className="product-grid">
                                 {relatedProducts.map(p => (
                                     <ProductCard key={p.id} product={p} />
@@ -218,7 +220,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                         <span className="rating-text">★ {product.rating}</span>
                     </div>
                     <a href={`/api/track?id=${product.id}&s=mobile-sticky`} className="btn btn-primary buy-btn" target="_blank" rel="noopener noreferrer">
-                        Acheter 
+                        Commander sur Amazon
                     </a>
                 </div>
 

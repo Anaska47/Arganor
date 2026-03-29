@@ -20,50 +20,79 @@ async function generatePinterestImage(postSlug, productImageUrl, title) {
         const width = 1000;
         const height = 1500;
         
-        // 1. Fond noir profond luxueux (Style Jimp v1)
-        const image = new Jimp({ width, height, color: 0x0F0F0FFF });
+        // 1. Un fond élégant semi-aléatoire !
+        const luxuryColors = [0x0F0F0FFF, 0x1A1A1AFF, 0x2A201CFF, 0x17231BFF, 0x2B181FFF, 0x3E2723FF, 0x263238FF, 0x1E1E24FF, 0x241715FF];
+        const bgColor = luxuryColors[Math.floor(Math.random() * luxuryColors.length)];
+        const image = new Jimp({ width, height, color: bgColor });
         
-        // 2. Récupérer l'image produit (ou une image par défaut si echec)
+        // Sélection d'un modèle (layout) aléatoire pour varier le design
+        // 1: Image grande, Texte bas | 2: Image moyenne, Texte grand | 3: Texte en haut, Image en bas
+        const layouts = [
+            { imgY: 0, imgH: 1000, textY: 1050, textH: 300, ctaY: 1380 },
+            { imgY: 0, imgH: 850, textY: 900, textH: 400, ctaY: 1350 },
+            { imgY: 500, imgH: 1000, textY: 50, textH: 350, ctaY: 420 }
+        ];
+        const layout = layouts[Math.floor(Math.random() * layouts.length)];
+
+        // 2. Générer une image *TOTALEMENT UNIQUE*
+        const randomSeed = Math.floor(Math.random() * 999999);
+        const categories = ["skincare,woman", "beauty,luxury", "cosmetics,model", "spa,relax,woman", "organic,skincare"];
+        const randomCat = categories[Math.floor(Math.random() * categories.length)];
+        const uniqueImageSource = `https://loremflickr.com/1000/${layout.imgH}/${randomCat}?random=${randomSeed}`;
+
         let productImg;
         try {
-            productImg = await Jimp.read(productImageUrl);
+            productImg = await Jimp.read(uniqueImageSource);
         } catch (e) {
-            console.warn(`L'URL de l'image n'est pas accessible, utilisation de l'image de fallback.`);
-            // Fallback luxury beauty image
-            productImg = await Jimp.read('https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1974&auto=format&fit=crop');
+            console.warn(`L'URL de loremflickr n'est pas accessible, on tente l'image produit.`);
+            try {
+                productImg = await Jimp.read(productImageUrl);
+            } catch (e2) {
+                productImg = await Jimp.read('https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1974&auto=format&fit=crop');
+            }
         }
         
-        // Couvrir la partie haute de l'affiche (1000x1000px)
-        productImg.cover({ w: 1000, h: 1000 });
-        image.composite(productImg, 0, 0);
+        // Couvrir la zone allouée et placer l'image
+        productImg.cover({ w: 1000, h: layout.imgH });
+        image.composite(productImg, 0, layout.imgY);
 
-        // 3. Ajouter la typographie (texte d'accroche)
-        // Utilisation des polices Jimp v1
+        // 3. Ajouter la typographie
         const { SANS_64_WHITE, SANS_32_WHITE } = require('jimp/fonts');
         const font = await loadFont(SANS_64_WHITE);
         const fontSmall = await loadFont(SANS_32_WHITE);
         
-        // Titre - Centré dans la zone noire du bas (Y=1050)
+        // Titre
         image.print({
             font, 
             x: 0, 
-            y: 1050, 
+            y: layout.textY, 
             text: {
                 text: title.toUpperCase(),
                 alignmentX: HorizontalAlign.CENTER,
                 alignmentY: VerticalAlign.MIDDLE
             },
             maxWidth: width,
-            maxHeight: 300
+            maxHeight: layout.textH
         });
+
+        // Appels à l'action variés
+        const catchphrases = [
+            "✨ CLIQUER POUR DÉCOUVRIR LE SECRET ✨",
+            "👉 LIRE L'ARTICLE COMPLET ICI",
+            "❤️ ENREGISTREZ POUR PLUS TARD ❤️",
+            "👇 LE PRODUIT MIRACLE EST ICI",
+            "🔥 ASTUCE BEAUTÉ 100% NATURELLE 🔥",
+            "🌿 DÉCOUVREZ LA ROUTINE PARFAITE 🌿"
+        ];
+        const ctaText = catchphrases[Math.floor(Math.random() * catchphrases.length)];
 
         // Sous-titre Call-to-action
         image.print({
             font: fontSmall,
             x: 0,
-            y: 1380,
+            y: layout.ctaY,
             text: {
-                text: "✨ CLIQUER POUR DÉCOUVRIR LE SECRET ✨",
+                text: ctaText,
                 alignmentX: HorizontalAlign.CENTER,
                 alignmentY: VerticalAlign.MIDDLE
             },

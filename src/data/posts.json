@@ -154,7 +154,8 @@
     "publishedDate": "2026-03-21",
     "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
     "relatedProductId": "real-1097",
-    "isAutopilot": true
+    "isAutopilot": true,
+    "pinterestImage": "/pins/test-et-avis-la-roche-posay-que-vaut-vraiment-le-la-roche-posay-sérum-rétinol-anti-âge-100ml.jpg"
   },
   {
     "id": "auto-1774054397656",
@@ -170,7 +171,8 @@
     "publishedDate": "2026-03-21",
     "image": "https://images.unsplash.com/photo-1629198688000-71f23e745b6e?q=80&w=2080&auto=format&fit=crop",
     "relatedProductId": "real-1056",
-    "isAutopilot": true
+    "isAutopilot": true,
+    "pinterestImage": "/pins/kerargan-sérum-acide-hyaluronique-500ml-5-raisons-pour-lesquelles-il-domine-le-marché-du-soin-du-visage.jpg"
   },
   {
     "id": "auto-1774054251846",
@@ -186,7 +188,8 @@
     "publishedDate": "2026-03-21",
     "image": "https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1974&auto=format&fit=crop",
     "relatedProductId": "real-1082",
-    "isAutopilot": true
+    "isAutopilot": true,
+    "pinterestImage": "/pins/le-secret-d-une-peau-parfaite-avec-la-roche-posay-huile-de-ricin-pure-500ml-édition-2026.jpg"
   },
   {
     "id": "auto-1774054250246",
@@ -202,7 +205,8 @@
     "publishedDate": "2026-03-21",
     "image": "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?q=80&w=1887&auto=format&fit=crop",
     "relatedProductId": "real-1080",
-    "isAutopilot": true
+    "isAutopilot": true,
+    "pinterestImage": "/pins/test-et-avis-the-ordinary-que-vaut-vraiment-le-the-ordinary-huile-de-romarin-100ml.jpg"
   },
   {
     "id": "auto-1773971642428",
@@ -215,7 +219,8 @@
     "publishedDate": "2026-03-20",
     "image": "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?q=80&w=1887&auto=format&fit=crop",
     "relatedProductId": "p1085",
-    "isAutopilot": true
+    "isAutopilot": true,
+    "pinterestImage": "/pins/pourquoi-j-ai-intégré-intense-skin-hydration-miracle-à-ma-routine-et-pourquoi-vous-devriez-aussi.jpg"
   },
   {
     "id": "b001",
@@ -233,7 +238,8 @@
       "bienfaits argan",
       "soin naturel visage",
       "anti-âge naturel"
-    ]
+    ],
+    "pinterestImage": "/pins/bienfaits-huile-argan-visage.jpg"
   },
   {
     "id": "b002",
@@ -251,7 +257,8 @@
       "pousse des cheveux",
       "remède perte de cheveux",
       "soin capillaire bio"
-    ]
+    ],
+    "pinterestImage": "/pins/huile-de-ricin-pousse-cheveux.jpg"
   },
   {
     "id": "b003",
@@ -269,7 +276,8 @@
       "huile pure vs raffinée",
       "choisir huile argan",
       "beauté naturelle"
-    ]
+    ],
+    "pinterestImage": "/pins/bio-vs-conventionnel-authenticite.jpg"
   },
   {
     "id": "b004",
@@ -287,7 +295,8 @@
       "soin visage soir",
       "massage facial",
       "anti-rides naturel"
-    ]
+    ],
+    "pinterestImage": "/pins/routine-anti-age-naturelle.jpg"
   },
   {
     "id": "b005",
@@ -305,7 +314,8 @@
       "chute de cheveux romarin",
       "minoxidil naturel",
       "alopecie traitement bio"
-    ]
+    ],
+    "pinterestImage": "/pins/huile-de-romarin-cuir-chevelu.jpg"
   },
   {
     "id": "b006",
@@ -323,7 +333,8 @@
       "secret beauté berbère",
       "routine hammam",
       "huile d'argan pur"
-    ]
+    ],
+    "pinterestImage": "/pins/secrets-beaute-femmes-berberes.jpg"
   },
   {
     "id": "b007",
@@ -341,7 +352,8 @@
       "sourcils épais",
       "huile de ricin cils",
       "sérum cils naturel"
-    ]
+    ],
+    "pinterestImage": "/pins/cils-sourcils-epais-naturellement.jpg"
   },
   {
     "id": "b008",
@@ -359,7 +371,8 @@
       "eczéma traitement naturel",
       "hydratation corps bio",
       "huile pour peau sèche"
-    ]
+    ],
+    "pinterestImage": "/pins/sauver-peaux-seches-atopiques.jpg"
   },
   {
     "id": "b009",
@@ -377,7 +390,8 @@
       "quelle huile cheveux",
       "comparatif huiles capillaires",
       "pousse cheveux rapide"
-    ]
+    ],
+    "pinterestImage": "/pins/romarin-vs-ricin-choix-cheveux.jpg"
   },
   {
     "id": "b010",
@@ -395,7 +409,8 @@
       "dangers silicones",
       "clean beauty",
       "cosmétique naturelle"
-    ]
+    ],
+    "pinterestImage": "/pins/danger-cosmetiques-chimiques-transition-bio.jpg"
   },
   {
     "id": "b1774146372510",
@@ -407,7 +422,8 @@
     "author": "Arganor AI Editor",
     "publishedDate": "2026-03-22",
     "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
-    "relatedProductId": "real-1010"
+    "relatedProductId": "real-1010",
+    "pinterestImage": "/pins/why-moroccanoil-sérum-rétinol-anti-âge-250ml-is-ultimate-solution.jpg"
   },
   {
     "id": "b1774146385866",
@@ -419,6 +435,7 @@
     "author": "Arganor AI Editor",
     "publishedDate": "2026-03-22",
     "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
-    "relatedProductId": "real-1097"
+    "relatedProductId": "real-1097",
+    "pinterestImage": "/pins/why-la-roche-posay-sérum-rétinol-anti-âge-100ml-is-ultimate-solution.jpg"
   }
 ]

@@ -20,7 +20,8 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: BlogPostPageProps) {
     const { slug } = await params;
-    const post = getBlogPostBySlug(slug);
+    const decodedSlug = decodeURIComponent(slug);
+    const post = getBlogPostBySlug(decodedSlug);
 
     if (!post) return { title: "Article Not Found" };
 
@@ -38,7 +39,8 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
     const { slug } = await params;
-    const post = getBlogPostBySlug(slug);
+    const decodedSlug = decodeURIComponent(slug);
+    const post = getBlogPostBySlug(decodedSlug);
 
     if (!post) notFound();
 
