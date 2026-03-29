@@ -30,7 +30,12 @@ export const getFeaturedProducts = (): Product[] => {
 };
 
 export const getProductBySlug = (slug: string): Product | undefined => {
-    return productsData.find((p) => p.slug === slug);
+    try {
+        const decodedSlug = decodeURIComponent(slug);
+        return productsData.find((p) => p.slug === decodedSlug);
+    } catch (e) {
+        return productsData.find((p) => p.slug === slug);
+    }
 };
 
 export const getProductById = (id: string): Product | undefined => {
