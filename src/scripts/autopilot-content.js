@@ -5,50 +5,124 @@ const { generatePinterestImage } = require('./pinterest-image-gen.js');
 const PRODUCTS_FILE = path.join(__dirname, '../data/products.json');
 const POSTS_FILE = path.join(__dirname, '../data/posts.json');
 
-// --- Product Generation Variables ---
-const REAL_ASINS = ['B07N7PK9QK', 'B00PBX3L7K', 'B00949CTQQ'];
-const NICHES = [
-    { name: 'Huile d\'Argan Pure', category: 'Soin du Visage', keywords: ['argan pur', 'or liquide', 'anti-âge', 'hydratation intense'] },
-    { name: 'Sérum Croissance', category: 'Soin des Cheveux', keywords: ['croissance cheveux', 'biotine', 'fortifiant', 'chevelure dense'] },
-    { name: 'Huile de Ricin Royale', category: 'Soin des Cheveux', keywords: ['ricin bio', 'cils longs', 'sourcils denses', 'cuir chevelu'] },
-    { name: 'Élixir de Romarin', category: 'Soin des Cheveux', keywords: ['romarin', 'circulation', 'vitalité', 'repousse'] },
-    { name: 'Soin Anti-Âge Suprême', category: 'Soin du Visage', keywords: ['rides', 'collagène', 'fermeté', 'éclat'] },
-    { name: 'Lait Corps Soyeux', category: 'Soin du Corps', keywords: ['hydratation', 'peau douce', 'nutrition', 'velouté'] },
+// --- Curated Catalog of Guaranteed High-Converting Amazon Real Products ---
+const REAL_PRODUCTS = [
+    {
+        name: "Lotion Exfoliante Perfectrice 2% BHA",
+        brand: "Paula's Choice",
+        category: "Soin du Visage",
+        asin: "B00949CTQQ",
+        description: "L'exfoliant liquide n°1 avec 2% de BHA (acide salicylique) qui élimine les cellules mortes, désobstrue les pores et lisse visiblement les rides.",
+        keywords: ["exfoliant BHA", "pores dilatés", "points noirs", "acide salicylique"],
+        price: 39.00
+    },
+    {
+        name: "Huile Fortifiante Cuir Chevelu Romarin Menthe",
+        brand: "Mielle Organics",
+        category: "Soin des Cheveux",
+        asin: "B07N7PK9QK",
+        description: "Cette huile infusée au romarin et à la menthe fortifie la fibre capillaire, stimule la pousse et apaise les cuirs chevelus irrités.",
+        keywords: ["pousse cheveux", "romarin", "alopécie", "fortifiant capillaire"],
+        price: 14.99
+    },
+    {
+        name: "Essence Advanced Snail 96 Mucin Power",
+        brand: "COSRX",
+        category: "Soin du Visage",
+        asin: "B00PBX3L7K",
+        description: "Composée à 96% de mucine (bave d'escargot), cette essence légère répare la barrière cutanée et offre une hydratation longue durée radieuse.",
+        keywords: ["bave escargot", "hydratation intense", "glass skin", "skincare coréenne"],
+        price: 24.50
+    },
+    {
+        name: "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+        brand: "The Ordinary",
+        category: "Soin du Visage",
+        asin: "B01N33X44C",
+        description: "Un sérum ultra-concentré en niacinamide pour réguler le sébum, resserrer les pores et atténuer les imperfections rapidement.",
+        keywords: ["niacinamide", "peau grasse", "sérum the ordinary", "imperfections", "pores"],
+        price: 10.90
+    },
+    {
+        name: "Baume Hydratant Visage et Corps Peaux Sèches",
+        brand: "CeraVe",
+        category: "Soin du Corps",
+        asin: "B07C5VJGDF",
+        description: "Enrichi aux 3 céramides essentiels et à l'acide hyaluronique, ce baume restaure la barrière cutanée sans fini gras.",
+        keywords: ["hydratation", "céramides", "peau sèche", "baume cerave", "dermatologique"],
+        price: 16.50
+    },
+    {
+        name: "Huile de Soin Capillaire No. 7 Bonding Oil",
+        brand: "Olaplex",
+        category: "Soin des Cheveux",
+        asin: "B0822ZTNJC",
+        description: "Une huile réparatrice hautement concentrée qui augmente instantanément la brillance, la douceur et l'éclat des cheveux abîmés.",
+        keywords: ["huile cheveux", "réparation cheveux", "olaplex", "brillance extrême", "soin thermoprotecteur"],
+        price: 29.50
+    },
+    {
+        name: "Huile Prodigieuse Multi-Fonctions",
+        brand: "NUXE",
+        category: "Soin du Corps",
+        asin: "B00AE6WNY8",
+        description: "L'iconique huile sèche nourrissante pour visage, corps et cheveux au parfum d'été mythique.",
+        keywords: ["huile sèche", "hydratation corps", "nuxe", "huile prodigieuse", "éclat naturel"],
+        price: 26.90
+    },
+    {
+        name: "Gel Moussant Purifiant Peaux Grasses Effaclar",
+        brand: "La Roche-Posay",
+        category: "Soin du Visage",
+        asin: "B00IMJ0HDU",
+        description: "Le nettoyant purifiant n°1 pour l'acné, formulé sans alcool pour nettoyer et éliminer l'excès de sébum en douceur.",
+        keywords: ["nettoyant visage", "acné", "peau grasse", "effaclar", "la roche-posay"],
+        price: 15.90
+    },
+    {
+        name: "Sérum Expert Réparateur de Nuit",
+        brand: "Soin Expert Nuit",
+        category: "Soin Anti-Âge",
+        asin: "B00DEXA0LY",
+        description: "Un sérum de nuit concentré conçu pour restaurer l'élasticité et repulper l'épiderme pendant votre sommeil avec des résultats rapides.",
+        keywords: ["sérum nuit", "réparation cutanée", "anti-rides", "hydratation"],
+        price: 28.90
+    }
 ];
-const ADJECTIVES = ['Velours', 'Doré', 'Pur', 'Lumineux', 'Royal', 'Divin', 'Soyeux', 'Radiant', 'Intense', 'Précieux', 'Éternel'];
-const NOUNS = ['Nectar', 'Sérum', 'Essence', 'Rituel', 'Infusion', 'Éclat', 'Secret', 'Luxe', 'Miracle'];
+
 const IMAGES = [
     'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop',
     'https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1974&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1974&auto=format&fit=crop',
     'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1974&auto=format&fit=crop',
     'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=1974&auto=format&fit=crop'
 ];
-const BRANDS = ['Arganor Héritage', 'Arganor Luxe', 'Arganor Professionnel', 'Arganor Botanique'];
 
 function getRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
 function generateNewProduct() {
-    const niche = getRandom(NICHES);
-    const baseName = `${getRandom(NOUNS)} ${getRandom(ADJECTIVES)} de ${niche.name}`;
-    const id = `auto_p_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
-    const slug = baseName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    const rawProd = getRandom(REAL_PRODUCTS);
+    
+    // Ajout d'un suffixe unique pour éviter les doublons de slugs lors de générations massives
+    const uniqueSuffix = Math.floor(Math.random() * 10000);
+    const id = `auto_p_${Date.now()}_${uniqueSuffix}`;
+    const slug = `${rawProd.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, '-')}-${uniqueSuffix}`.replace(/(^-|-$)/g, '');
 
     return {
         id: id,
-        asin: getRandom(REAL_ASINS),
-        name: baseName,
+        asin: rawProd.asin,
+        name: rawProd.name,
         slug: slug,
-        description: `Découvrez l'ultime raffinement avec **${baseName}**. Cette formule précieuse exploite toute la puissance de ${niche.name} pour offrir des résultats exceptionnels.`,
-        benefits: `### Transformez votre routine\n- **Nutrition Profonde**: Une hydratation pénétrante.\n- **Résultats Visibles**: Une routine transformée en 7 jours.\n- **Éthique & Pur**: Le meilleur de la nature pour vous.`,
-        price: Math.floor(Math.random() * (120 - 40) + 40) + 0.90,
-        category: niche.category,
-        brand: getRandom(BRANDS),
+        description: rawProd.description,
+        benefits: `### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.`,
+        price: rawProd.price,
+        category: rawProd.category,
+        brand: rawProd.brand,
         image: getRandom(IMAGES),
         rating: Number((Math.random() * (5.0 - 4.6) + 4.6).toFixed(1)),
-        reviews: Math.floor(Math.random() * 500) + 50,
-        features: [...niche.keywords.slice(0, 2), "100% Bio", "Luxe"],
-        seoTags: [...niche.keywords, "beauté de luxe", "arganor"]
+        reviews: Math.floor(Math.random() * 800) + 150,
+        features: [...rawProd.keywords.slice(0, 2), "Incontournable", "Best-Seller"],
+        seoTags: [...rawProd.keywords, "beauté", "tendance"]
     };
 }
 
