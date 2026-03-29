@@ -51,8 +51,18 @@ export async function GET(req: NextRequest) {
     saveClicks(data);
 
     // ── Build Affiliate Link ─────────────────────────────────
-    // Fallback if no ASIN/link in data
-    const amazonLink = `https://www.amazon.fr/dp/${product.asin || 'B00K5H0RX0'}?tag=arganor-21`;
+    let amazonLink = "";
+    const affiliateTag = "arganor-21";
+
+    if (product.asin) {
+        // Direct Product Page
+        amazonLink = `https://www.amazon.fr/dp/${product.asin}?tag=${affiliateTag}`;
+    } else {
+        // Fallback: Amazon Search results for the exact product name
+        // This guarantees the user finds the accurate product (or very close) and the affiliate cookie is still set!
+        const searchQuery = encodeURIComponent(product.name);
+        amazonLink = `https://www.amazon.fr/s?k=${searchQuery}&tag=${affiliateTag}`;
+    }
     
     // REDIRECT to Amazon immediately!
     return NextResponse.redirect(amazonLink);

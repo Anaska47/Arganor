@@ -151,13 +151,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
                             </div>
 
                              <div className="actions">
-                                <a href={`/api/track?id=${product.id}&s=buy-us`} className="btn btn-primary buy-btn" target="_blank" rel="noopener noreferrer">
-                                    Buy on Amazon US
+                                <a href={`/api/track?id=${product.id}&s=buy-fr`} className="btn btn-primary buy-btn" target="_blank" rel="noopener noreferrer">
+                                   📦 Acheter au meilleur prix sur Amazon
                                 </a>
-                                <div style={{ marginTop: '10px' }}>
-                                    <a href={`/api/track?id=${product.id}&s=buy-fr`} className="btn btn-outline buy-btn" target="_blank" rel="noopener noreferrer">
-                                        Acheter sur Amazon FR
-                                    </a>
+                                <div style={{ marginTop: '10px', fontSize: '0.85rem', color: 'var(--color-dark-muted)', textAlign: 'center' }}>
+                                    Paiement sécurisé et expédition garantie par Amazon
                                 </div>
                             </div>
 
