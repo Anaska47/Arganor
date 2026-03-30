@@ -5,20 +5,20 @@ export interface Product {
     name: string;
     slug: string;
     asin?: string; // New: Optional ASIN
-    description: string;
-    benefits: string; // New: Markdown supported
+    description?: string;
+    benefits?: string; // New: Markdown supported
     price: number;
     category: string;
-    brand: string; // New
+    brand?: string; // New
     image: string;
     rating: number;
     reviews: number;
-    features: string[];
+    features?: string[];
     affiliateLinks?: {
         us: string;
         fr: string;
     };
-    seoTags: string[]; // New
+    seoTags?: string[]; // New
 }
 
 export const getProducts = (): Product[] => {

@@ -59,7 +59,7 @@ export function buildPinData(product: Product, baseUrl: string = "https://argano
 
 function getBenefit(product: Product): string {
     // Extract first bullet from benefits markdown
-    const match = product.benefits.match(/\*\*(.+?)\*\*[:\s]+(.+)/);
+    const match = product.benefits?.match(/\*\*(.+?)\*\*[:\s]+(.+)/);
     if (match) return `✅ ${match[2].trim()}`;
     return `✅ Un des best-sellers de la catégorie ${product.category}`;
 }

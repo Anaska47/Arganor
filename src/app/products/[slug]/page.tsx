@@ -141,9 +141,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
                             <div className="features-list">
                                 <h3>Avantages Clés</h3>
                                 <ul>
-                                    {product.features.map((feature, index) => (
+                                    {product.features?.map((feature, index) => (
                                         <li key={index}><Check size={16} color="var(--color-gold)" /> {feature}</li>
-                                    ))}
+                                    )) || <li><Check size={16} color="var(--color-gold)" /> Incontournable</li>}
                                 </ul>
                             </div>
 
@@ -190,7 +190,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                         <div className="benefits-content" style={{ maxWidth: '800px', margin: '0 auto', fontSize: '1.1rem', lineHeight: '1.8' }}>
                             {/* Simple markdown rendering */}
                             <div dangerouslySetInnerHTML={{
-                                __html: product.benefits
+                                __html: (product.benefits || "Découvrez un soin d'exception.")
                                     .replace(/### (.*)/g, '<h3>$1</h3>')
                                     .replace(/- \*\*(.*?)\*\*:/g, '<strong>• $1:</strong>')
                                     .replace(/\n/g, '<br />')

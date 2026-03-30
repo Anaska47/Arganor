@@ -9,7 +9,16 @@
     "slug": "serum-the-ordinary-niacinamide",
     "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop",
     "rating": 4.8,
-    "reviews": 1540
+    "reviews": 1540,
+    "description": "Luxe et efficacité pour votre routine.",
+    "benefits": "### Avantages\n- Naturel\n- Bio",
+    "features": [
+      "Bio",
+      "Luxe"
+    ],
+    "seoTags": [
+      "beauté"
+    ]
   },
   {
     "id": "auto_p_1774827676180_2952",
