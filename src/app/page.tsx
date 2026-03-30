@@ -12,15 +12,27 @@ export default function Home() {
     <>
       <Header />
       <main>
-        {/* Hero Section */}
-        <section className="hero reveal">
+        {/* Hero Section - CINEMATIC WAOUH EFFECT */}
+        <section className="hero-video-container reveal">
+          <video 
+            autoPlay 
+            muted 
+            loop 
+            playsInline 
+            className="hero-video"
+            poster="/images/hero-fallback.jpg"
+          >
+            <source src="/videos/hero-luxury.mp4" type="video/mp4" />
+          </video>
+          <div className="hero-overlay"></div>
+          
           <div className="container hero-content">
             <span className="hero-subtitle reveal-delay-1">L&apos;Héritage de l&apos;Atlas</span>
-            <h1 className="reveal-delay-2">L&apos;Arganor : L&apos;Élixir de Jeunesse Éternelle</h1>
-            <p className="reveal-delay-3">Découvrez la puissance transformatrice de l&apos;or liquide du Maroc. Bio, durable et d&apos;un luxe absolu pour votre peau et vos cheveux.</p>
+            <h1 className="reveal-delay-2">L&apos;Arganor<span>™</span><br />L&apos;Élixir de Jeunesse</h1>
+            <p className="reveal-delay-3">Découvrez la puissance transformatrice de l&apos;or liquide. Une immersion sensorielle dans le luxe absolu.</p>
             <div className="hero-cta reveal-delay-3">
-              <Link href="/products" className="btn btn-primary">Explorer la Collection</Link>
-              <Link href="/blog" className="btn btn-outline">Notre Histoire</Link>
+              <Link href="/products" className="btn btn-gold">Boutique Exclusive</Link>
+              <Link href="/blog" className="btn btn-outline-white">Notre Journal</Link>
             </div>
           </div>
         </section>
