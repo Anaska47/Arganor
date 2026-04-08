@@ -15,12 +15,12 @@ jobs:
 
     steps:
     - name: 📥 Récupération du code source
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: ⚙️ Configuration de Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20'
         cache: 'npm'
 
     - name: 📦 Installation des dépendances
@@ -33,7 +33,7 @@ jobs:
       run: |
         git config --global user.name "Arganor Autopilot"
         git config --global user.email "bot@arganor.com"
-        git add src/data/posts.json public/pins/ src/media/
+        git add src/data/posts.json src/data/products.json public/pins/ media/
         # S'il y a des changements, on commite et on push (ce qui déclenchera Vercel)
         git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Autopilot: Nouvel Article SEO et Épingle Pinterest générés" && git push)
 

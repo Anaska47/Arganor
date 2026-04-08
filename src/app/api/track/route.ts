@@ -5,16 +5,31 @@ import { getProductById } from "@/lib/data";
 
 const CLICKS_PATH = path.join(process.cwd(), 'src/data/clicks.json');
 
-function getClicks() {
+type ClicksData = {
+    totalClicks: number;
+    productClicks: Record<string, number>;
+    recentClicks: Array<{
+        productId: string;
+        productName: string;
+        source: string;
+        time: string;
+    }>;
+};
+
+function getEmptyClicks(): ClicksData {
+    return { totalClicks: 0, productClicks: {}, recentClicks: [] };
+}
+
+function getClicks(): ClicksData {
     try {
-        if (!fs.existsSync(CLICKS_PATH)) return { totalClicks: 0, productClicks: {}, recentClicks: [] };
-        return JSON.parse(fs.readFileSync(CLICKS_PATH, 'utf8'));
-    } catch (e) {
-        return { totalClicks: 0, productClicks: {}, recentClicks: [] };
+        if (!fs.existsSync(CLICKS_PATH)) return getEmptyClicks();
+        return JSON.parse(fs.readFileSync(CLICKS_PATH, 'utf8')) as ClicksData;
+    } catch {
+        return getEmptyClicks();
     }
 }
 
-function saveClicks(data: any) {
+function saveClicks(data: ClicksData) {
     try {
         fs.writeFileSync(CLICKS_PATH, JSON.stringify(data, null, 2));
     } catch (e) {

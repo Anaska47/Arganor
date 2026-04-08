@@ -38,8 +38,9 @@ export async function POST(req: Request) {
         }
 
         return NextResponse.json({ success: true, message: successMessage, output: stdout });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Erreur de génération:", error);
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+        const message = error instanceof Error ? error.message : "Erreur inconnue";
+        return NextResponse.json({ success: false, error: message }, { status: 500 });
     }
 }

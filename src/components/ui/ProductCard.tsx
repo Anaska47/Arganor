@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Product } from "@/lib/data";
-import { getAffiliateLink } from "@/lib/affiliate";
 import { Star } from "lucide-react";
 
 interface ProductCardProps {

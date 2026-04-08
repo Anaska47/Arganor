@@ -4,8 +4,7 @@ import { getBlogPostBySlug, getBlogPosts } from "@/lib/blog";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Calendar, User, ArrowLeft, Star } from "lucide-react";
-import { getProductById } from "@/lib/data";
-import { getAffiliateLink } from "@/lib/affiliate";
+import { getProductById, getProducts } from "@/lib/data";
 
 interface BlogPostPageProps {
     params: Promise<{ slug: string }>;
@@ -47,8 +46,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     // Try finding the related product, if not found (e.g. new DB), fallback to the absolute #1 best-seller
     let relatedProduct = post.relatedProductId ? getProductById(post.relatedProductId) : null;
     if (!relatedProduct) {
-        const allProducts = getProductById("real-1000") ? [getProductById("real-1000")] : [];
-        const fallbackProducts = require("@/lib/data").getProducts();
+        const fallbackProducts = getProducts();
         relatedProduct = fallbackProducts.length > 0 ? fallbackProducts[0] : null;
     }
 
@@ -113,7 +111,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                             }} />
 
                             {/* Pinterest Pin-It Block (Optimized for "Save from URL") */}
-                            {(post as any).pinterestImage && (
+                            {post.pinterestImage && (
                                 <div className="pinterest-share-box" style={{ background: '#FFF5F5', padding: '2rem', borderRadius: '12px', border: '1px solid #FFDFDF', textAlign: 'center', margin: '3rem 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                     <h3 style={{ fontSize: '1.4rem', color: '#E60023', marginBottom: '1rem', fontFamily: 'var(--font-playfair)' }}>
                                         📌 Épinglez pour lire plus tard !
@@ -123,7 +121,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                                     </p>
                                     <div style={{ maxWidth: '300px', width: '100%', boxShadow: '0 10px 30px rgba(0,0,0,0.15)', borderRadius: '8px', overflow: 'hidden' }}>
                                         <img 
-                                            src={(post as any).pinterestImage} 
+                                            src={post.pinterestImage} 
                                             alt={`Épingle Pinterest : ${post.title}`} 
                                             style={{ width: '100%', height: 'auto', display: 'block' }}
                                         />

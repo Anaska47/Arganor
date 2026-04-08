@@ -2,7 +2,6 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ProductCard from "@/components/ui/ProductCard";
 import { getProductsByCategory } from "@/lib/data"; // Assumes you might need getProducts for static params
-import { notFound } from "next/navigation";
 
 // Define known categories for static generation
 const CATEGORIES = ["face", "hair", "body", "skincare", "anti-aging"];

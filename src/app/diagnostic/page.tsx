@@ -1,13 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Image from "next/image";
+import { useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getAffiliateLink } from "@/lib/affiliate";
+import type { Product } from "@/lib/data";
 
 // Simulation of products for the client side
-const mockProducts = [
+type DiagnosticProduct = Pick<Product, "id" | "name" | "category" | "image"> & {
+  description: string;
+  match: {
+    target: string;
+    concern: string;
+  };
+};
+
+const mockProducts: DiagnosticProduct[] = [
   {
     id: "p-face-dry",
     name: "Sérum Anti-Âge Acide Hyaluronique",
@@ -46,7 +54,7 @@ export default function DiagnosticPage() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({ target: "", concern: "" });
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<DiagnosticProduct | null>(null);
 
   const handleAnswer = (key: string, value: string) => {
     const newAnswers = { ...answers, [key]: value };
@@ -137,14 +145,14 @@ export default function DiagnosticPage() {
               <h1 style={{ fontSize: '2rem', margin: '1.5rem 0', fontFamily: 'var(--font-playfair)', color: 'var(--color-white)' }}>Votre Prescription Beauté</h1>
               
               <div style={{ background: '#000', padding: '2rem', borderRadius: '12px', border: '1px solid #333', marginBottom: '2rem' }}>
-                <a href={getAffiliateLink({ name: result.name } as any, 'fr')} target="_blank" rel="noopener noreferrer">
+                <a href={getDiagnosticAffiliateLink(result)} target="_blank" rel="noopener noreferrer">
                   <img src={result.image} alt={result.name} style={{ width: '100%', height: '250px', objectFit: 'cover', borderRadius: '8px', marginBottom: '1.5rem', border: '1px solid #444' }} />
                 </a>
                 <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--color-gold-light)' }}>{result.name}</h3>
                 <p style={{ color: '#AAA', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '1.5rem' }}>{result.description}</p>
                 
                 <a 
-                  href={getAffiliateLink({ name: result.name } as any, 'fr')} 
+                  href={getDiagnosticAffiliateLink(result)} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   style={{ display: 'block', width: '100%', padding: '16px', background: '#FF9900', color: '#000', fontWeight: 'bold', fontSize: '1.1rem', borderRadius: '8px', textDecoration: 'none', transition: 'all 0.3s ease' }}
@@ -185,3 +193,13 @@ const btnStyle = {
   justifyContent: 'space-between',
   alignItems: 'center'
 };
+
+function getDiagnosticAffiliateLink(product: DiagnosticProduct) {
+  return getAffiliateLink({
+    ...product,
+    slug: product.id,
+    price: 0,
+    rating: 0,
+    reviews: 0,
+  }, "fr");
+}

@@ -3,6 +3,17 @@ import fs from 'fs';
 import path from 'path';
 import { NextResponse } from "next/server";
 
+type ClickActivity = {
+    productName: string;
+    source: string;
+    time: string;
+};
+
+type ClicksData = {
+    totalClicks?: number;
+    recentClicks?: ClickActivity[];
+};
+
 export async function GET() {
     // 1. Get products count
     const products = getProducts();
@@ -10,11 +21,11 @@ export async function GET() {
 
     // 2. Get real clicks count
     let realClicks = 0;
-    let recentActivities: any[] = [];
+    let recentActivities: ClickActivity[] = [];
     try {
         const clicksPath = path.join(process.cwd(), 'src/data/clicks.json');
         if (fs.existsSync(clicksPath)) {
-            const clicksData = JSON.parse(fs.readFileSync(clicksPath, 'utf8'));
+            const clicksData = JSON.parse(fs.readFileSync(clicksPath, 'utf8')) as ClicksData;
             realClicks = clicksData.totalClicks || 0;
             recentActivities = clicksData.recentClicks || [];
         }
@@ -46,7 +57,8 @@ export async function GET() {
         avgRating,
         revenue,
         clicks: realClicks,
-        activities: recentActivities.map((c: any) => ({
+        activities: recentActivities.map((c, index) => ({
+            id: index,
             type: "sale",
             text: `Clic sur ${c.productName} (${c.source})`,
             time: formatTime(c.time),

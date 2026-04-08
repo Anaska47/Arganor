@@ -1,39 +1,66 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Edit, Trash2, Plus } from "lucide-react";
 
+type BlogPost = {
+    id: string;
+    title: string;
+    slug: string;
+    excerpt: string;
+    content: string;
+    category: string;
+    author: string;
+    publishedDate: string;
+    image?: string;
+    relatedProductId?: string;
+};
+
+type Product = {
+    id: string;
+    name: string;
+    slug: string;
+    category: string;
+    brand: string;
+    benefits: string;
+    image?: string;
+};
+
 export default function AdminBlogClient() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [posts, setPosts] = useState<any[]>([]);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [products, setProducts] = useState<any[]>([]); // For auto-linking
+    const [posts, setPosts] = useState<BlogPost[]>([]);
+    const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [generating, setGenerating] = useState(false);
 
-    const fetchPosts = async () => {
-        const res = await fetch('/api/blog');
+    const fetchPosts = useCallback(async () => {
+        const res = await fetch("/api/blog");
         const data = await res.json();
         setPosts(data);
         setLoading(false);
-    };
-
-    const fetchProducts = async () => {
-        const res = await fetch('/api/products');
-        const data = await res.json();
-        setProducts(data);
-    };
-
-    useEffect(() => {
-        fetchPosts();
-        fetchProducts();
     }, []);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const generatePost = async (product: any) => {
+    useEffect(() => {
+        let isMounted = true;
+
+        void Promise.all([
+            fetch("/api/blog").then((res) => res.json() as Promise<BlogPost[]>),
+            fetch("/api/products").then((res) => res.json() as Promise<Product[]>),
+        ]).then(([nextPosts, nextProducts]) => {
+            if (!isMounted) return;
+            setPosts(nextPosts);
+            setProducts(nextProducts);
+            setLoading(false);
+        });
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    const generatePost = async (product: Product) => {
         setGenerating(true);
-        // Mimic AI generation using "Smart Templates"
-        const newPost = {
+
+        const newPost: BlogPost = {
             id: `b${Date.now()}`,
             title: `Why ${product.name} is the Ultimate Solution for ${product.category}`,
             slug: `why-${product.slug}-is-ultimate-solution`,
@@ -58,19 +85,18 @@ We've tested countless products, but this one stands out because of its purity a
 ## How to Use
 
 Apply generous amounts before bed or in the morning for best results.
-        `,
+            `,
             category: product.category,
             author: "Arganor AI Editor",
-            publishedDate: new Date().toISOString().split('T')[0],
+            publishedDate: new Date().toISOString().split("T")[0],
             image: product.image,
-            relatedProductId: product.id
+            relatedProductId: product.id,
         };
 
-        // Save to API
-        await fetch('/api/blog', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newPost)
+        await fetch("/api/blog", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newPost),
         });
 
         await fetchPosts();
@@ -84,25 +110,36 @@ Apply generous amounts before bed or in the morning for best results.
         <div>
             <header className="page-header-admin flex-header">
                 <h1>Blog Management</h1>
-                <div style={{ display: 'flex', gap: '10px' }}>
-                    {/* Simple Auto-Gen Demo button */}
+
+                <div className="header-actions">
+                    <label htmlFor="generate-article-select" className="sr-only">
+                        Generate an article for a product
+                    </label>
+
                     <select
+                        id="generate-article-select"
+                        aria-label="Generate an article for a product"
                         onChange={(e) => {
                             if (e.target.value) {
-                                const prod = products.find(p => p.id === e.target.value);
+                                const prod = products.find((p) => p.id === e.target.value);
                                 if (prod) generatePost(prod);
-                                e.target.value = ""; // reset
+                                e.target.value = "";
                             }
                         }}
                         className="smart-select"
                         disabled={generating}
                     >
                         <option value="">✨ Generate Article for...</option>
-                        {products.map(p => (
-                            <option key={p.id} value={p.id}>{p.name}</option>
+                        {products.map((p) => (
+                            <option key={p.id} value={p.id}>
+                                {p.name}
+                            </option>
                         ))}
                     </select>
-                    <button className="btn btn-primary add-btn"><Plus size={18} /> New Post</button>
+
+                    <button className="btn btn-primary add-btn">
+                        <Plus size={18} /> New Post
+                    </button>
                 </div>
             </header>
 
@@ -121,13 +158,19 @@ Apply generous amounts before bed or in the morning for best results.
                         {posts.map((post) => (
                             <tr key={post.id}>
                                 <td className="font-semibold">{post.title}</td>
-                                <td><span className="badge">{post.category}</span></td>
+                                <td>
+                                    <span className="badge">{post.category}</span>
+                                </td>
                                 <td>{post.author}</td>
                                 <td>{post.publishedDate}</td>
                                 <td>
                                     <div className="action-buttons">
-                                        <button className="action-btn edit" title="Edit"><Edit size={16} /></button>
-                                        <button className="action-btn delete" title="Delete"><Trash2 size={16} /></button>
+                                        <button className="action-btn edit" title="Edit">
+                                            <Edit size={16} />
+                                        </button>
+                                        <button className="action-btn delete" title="Delete">
+                                            <Trash2 size={16} />
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -135,20 +178,39 @@ Apply generous amounts before bed or in the morning for best results.
                     </tbody>
                 </table>
             </div>
+
             <style jsx>{`
-        .smart-select {
-            padding: 8px 12px;
-            border: 1px solid var(--color-gold);
-            border-radius: 4px;
-            background: white;
-            color: var(--color-gold-dark);
-            cursor: pointer;
-            outline: none;
-        }
-        .smart-select:hover {
-            background: var(--color-cream);
-        }
-      `}</style>
+                .header-actions {
+                    display: flex;
+                    gap: 10px;
+                }
+
+                .smart-select {
+                    padding: 8px 12px;
+                    border: 1px solid var(--color-gold);
+                    border-radius: 4px;
+                    background: white;
+                    color: var(--color-gold-dark);
+                    cursor: pointer;
+                    outline: none;
+                }
+
+                .smart-select:hover {
+                    background: var(--color-cream);
+                }
+
+                .sr-only {
+                    position: absolute;
+                    width: 1px;
+                    height: 1px;
+                    padding: 0;
+                    margin: -1px;
+                    overflow: hidden;
+                    clip: rect(0, 0, 0, 0);
+                    white-space: nowrap;
+                    border: 0;
+                }
+            `}</style>
         </div>
     );
 }

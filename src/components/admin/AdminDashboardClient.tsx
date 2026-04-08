@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { 
     Package, 
     FileText, 
     DollarSign, 
     TrendingUp, 
     Star, 
-    Users, 
     Zap,
     PlusCircle,
     RefreshCw,
@@ -38,7 +37,7 @@ export default function AdminDashboardClient() {
     const [activities, setActivities] = useState<Activity[]>([]);
     const [generatingStatus, setGeneratingStatus] = useState<{type: string, status: 'loading' | 'success' | 'error' | null, message: string}>({ type: '', status: null, message: '' });
 
-    const fetchStats = async () => {
+    const fetchStats = useCallback(async () => {
         try {
             const res = await fetch("/api/admin/stats");
             const data = await res.json();
@@ -51,11 +50,11 @@ export default function AdminDashboardClient() {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
     useEffect(() => {
         fetchStats();
-    }, []);
+    }, [fetchStats]);
 
     const handleGenerate = async (type: 'product' | 'article' | 'pin') => {
         setGeneratingStatus({ type, status: 'loading', message: 'Génération en cours...' });
@@ -76,6 +75,7 @@ export default function AdminDashboardClient() {
                 setGeneratingStatus({ type, status: 'error', message: "Erreur : " + data.error });
             }
         } catch (error) {
+            console.error("Failed to generate content", error);
             setGeneratingStatus({ type, status: 'error', message: "Erreur inattendue" });
         }
     };

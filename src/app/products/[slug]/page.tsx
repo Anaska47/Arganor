@@ -2,11 +2,9 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getProductBySlug, getProducts } from "@/lib/data";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import { Star, Check, Truck, ShieldCheck, Clock, Award, Shield } from "lucide-react";
 import ProductCard from "@/components/ui/ProductCard";
-import { getAffiliateLink } from "@/lib/affiliate";
 
 interface ProductPageProps {
     params: Promise<{ slug: string }>;

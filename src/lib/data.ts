@@ -33,7 +33,7 @@ export const getProductBySlug = (slug: string): Product | undefined => {
     try {
         const decodedSlug = decodeURIComponent(slug);
         return productsData.find((p) => p.slug === decodedSlug);
-    } catch (e) {
+    } catch {
         return productsData.find((p) => p.slug === slug);
     }
 };

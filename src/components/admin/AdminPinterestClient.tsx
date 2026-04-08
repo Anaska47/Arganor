@@ -121,10 +121,6 @@ export default function AdminPinterestClient() {
         }
     };
 
-    const makeDescription = selectedPin
-        ? `${selectedPin.description}\n\n${selectedPin.hashtags.join(" ")}`
-        : "";
-
     if (loading) {
         return (
             <div className="pin-loading-state">
