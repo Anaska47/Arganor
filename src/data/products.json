@@ -1,5 +1,61 @@
 [
   {
+    "id": "auto_p_1775726199035_5366",
+    "asin": "B07N7PK9QK",
+    "name": "Huile Fortifiante Cuir Chevelu Romarin Menthe",
+    "slug": "huile-fortifiante-cuir-chevelu-romarin-menthe-5366",
+    "description": "Cette huile infusée au romarin et à la menthe fortifie la fibre capillaire, stimule la pousse et apaise les cuirs chevelus irrités.",
+    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "price": 14.99,
+    "category": "Soin des Cheveux",
+    "brand": "Mielle Organics",
+    "image": "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.6,
+    "reviews": 398,
+    "features": [
+      "pousse cheveux",
+      "romarin",
+      "Incontournable",
+      "Best-Seller"
+    ],
+    "seoTags": [
+      "pousse cheveux",
+      "romarin",
+      "alopécie",
+      "fortifiant capillaire",
+      "beauté",
+      "tendance"
+    ]
+  },
+  {
+    "id": "auto_p_1775726185910_7736",
+    "asin": "B00949CTQQ",
+    "name": "Lotion Exfoliante Perfectrice 2% BHA",
+    "slug": "lotion-exfoliante-perfectrice-2-bha-7736",
+    "description": "L'exfoliant liquide n°1 avec 2% de BHA (acide salicylique) qui élimine les cellules mortes, désobstrue les pores et lisse visiblement les rides.",
+    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "price": 39,
+    "category": "Soin du Visage",
+    "brand": "Paula's Choice",
+    "image": "https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.7,
+    "reviews": 393,
+    "features": [
+      "exfoliant BHA",
+      "pores dilatés",
+      "Incontournable",
+      "Best-Seller"
+    ],
+    "seoTags": [
+      "exfoliant BHA",
+      "pores dilatés",
+      "points noirs",
+      "acide salicylique",
+      "beauté",
+      "tendance"
+    ]
+  },
+  {
     "id": "auto_p_the_ordinary_niac",
     "name": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
     "brand": "The Ordinary",
