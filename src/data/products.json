@@ -1,5 +1,63 @@
 [
   {
+    "id": "auto_p_1775812664022_5201",
+    "asin": "B00AE6WNY8",
+    "name": "Huile Prodigieuse Multi-Fonctions",
+    "slug": "huile-prodigieuse-multi-fonctions-5201",
+    "description": "L'iconique huile sèche nourrissante pour visage, corps et cheveux au parfum d'été mythique.",
+    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "price": 26.9,
+    "category": "Soin du Corps",
+    "brand": "NUXE",
+    "image": "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.8,
+    "reviews": 361,
+    "features": [
+      "huile sèche",
+      "hydratation corps",
+      "Incontournable",
+      "Best-Seller"
+    ],
+    "seoTags": [
+      "huile sèche",
+      "hydratation corps",
+      "nuxe",
+      "huile prodigieuse",
+      "éclat naturel",
+      "beauté",
+      "tendance"
+    ]
+  },
+  {
+    "id": "auto_p_1775812651833_6107",
+    "asin": "B07C5VJGDF",
+    "name": "Baume Hydratant Visage et Corps Peaux Sèches",
+    "slug": "baume-hydratant-visage-et-corps-peaux-seches-6107",
+    "description": "Enrichi aux 3 céramides essentiels et à l'acide hyaluronique, ce baume restaure la barrière cutanée sans fini gras.",
+    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "price": 16.5,
+    "category": "Soin du Corps",
+    "brand": "CeraVe",
+    "image": "https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.9,
+    "reviews": 792,
+    "features": [
+      "hydratation",
+      "céramides",
+      "Incontournable",
+      "Best-Seller"
+    ],
+    "seoTags": [
+      "hydratation",
+      "céramides",
+      "peau sèche",
+      "baume cerave",
+      "dermatologique",
+      "beauté",
+      "tendance"
+    ]
+  },
+  {
     "id": "auto_p_1775726199035_5366",
     "asin": "B07N7PK9QK",
     "name": "Huile Fortifiante Cuir Chevelu Romarin Menthe",
