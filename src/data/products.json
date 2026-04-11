@@ -1,5 +1,61 @@
 [
   {
+    "id": "auto_p_1775897632277_7705",
+    "asin": "B00PBX3L7K",
+    "name": "Essence Advanced Snail 96 Mucin Power",
+    "slug": "essence-advanced-snail-96-mucin-power-7705",
+    "description": "Composée à 96% de mucine (bave d'escargot), cette essence légère répare la barrière cutanée et offre une hydratation longue durée radieuse.",
+    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "price": 24.5,
+    "category": "Soin du Visage",
+    "brand": "COSRX",
+    "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.9,
+    "reviews": 439,
+    "features": [
+      "bave escargot",
+      "hydratation intense",
+      "Incontournable",
+      "Best-Seller"
+    ],
+    "seoTags": [
+      "bave escargot",
+      "hydratation intense",
+      "glass skin",
+      "skincare coréenne",
+      "beauté",
+      "tendance"
+    ]
+  },
+  {
+    "id": "auto_p_1775897619614_1676",
+    "asin": "B00DEXA0LY",
+    "name": "Sérum Expert Réparateur de Nuit",
+    "slug": "serum-expert-reparateur-de-nuit-1676",
+    "description": "Un sérum de nuit concentré conçu pour restaurer l'élasticité et repulper l'épiderme pendant votre sommeil avec des résultats rapides.",
+    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "price": 28.9,
+    "category": "Soin Anti-Âge",
+    "brand": "Soin Expert Nuit",
+    "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
+    "rating": 4.6,
+    "reviews": 605,
+    "features": [
+      "sérum nuit",
+      "réparation cutanée",
+      "Incontournable",
+      "Best-Seller"
+    ],
+    "seoTags": [
+      "sérum nuit",
+      "réparation cutanée",
+      "anti-rides",
+      "hydratation",
+      "beauté",
+      "tendance"
+    ]
+  },
+  {
     "id": "auto_p_1775812664022_5201",
     "asin": "B00AE6WNY8",
     "name": "Huile Prodigieuse Multi-Fonctions",
