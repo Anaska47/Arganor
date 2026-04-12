@@ -1,5 +1,63 @@
 [
   {
+    "id": "auto_p_1775984231030_3504",
+    "asin": "B01N33X44C",
+    "name": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+    "slug": "serum-anti-imperfections-niacinamide-10-zinc-1--3504",
+    "description": "Un sérum ultra-concentré en niacinamide pour réguler le sébum, resserrer les pores et atténuer les imperfections rapidement.",
+    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "price": 10.9,
+    "category": "Soin du Visage",
+    "brand": "The Ordinary",
+    "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.7,
+    "reviews": 566,
+    "features": [
+      "niacinamide",
+      "peau grasse",
+      "Incontournable",
+      "Best-Seller"
+    ],
+    "seoTags": [
+      "niacinamide",
+      "peau grasse",
+      "sérum the ordinary",
+      "imperfections",
+      "pores",
+      "beauté",
+      "tendance"
+    ]
+  },
+  {
+    "id": "auto_p_1775984217041_5792",
+    "asin": "B01N33X44C",
+    "name": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+    "slug": "serum-anti-imperfections-niacinamide-10-zinc-1--5792",
+    "description": "Un sérum ultra-concentré en niacinamide pour réguler le sébum, resserrer les pores et atténuer les imperfections rapidement.",
+    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "price": 10.9,
+    "category": "Soin du Visage",
+    "brand": "The Ordinary",
+    "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
+    "rating": 4.7,
+    "reviews": 333,
+    "features": [
+      "niacinamide",
+      "peau grasse",
+      "Incontournable",
+      "Best-Seller"
+    ],
+    "seoTags": [
+      "niacinamide",
+      "peau grasse",
+      "sérum the ordinary",
+      "imperfections",
+      "pores",
+      "beauté",
+      "tendance"
+    ]
+  },
+  {
     "id": "auto_p_1775897632277_7705",
     "asin": "B00PBX3L7K",
     "name": "Essence Advanced Snail 96 Mucin Power",
