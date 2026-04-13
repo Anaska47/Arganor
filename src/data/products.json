@@ -1,5 +1,62 @@
 [
   {
+    "id": "auto_p_1776074489142_2472",
+    "asin": "B00DEXA0LY",
+    "name": "Sérum Expert Réparateur de Nuit",
+    "slug": "serum-expert-reparateur-de-nuit-2472",
+    "description": "Un sérum de nuit concentré conçu pour restaurer l'élasticité et repulper l'épiderme pendant votre sommeil avec des résultats rapides.",
+    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "price": 28.9,
+    "category": "Soin Anti-Âge",
+    "brand": "Soin Expert Nuit",
+    "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
+    "rating": 4.9,
+    "reviews": 665,
+    "features": [
+      "sérum nuit",
+      "réparation cutanée",
+      "Incontournable",
+      "Best-Seller"
+    ],
+    "seoTags": [
+      "sérum nuit",
+      "réparation cutanée",
+      "anti-rides",
+      "hydratation",
+      "beauté",
+      "tendance"
+    ]
+  },
+  {
+    "id": "auto_p_1776074476638_9023",
+    "asin": "B00IMJ0HDU",
+    "name": "Gel Moussant Purifiant Peaux Grasses Effaclar",
+    "slug": "gel-moussant-purifiant-peaux-grasses-effaclar-9023",
+    "description": "Le nettoyant purifiant n°1 pour l'acné, formulé sans alcool pour nettoyer et éliminer l'excès de sébum en douceur.",
+    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "price": 15.9,
+    "category": "Soin du Visage",
+    "brand": "La Roche-Posay",
+    "image": "https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.6,
+    "reviews": 244,
+    "features": [
+      "nettoyant visage",
+      "acné",
+      "Incontournable",
+      "Best-Seller"
+    ],
+    "seoTags": [
+      "nettoyant visage",
+      "acné",
+      "peau grasse",
+      "effaclar",
+      "la roche-posay",
+      "beauté",
+      "tendance"
+    ]
+  },
+  {
     "id": "auto_p_1775984231030_3504",
     "asin": "B01N33X44C",
     "name": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
