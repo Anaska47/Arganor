@@ -1,5 +1,62 @@
 [
   {
+    "id": "auto_p_1776158758218_4077",
+    "asin": "B01N33X44C",
+    "name": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+    "slug": "serum-anti-imperfections-niacinamide-10-zinc-1--4077",
+    "description": "Un sérum ultra-concentré en niacinamide pour réguler le sébum, resserrer les pores et atténuer les imperfections rapidement.",
+    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "price": 10.9,
+    "category": "Soin du Visage",
+    "brand": "The Ordinary",
+    "image": "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1974&auto=format&fit=crop",
+    "rating": 5,
+    "reviews": 756,
+    "features": [
+      "niacinamide",
+      "peau grasse",
+      "Incontournable",
+      "Best-Seller"
+    ],
+    "seoTags": [
+      "niacinamide",
+      "peau grasse",
+      "sérum the ordinary",
+      "imperfections",
+      "pores",
+      "beauté",
+      "tendance"
+    ]
+  },
+  {
+    "id": "auto_p_1776158744213_5097",
+    "asin": "B00PBX3L7K",
+    "name": "Essence Advanced Snail 96 Mucin Power",
+    "slug": "essence-advanced-snail-96-mucin-power-5097",
+    "description": "Composée à 96% de mucine (bave d'escargot), cette essence légère répare la barrière cutanée et offre une hydratation longue durée radieuse.",
+    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "price": 24.5,
+    "category": "Soin du Visage",
+    "brand": "COSRX",
+    "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
+    "rating": 4.8,
+    "reviews": 217,
+    "features": [
+      "bave escargot",
+      "hydratation intense",
+      "Incontournable",
+      "Best-Seller"
+    ],
+    "seoTags": [
+      "bave escargot",
+      "hydratation intense",
+      "glass skin",
+      "skincare coréenne",
+      "beauté",
+      "tendance"
+    ]
+  },
+  {
     "id": "auto_p_1776074489142_2472",
     "asin": "B00DEXA0LY",
     "name": "Sérum Expert Réparateur de Nuit",
