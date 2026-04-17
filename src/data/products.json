@@ -1,5 +1,62 @@
 [
   {
+    "id": "auto_p_1776417894079_7085",
+    "asin": "B00DEXA0LY",
+    "name": "Sérum Expert Réparateur de Nuit",
+    "slug": "serum-expert-reparateur-de-nuit-7085",
+    "description": "Un sérum de nuit concentré conçu pour restaurer l'élasticité et repulper l'épiderme pendant votre sommeil avec des résultats rapides.",
+    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "price": 28.9,
+    "category": "Soin Anti-Âge",
+    "brand": "Soin Expert Nuit",
+    "image": "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=1974&auto=format&fit=crop",
+    "rating": 5,
+    "reviews": 475,
+    "features": [
+      "sérum nuit",
+      "réparation cutanée",
+      "Incontournable",
+      "Best-Seller"
+    ],
+    "seoTags": [
+      "sérum nuit",
+      "réparation cutanée",
+      "anti-rides",
+      "hydratation",
+      "beauté",
+      "tendance"
+    ]
+  },
+  {
+    "id": "auto_p_1776417882705_318",
+    "asin": "B07C5VJGDF",
+    "name": "Baume Hydratant Visage et Corps Peaux Sèches",
+    "slug": "baume-hydratant-visage-et-corps-peaux-seches-318",
+    "description": "Enrichi aux 3 céramides essentiels et à l'acide hyaluronique, ce baume restaure la barrière cutanée sans fini gras.",
+    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "price": 16.5,
+    "category": "Soin du Corps",
+    "brand": "CeraVe",
+    "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.9,
+    "reviews": 361,
+    "features": [
+      "hydratation",
+      "céramides",
+      "Incontournable",
+      "Best-Seller"
+    ],
+    "seoTags": [
+      "hydratation",
+      "céramides",
+      "peau sèche",
+      "baume cerave",
+      "dermatologique",
+      "beauté",
+      "tendance"
+    ]
+  },
+  {
     "id": "auto_p_1776331548949_4197",
     "asin": "B01N33X44C",
     "name": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
