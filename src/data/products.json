@@ -1,5 +1,63 @@
 [
   {
+    "id": "auto_p_1776502702577_3046",
+    "asin": "B00IMJ0HDU",
+    "name": "Gel Moussant Purifiant Peaux Grasses Effaclar",
+    "slug": "gel-moussant-purifiant-peaux-grasses-effaclar-3046",
+    "description": "Le nettoyant purifiant n°1 pour l'acné, formulé sans alcool pour nettoyer et éliminer l'excès de sébum en douceur.",
+    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "price": 15.9,
+    "category": "Soin du Visage",
+    "brand": "La Roche-Posay",
+    "image": "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.9,
+    "reviews": 558,
+    "features": [
+      "nettoyant visage",
+      "acné",
+      "Incontournable",
+      "Best-Seller"
+    ],
+    "seoTags": [
+      "nettoyant visage",
+      "acné",
+      "peau grasse",
+      "effaclar",
+      "la roche-posay",
+      "beauté",
+      "tendance"
+    ]
+  },
+  {
+    "id": "auto_p_1776502690283_7719",
+    "asin": "B00AE6WNY8",
+    "name": "Huile Prodigieuse Multi-Fonctions",
+    "slug": "huile-prodigieuse-multi-fonctions-7719",
+    "description": "L'iconique huile sèche nourrissante pour visage, corps et cheveux au parfum d'été mythique.",
+    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "price": 26.9,
+    "category": "Soin du Corps",
+    "brand": "NUXE",
+    "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.8,
+    "reviews": 585,
+    "features": [
+      "huile sèche",
+      "hydratation corps",
+      "Incontournable",
+      "Best-Seller"
+    ],
+    "seoTags": [
+      "huile sèche",
+      "hydratation corps",
+      "nuxe",
+      "huile prodigieuse",
+      "éclat naturel",
+      "beauté",
+      "tendance"
+    ]
+  },
+  {
     "id": "auto_p_1776417894079_7085",
     "asin": "B00DEXA0LY",
     "name": "Sérum Expert Réparateur de Nuit",
