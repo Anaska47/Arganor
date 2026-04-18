@@ -1,5 +1,61 @@
 [
   {
+    "id": "auto_p_1776512817932_1955",
+    "asin": "B00DEXA0LY",
+    "name": "Sérum Expert Réparateur de Nuit",
+    "slug": "serum-expert-reparateur-de-nuit-1955",
+    "description": "Un sérum de nuit concentré conçu pour restaurer l'élasticité et repulper l'épiderme pendant votre sommeil avec des résultats rapides.",
+    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "price": 28.9,
+    "category": "Soin Anti-Âge",
+    "brand": "Soin Expert Nuit",
+    "image": "https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.7,
+    "reviews": 842,
+    "features": [
+      "sérum nuit",
+      "réparation cutanée",
+      "Incontournable",
+      "Best-Seller"
+    ],
+    "seoTags": [
+      "sérum nuit",
+      "réparation cutanée",
+      "anti-rides",
+      "hydratation",
+      "beauté",
+      "tendance"
+    ]
+  },
+  {
+    "id": "auto_p_1776512807781_5406",
+    "asin": "B00PBX3L7K",
+    "name": "Essence Advanced Snail 96 Mucin Power",
+    "slug": "essence-advanced-snail-96-mucin-power-5406",
+    "description": "Composée à 96% de mucine (bave d'escargot), cette essence légère répare la barrière cutanée et offre une hydratation longue durée radieuse.",
+    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "price": 24.5,
+    "category": "Soin du Visage",
+    "brand": "COSRX",
+    "image": "https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.7,
+    "reviews": 857,
+    "features": [
+      "bave escargot",
+      "hydratation intense",
+      "Incontournable",
+      "Best-Seller"
+    ],
+    "seoTags": [
+      "bave escargot",
+      "hydratation intense",
+      "glass skin",
+      "skincare coréenne",
+      "beauté",
+      "tendance"
+    ]
+  },
+  {
     "id": "auto_p_1776502702577_3046",
     "asin": "B00IMJ0HDU",
     "name": "Gel Moussant Purifiant Peaux Grasses Effaclar",
