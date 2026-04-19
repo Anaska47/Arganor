@@ -4,6 +4,7 @@ import { getBlogPosts } from "@/lib/blog";
 import { getProductBySlug } from "@/lib/data";
 
 import { generateGrowthJson, hasGrowthAiConfig } from "./ai";
+import { resolvePromptVersion, type ResolvedPromptVersion } from "./prompts";
 import { resolveProductTaxonomy, type ProductTaxonomyResolution } from "./taxonomy";
 import {
     getContentQueueItem,
@@ -66,6 +67,7 @@ type ContentDraft = {
 type PreparedContentDraftResult = {
     queueItem: ContentQueueRow;
     contentDraft: ContentDraft;
+    writerPrompt: ResolvedPromptVersion;
 };
 
 function slugify(value: string): string {
@@ -75,6 +77,14 @@ function slugify(value: string): string {
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-+|-+$/g, "");
+}
+
+function toWriterPromptKey(intent: string | null): string {
+    if (intent === "routine") {
+        return "routine-article";
+    }
+
+    return "buyer-intent-article";
 }
 
 function toQueuePayloadObject(queueItem: ContentQueueRow): Record<string, unknown> {
@@ -142,6 +152,10 @@ function toReadableList(items: string[]): string {
     return `${items.slice(0, -1).join(", ")} et ${items[items.length - 1]}`;
 }
 
+function uniqueStrings(items: string[]): string[] {
+    return items.filter((item, index, values) => item && values.indexOf(item) === index);
+}
+
 function normalizeForMatch(value: string): string {
     return value
         .normalize("NFD")
@@ -187,6 +201,75 @@ function extractSignals(product: ProductRecord, taxonomy: ProductTaxonomyResolut
         .filter(Boolean)
         .filter((item, index, items) => items.indexOf(item) === index)
         .slice(0, 4);
+}
+
+function formatPrice(price: number): string | null {
+    if (!Number.isFinite(price) || price <= 0) {
+        return null;
+    }
+
+    return `${price.toFixed(2)} EUR`;
+}
+
+function buildBuyerObjections(product: ProductRecord, taxonomy: ProductTaxonomyResolution): string[] {
+    if (taxonomy.effectiveClusterRef === "soin_des_cheveux") {
+        return [
+            `A quelle frequence utiliser ${product.name} sans alourdir les racines ?`,
+            `Est-ce un bon choix si le cuir chevelu est sensible ou deja charge en huiles ?`,
+            "Que faut-il observer avant d'attendre un vrai resultat visible ?",
+        ];
+    }
+
+    if (taxonomy.effectiveClusterRef === "soin_du_corps") {
+        return [
+            "Quand l'appliquer pour garder le plus de confort possible ?",
+            "Est-ce suffisant si la peau tire beaucoup ou desquame facilement ?",
+            "A quel moment faut-il plutot choisir une texture plus riche ou plus simple ?",
+        ];
+    }
+
+    return [
+        `Est-ce adapte si l'objectif principal est ${toReadableList(extractSignals(product, taxonomy).slice(0, 2)) || "une routine plus stable"} ?`,
+        "Comment l'utiliser sans irriter ni surcharger la routine ?",
+        "Quelles limites faut-il connaitre avant de cliquer sur Amazon ?",
+    ];
+}
+
+function buildProductProofPoints(product: ProductRecord, taxonomy: ProductTaxonomyResolution): string[] {
+    const proofPoints: string[] = [];
+    const benefits = extractBenefitBullets(product);
+    const signals = extractSignals(product, taxonomy);
+    const formattedPrice = formatPrice(product.price);
+
+    if (product.brand) {
+        proofPoints.push(`Marque: ${product.brand}`);
+    }
+
+    if (formattedPrice) {
+        proofPoints.push(`Prix repere: ${formattedPrice}`);
+    }
+
+    if (Number.isFinite(product.rating) && product.rating > 0 && Number.isFinite(product.reviews) && product.reviews >= 0) {
+        proofPoints.push(`Preuve sociale: ${product.rating}/5 sur ${product.reviews} avis`);
+    }
+
+    if (product.asin) {
+        proofPoints.push(`ASIN: ${product.asin}`);
+    }
+
+    for (const benefit of benefits.slice(0, 3)) {
+        proofPoints.push(`Point fort: ${trimTrailingPunctuation(benefit)}`);
+    }
+
+    for (const signal of signals.slice(0, 4)) {
+        proofPoints.push(`Signal produit: ${signal}`);
+    }
+
+    if (product.description) {
+        proofPoints.push(`Description catalogue: ${stripMarkdown(product.description)}`);
+    }
+
+    return uniqueStrings(proofPoints).slice(0, 10);
 }
 
 function buildSectionBody(
@@ -386,6 +469,7 @@ async function maybeGenerateContentDraftWithAi(
     product: NonNullable<ReturnType<typeof getProductBySlug>>,
     taxonomy: ProductTaxonomyResolution,
     draftPack: DraftPack,
+    writerPrompt: ResolvedPromptVersion,
     fallback: ContentDraft,
 ): Promise<ContentDraft> {
     if (!hasGrowthAiConfig()) {
@@ -412,12 +496,25 @@ async function maybeGenerateContentDraftWithAi(
     };
 
     try {
+        const payload = toQueuePayloadObject(queueItem);
+        const suggestedAngles = Array.isArray(payload.suggestedAngles)
+            ? payload.suggestedAngles.filter((item): item is string => typeof item === "string" && item.trim().length > 0)
+            : [];
+        const productProofPoints = buildProductProofPoints(product, taxonomy);
+        const buyerObjections = buildBuyerObjections(product, taxonomy);
+
         const result = await generateGrowthJson<AiContentDraft>({
             systemPrompt: [
                 "You are the Arganor content engine.",
+                writerPrompt.promptBody,
                 "Expand the planning draft into a strong structured SEO draft and Pinterest click-oriented variants.",
                 "Return JSON only.",
                 "The article should be useful, premium, concrete, and ready for editorial review.",
+                "Write like a senior beauty affiliate editor, not like a planner or generic SEO bot.",
+                "Use only the provided product facts. Never invent ingredients, percentages, lab results, or personal experience.",
+                "The article must feel specific to the product: cite proof points, buyer objections, realistic limits, usage cues, and a real reason to click.",
+                "Include at least one comparison or decision framing so the reader understands when this product is a good fit and when it is not.",
+                "The CTA must create qualified click intent, not vague curiosity.",
                 "Do not mention internal systems, AI, or placeholders.",
             ].join("\n\n"),
             userPrompt: JSON.stringify(
@@ -435,6 +532,14 @@ async function maybeGenerateContentDraftWithAi(
                         category: taxonomy.effectiveCategory,
                         description: product.description,
                         image: product.image,
+                        brand: product.brand ?? null,
+                        asin: product.asin ?? null,
+                        price: product.price,
+                        rating: product.rating,
+                        reviews: product.reviews,
+                        benefits: product.benefits ?? null,
+                        features: Array.isArray(product.features) ? product.features : [],
+                        seoTags: Array.isArray(product.seoTags) ? product.seoTags : [],
                     },
                     taxonomy: {
                         sourceCategory: taxonomy.sourceCategory,
@@ -443,7 +548,18 @@ async function maybeGenerateContentDraftWithAi(
                         confidence: taxonomy.confidence,
                         rationale: taxonomy.rationale,
                     },
+                    productProofPoints,
+                    buyerObjections,
+                    suggestedAngles,
                     draftPack,
+                    editorialRequirements: {
+                        includeConcreteProof: true,
+                        includeLimits: true,
+                        includeUsageGuidance: true,
+                        includeDecisionFraming: true,
+                        includeStrongCta: true,
+                        avoidGenericFluff: true,
+                    },
                     expectedShape: {
                         post: {
                             slug: "string",
@@ -468,8 +584,8 @@ async function maybeGenerateContentDraftWithAi(
                 null,
                 2,
             ),
-            temperature: 0.7,
-            maxOutputTokens: 2200,
+            temperature: 0.6,
+            maxOutputTokens: 2600,
         });
 
         const aiPost = result.data.post || {};
@@ -522,8 +638,16 @@ export async function prepareContentDraftForQueueItem(queueItemId: string): Prom
 
     const taxonomy = resolveProductTaxonomy(product);
     const draftPack = readDraftPack(queueItem);
+    const writerPrompt = await resolvePromptVersion("writer", toWriterPromptKey(queueItem.intent));
     const fallbackContentDraft = buildDeterministicContentDraft(queueItem, product, taxonomy, draftPack);
-    const contentDraft = await maybeGenerateContentDraftWithAi(queueItem, product, taxonomy, draftPack, fallbackContentDraft);
+    const contentDraft = await maybeGenerateContentDraftWithAi(
+        queueItem,
+        product,
+        taxonomy,
+        draftPack,
+        writerPrompt,
+        fallbackContentDraft,
+    );
 
     const existingPayload = toQueuePayloadObject(queueItem);
     const nextPayload = {
@@ -541,6 +665,12 @@ export async function prepareContentDraftForQueueItem(queueItemId: string): Prom
         },
         contentDraft,
         contentDraftGeneratedAt: contentDraft.generatedAt,
+        contentDraftPromptRef: {
+            module: writerPrompt.module,
+            promptKey: writerPrompt.promptKey,
+            version: writerPrompt.version,
+            source: writerPrompt.source,
+        },
     };
 
     const updatedItem = await updateContentQueue(queueItem.id, {
@@ -551,6 +681,7 @@ export async function prepareContentDraftForQueueItem(queueItemId: string): Prom
     return {
         queueItem: updatedItem,
         contentDraft,
+        writerPrompt,
     };
 }
 

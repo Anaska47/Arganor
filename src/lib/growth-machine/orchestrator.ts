@@ -4,6 +4,7 @@ import { prepareContentDrafts } from "./content-runner";
 import { prepareDrafts } from "./drafts";
 import { DEFAULT_PROMPT_VERSIONS } from "./prompt-registry";
 import { previewPromotion, promoteQueueItem } from "./promote";
+import { reviseNeedsRevisionDrafts } from "./revise";
 import { reviewDrafts } from "./review";
 import { enqueueStrategyBriefs } from "./strategy";
 import {
@@ -28,6 +29,7 @@ type RunGrowthCycleResult = {
     draftPackCount: number;
     contentDraftCount: number;
     reviewCount: number;
+    revisionCount: number;
     readyToPromoteCount: number;
     promotedCount: number;
     readyQueueIds: string[];
@@ -83,6 +85,7 @@ export async function runGrowthCycle(options: RunGrowthCycleOptions = {}): Promi
     let draftPackCount = 0;
     let contentDraftCount = 0;
     let reviewCount = 0;
+    let revisionCount = 0;
     let readyToPromoteCount = 0;
     let promotedCount = 0;
     let readyQueueIds: string[] = [];
@@ -105,6 +108,9 @@ export async function runGrowthCycle(options: RunGrowthCycleOptions = {}): Promi
 
         const reviewResults = await reviewDrafts(limit);
         reviewCount = reviewResults.length;
+
+        const revisionResults = await reviseNeedsRevisionDrafts(limit);
+        revisionCount = revisionResults.length;
 
         const queueItems = await listContentQueue({ limit: 100 });
         const readyItems = queueItems.filter(isReadyToPromote);
@@ -134,6 +140,7 @@ export async function runGrowthCycle(options: RunGrowthCycleOptions = {}): Promi
                 draftPackCount,
                 contentDraftCount,
                 reviewCount,
+                revisionCount,
                 readyToPromoteCount,
                 promotedCount,
             },
@@ -155,6 +162,7 @@ export async function runGrowthCycle(options: RunGrowthCycleOptions = {}): Promi
             draftPackCount,
             contentDraftCount,
             reviewCount,
+            revisionCount,
             readyToPromoteCount,
             promotedCount,
             readyQueueIds,
@@ -173,6 +181,7 @@ export async function runGrowthCycle(options: RunGrowthCycleOptions = {}): Promi
                 draftPackCount,
                 contentDraftCount,
                 reviewCount,
+                revisionCount,
                 readyToPromoteCount,
                 promotedCount,
             },
