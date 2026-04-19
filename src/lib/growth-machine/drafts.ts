@@ -4,6 +4,7 @@ import { getBlogPosts } from "@/lib/blog";
 import { getProductBySlug } from "@/lib/data";
 
 import { generateGrowthJson, hasGrowthAiConfig } from "./ai";
+import { buildProductEvidence } from "./product-evidence";
 import { resolvePromptVersion, type ResolvedPromptVersion } from "./prompts";
 import { resolveProductTaxonomy, type ProductTaxonomyResolution } from "./taxonomy";
 import {
@@ -79,31 +80,67 @@ function buildRecommendedPostRef(productSlug: string, intent: string | null): st
     return `${productSlug}-${suffix}`;
 }
 
-function buildArticleTitle(productName: string, intent: string | null): string {
+function buildArticleTitle(productName: string, clusterRef: string, intent: string | null): string {
     if (intent === "routine") {
-        return `Comment integrer ${productName} dans une routine Arganor`;
+        if (clusterRef === "soin_des_cheveux") {
+            return `${productName}: comment l'integrer sans alourdir le cuir chevelu`;
+        }
+
+        if (clusterRef === "soin_du_visage") {
+            return `${productName}: comment l'integrer dans une routine sans surcharger la peau`;
+        }
+
+        return `${productName}: comment l'integrer dans une routine simple et realiste`;
     }
 
     if (intent === "problem_solution") {
-        return `${productName} peut-il vraiment aider dans une routine ciblee ?`;
+        if (clusterRef === "soin_des_cheveux") {
+            return `${productName}: peut-il aider si le cuir chevelu et la pousse sont la vraie priorite ?`;
+        }
+
+        if (clusterRef === "soin_du_visage") {
+            return `${productName}: peut-il vraiment aider sur pores, brillance ou imperfections ?`;
+        }
+
+        return `${productName}: peut-il vraiment aider dans une routine ciblee ?`;
     }
 
-    return `Pourquoi ${productName} merite un guide d'achat Arganor`;
+    if (clusterRef === "soin_des_cheveux") {
+        return `${productName}: pour qui, comment l'appliquer et quoi verifier avant achat`;
+    }
+
+    if (clusterRef === "soin_du_visage") {
+        return `${productName}: pour qui, comment l'utiliser et quoi verifier avant achat`;
+    }
+
+    return `${productName}: vrai fit produit, limites et points a verifier avant achat`;
 }
 
-function buildExcerpt(productName: string, intent: string | null): string {
+function buildExcerpt(productName: string, clusterRef: string, intent: string | null): string {
     if (intent === "routine") {
+        if (clusterRef === "soin_des_cheveux") {
+            return `Une routine simple pour utiliser ${productName} sur le cuir chevelu sans graisser toute la routine ni promettre une pousse miracle.`;
+        }
+
         return `Une routine simple, claire et credible pour utiliser ${productName} sans surcharge ni promesse vide.`;
     }
 
     if (intent === "problem_solution") {
-        return `On regarde ou ${productName} peut vraiment s'integrer, pour qui, et avec quelles attentes realistes.`;
+        return `On regarde ou ${productName} peut vraiment s'integrer, pour qui, avec quelles limites et a quel rythme juger le resultat.`;
     }
 
-    return `Le point sur ${productName}, ses forces reelles, son positionnement et le type de routine auquel il convient le mieux.`;
+    if (clusterRef === "soin_des_cheveux") {
+        return `On regarde a qui ${productName} peut convenir, comment l'appliquer sur le cuir chevelu et ce qu'il faut verifier avant de cliquer.`;
+    }
+
+    if (clusterRef === "soin_du_visage") {
+        return `On regarde a qui ${productName} peut convenir, comment l'utiliser sans irriter et ce qu'il faut verifier avant achat.`;
+    }
+
+    return `Le point sur ${productName}, ses forces reelles, ses limites et le type de routine auquel il convient le mieux.`;
 }
 
-function buildMetaDescription(productName: string, intent: string | null): string {
+function buildMetaDescription(productName: string, clusterRef: string, intent: string | null): string {
     if (intent === "routine") {
         return `Routine Arganor autour de ${productName}: ordre d'application, points d'attention et usage recommande.`;
     }
@@ -112,11 +149,28 @@ function buildMetaDescription(productName: string, intent: string | null): strin
         return `${productName}: problemes cibles, limites, et conseils d'usage dans une routine concrete.`;
     }
 
-    return `${productName}: avis, points forts, limites et bonnes raisons d'en faire un vrai contenu d'achat Arganor.`;
+    if (clusterRef === "soin_des_cheveux") {
+        return `${productName}: application, limites, profils concernes et points a verifier avant achat.`;
+    }
+
+    if (clusterRef === "soin_du_visage") {
+        return `${productName}: fit produit, tolerance, limites et points a verifier avant achat.`;
+    }
+
+    return `${productName}: avis, points forts, limites et verifications utiles avant achat.`;
 }
 
-function buildSections(productName: string, intent: string | null): string[] {
+function buildSections(productName: string, clusterRef: string, intent: string | null): string[] {
     if (intent === "routine") {
+        if (clusterRef === "soin_des_cheveux") {
+            return [
+                `Pour quel cuir chevelu cette routine avec ${productName} reste logique`,
+                `Comment appliquer ${productName} sans graisser toute la routine`,
+                `Les erreurs qui font abandonner trop vite`,
+                `Ce qu'il faut verifier avant de voir la fiche produit`,
+            ];
+        }
+
         return [
             `A qui cette routine avec ${productName} convient vraiment`,
             `Comment utiliser ${productName} dans le bon ordre`,
@@ -126,11 +180,40 @@ function buildSections(productName: string, intent: string | null): string[] {
     }
 
     if (intent === "problem_solution") {
+        if (clusterRef === "soin_du_visage") {
+            return [
+                `Quel besoin ${productName} peut vraiment aider a traiter`,
+                `Ce que le produit peut faire sans survendre le resultat`,
+                `Les limites et profils pour lesquels ralentir`,
+                `Ce qu'il faut verifier sur la fiche produit avant achat`,
+            ];
+        }
+
         return [
             `Quel probleme ${productName} peut vraiment aider a corriger`,
             `Ce que ${productName} fait bien`,
             `Les limites a connaitre avant de l'essayer`,
             `Faut-il cliquer pour voir la fiche produit ?`,
+        ];
+    }
+
+    if (clusterRef === "soin_des_cheveux") {
+        return [
+            `Pour quel type de cuir chevelu ${productName} peut etre un bon choix`,
+            `Ce que cette huile apporte vraiment dans une routine simple`,
+            `Ce qu'elle ne fera pas a elle seule`,
+            `Comment l'appliquer sans erreur ni surcharge`,
+            `Ce qu'il faut verifier sur la fiche Amazon avant achat`,
+        ];
+    }
+
+    if (clusterRef === "soin_du_visage") {
+        return [
+            `Pour quel type de peau ${productName} peut etre pertinent`,
+            `Ce que le produit fait bien quand le besoin est clair`,
+            `Les limites et points de tolerance a garder en tete`,
+            `Comment l'utiliser sans compliquer la routine`,
+            `Ce qu'il faut verifier avant de cliquer vers la fiche produit`,
         ];
     }
 
@@ -147,6 +230,29 @@ function buildPinDrafts(productName: string, clusterRef: string | null, intent: 
     const cluster = clusterRef || "general";
 
     if (intent === "routine") {
+        if (clusterRef === "soin_des_cheveux") {
+            return [
+                {
+                    angle: "routine_simple",
+                    hook: `Comment utiliser ${productName} sans graisser tout le cuir chevelu`,
+                    visualDirection: `Routine cuir chevelu simple, produit hero, texte clair, cluster ${cluster}`,
+                    cta: "Voir la routine simple",
+                },
+                {
+                    angle: "mistake",
+                    hook: `L'erreur qui fait abandonner trop vite ${productName}`,
+                    visualDirection: `Hook erreur courante, contraste net, cluster ${cluster}`,
+                    cta: "Eviter l'erreur",
+                },
+                {
+                    angle: "result",
+                    hook: `Pour quel cuir chevelu ${productName} reste logique`,
+                    visualDirection: `Benefice concret, cadrage premium, cluster ${cluster}`,
+                    cta: "Voir le bon fit",
+                },
+            ];
+        }
+
         return [
             {
                 angle: "routine_simple",
@@ -165,6 +271,29 @@ function buildPinDrafts(productName: string, clusterRef: string | null, intent: 
                 hook: `A qui ${productName} convient vraiment`,
                 visualDirection: `Promesse claire, benefice visible, cluster ${cluster}`,
                 cta: "Voir si ca vous correspond",
+            },
+        ];
+    }
+
+    if (clusterRef === "soin_des_cheveux") {
+        return [
+            {
+                angle: "buyer_intent",
+                hook: `${productName}: bon choix ou simple buzz pour le cuir chevelu ?`,
+                visualDirection: `Produit hero sur fond clair, promesse d'achat claire, cluster ${cluster}`,
+                cta: "Voir l'avis concret",
+            },
+            {
+                angle: "mistake",
+                hook: `Ce qu'il faut verifier avant d'acheter cette huile cuir chevelu`,
+                visualDirection: `Texte fort, objection utile, cluster ${cluster}`,
+                cta: "Voir les verifications",
+            },
+            {
+                angle: "result",
+                hook: `A qui ${productName} peut vraiment convenir`,
+                visualDirection: `Benefice concret, cadrage premium, cluster ${cluster}`,
+                cta: "Voir si le produit colle",
             },
         ];
     }
@@ -223,14 +352,16 @@ function buildDeterministicDraftPack(
         throw new Error("[growth-machine] Missing product while building deterministic draft pack.");
     }
 
+    const evidence = buildProductEvidence(product, taxonomy);
+
     return {
         recommendedPostRef: buildRecommendedPostRef(slugifySegment(product.name), queueItem.intent),
         article: {
-            title: buildArticleTitle(product.name, queueItem.intent),
-            excerpt: buildExcerpt(product.name, queueItem.intent),
-            metaDescription: buildMetaDescription(product.name, queueItem.intent),
-            sections: buildSections(product.name, queueItem.intent),
-            cta: `Voir la fiche ${product.name}`,
+            title: buildArticleTitle(product.name, taxonomy.effectiveClusterRef, queueItem.intent),
+            excerpt: buildExcerpt(product.name, taxonomy.effectiveClusterRef, queueItem.intent),
+            metaDescription: buildMetaDescription(product.name, taxonomy.effectiveClusterRef, queueItem.intent),
+            sections: buildSections(product.name, taxonomy.effectiveClusterRef, queueItem.intent),
+            cta: evidence.clickReasons[0] ? `Voir la fiche ${product.name} pour ${evidence.clickReasons[0]}` : `Voir la fiche ${product.name}`,
         },
         pinDrafts: buildPinDrafts(product.name, taxonomy.effectiveClusterRef, queueItem.intent),
         promptRefs: {
@@ -315,6 +446,8 @@ async function maybeGenerateDraftPackWithAi(
         return fallback;
     }
 
+    const evidence = buildProductEvidence(product, taxonomy);
+
     const recentRelatedPosts = getBlogPosts()
         .filter((post) => post.relatedProductId === product.id)
         .slice(0, 3)
@@ -370,6 +503,8 @@ async function maybeGenerateDraftPackWithAi(
                         description: product.description,
                         rating: product.rating,
                         reviews: product.reviews,
+                        asin: product.asin ?? null,
+                        price: product.price,
                     },
                     taxonomy: {
                         sourceCategory: taxonomy.sourceCategory,
@@ -377,6 +512,14 @@ async function maybeGenerateDraftPackWithAi(
                         effectiveClusterRef: taxonomy.effectiveClusterRef,
                         confidence: taxonomy.confidence,
                         rationale: taxonomy.rationale,
+                    },
+                    evidence: {
+                        signals: evidence.signals,
+                        fitProfiles: evidence.fitProfiles,
+                        objectionChecklist: evidence.objectionChecklist,
+                        clickReasons: evidence.clickReasons,
+                        usageGuidance: evidence.usageGuidance,
+                        qualitySummary: evidence.qualitySummary,
                     },
                     relatedPostCount,
                     recentRelatedPosts,
