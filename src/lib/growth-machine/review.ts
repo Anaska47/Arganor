@@ -204,12 +204,33 @@ async function maybeGenerateAiReview(
     }
 
     try {
+        const aiVisibleDraft = {
+            post: {
+                slug: contentDraft.post.slug,
+                title: contentDraft.post.title,
+                excerpt: contentDraft.post.excerpt,
+                metaDescription: contentDraft.post.metaDescription,
+                content: contentDraft.post.content,
+                category: contentDraft.post.category,
+                image: contentDraft.post.image,
+            },
+            pins: contentDraft.pins.map((pin) => ({
+                angle: pin.angle,
+                hook: pin.hook,
+                title: pin.title,
+                description: pin.description,
+                imagePrompt: pin.imagePrompt,
+                cta: pin.cta,
+            })),
+        };
+
         const result = await generateGrowthJson<AiReviewCandidate>({
             systemPrompt: [
                 "You are the Arganor QA editor.",
                 qaPrompt.promptBody,
                 "Return JSON only.",
                 "Be strict on clarity, usefulness, click intent, and editorial credibility.",
+                "Product facts passed in the catalog payload are allowed evidence and should not be treated as invented claims.",
             ].join("\n\n"),
             userPrompt: JSON.stringify(
                 {
@@ -222,10 +243,16 @@ async function maybeGenerateAiReview(
                     product: {
                         slug: product.slug,
                         name: product.name,
+                        brand: product.brand,
                         category: product.category,
                         description: product.description,
+                        asin: product.asin,
+                        price: product.price,
+                        rating: product.rating,
+                        reviews: product.reviews,
+                        features: Array.isArray(product.features) ? product.features : [],
                     },
-                    draft: contentDraft,
+                    draft: aiVisibleDraft,
                     expectedShape: {
                         verdict: "approved | needs_revision | rejected",
                         rationale: "string",
