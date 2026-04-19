@@ -35,6 +35,8 @@ type AiRevisionDraft = {
     }>;
 };
 
+type ProductRecord = NonNullable<ReturnType<typeof getProductBySlug>>;
+
 function toWriterPromptKey(intent: string | null): string {
     if (intent === "routine") {
         return "routine-article";
@@ -86,6 +88,154 @@ function readRevisionAttempts(payload: Record<string, unknown>): number {
 
 function toNonEmptyString(value: unknown, fallback: string): string {
     return typeof value === "string" && value.trim() ? value.trim() : fallback;
+}
+
+function uniqueStrings(items: string[]): string[] {
+    return items.filter((item, index, values) => item && values.indexOf(item) === index);
+}
+
+function trimTrailingPunctuation(value: string): string {
+    return value.trim().replace(/[.!?\s]+$/g, "");
+}
+
+function extractBenefitBullets(product: ProductRecord): string[] {
+    if (!product.benefits) {
+        return [];
+    }
+
+    return product.benefits
+        .split("\n")
+        .map((line) => line.trim())
+        .filter((line) => line.startsWith("- "))
+        .map((line) => line.replace(/^- /, ""))
+        .map((line) => line.replace(/\*\*(.*?)\*\*/g, "$1"))
+        .map(trimTrailingPunctuation)
+        .filter(Boolean)
+        .slice(0, 4);
+}
+
+function buildProductSignals(product: ProductRecord): string[] {
+    return uniqueStrings(
+        [
+            ...(Array.isArray(product.features) ? product.features : []),
+            ...(Array.isArray(product.seoTags) ? product.seoTags : []),
+            ...extractBenefitBullets(product),
+        ]
+            .map((item) => (typeof item === "string" ? trimTrailingPunctuation(item) : ""))
+            .filter(Boolean),
+    ).slice(0, 6);
+}
+
+function formatPrice(price: number): string | null {
+    if (!Number.isFinite(price) || price <= 0) {
+        return null;
+    }
+
+    return `${price.toFixed(2)} EUR`;
+}
+
+function replaceFinalCta(content: string, nextCta: string): string {
+    if (/\*\*CTA\s*:\*\*/i.test(content)) {
+        return content.replace(/\*\*CTA\s*:\*\*[\s\S]*$/i, `**CTA :** ${nextCta}`);
+    }
+
+    if (/CTA final:/i.test(content)) {
+        return content.replace(/CTA final:[\s\S]*$/i, `CTA final: ${nextCta}`);
+    }
+
+    return `${content.trim()}\n\n**CTA :** ${nextCta}`;
+}
+
+function appendSectionIfMissing(content: string, heading: string, body: string): string {
+    if (content.includes(`## ${heading}`)) {
+        return content;
+    }
+
+    return `${content.trim()}\n\n## ${heading}\n\n${body}`;
+}
+
+function buildDeterministicRevisionDraft(
+    queueItem: ContentQueueRow,
+    contentDraft: ContentDraft,
+    review: DraftReview,
+    product: ProductRecord,
+): ContentDraft {
+    const taxonomy = resolveProductTaxonomy(product);
+    const productSignals = buildProductSignals(product);
+    const price = formatPrice(product.price);
+    const socialProof =
+        Number.isFinite(product.rating) && product.rating > 0 && Number.isFinite(product.reviews) && product.reviews >= 0
+            ? `${product.rating}/5 sur ${product.reviews} avis`
+            : null;
+    const primaryNeed = productSignals.slice(0, 3).join(", ");
+    const proofSentence = [
+        product.brand ? `${product.brand} positionne ici ${product.name} sur un besoin clair` : `${product.name} vise un besoin clair`,
+        primaryNeed ? `autour de ${primaryNeed}` : null,
+        socialProof ? `avec un repere social de ${socialProof}` : null,
+        price ? `et un prix repere autour de ${price}` : null,
+    ]
+        .filter(Boolean)
+        .join(" ")
+        .replace(/\s+/g, " ")
+        .trim();
+    const comparisonSentence =
+        taxonomy.effectiveClusterRef === "soin_du_visage"
+            ? `${product.name} merite surtout le clic si l'objectif est de travailler pores, grain de peau ou congestion. Si la priorite du moment est plutot l'apaisement ou la reparation d'une peau tres reactive, ce n'est pas forcement le premier produit a regarder.`
+            : `${product.name} merite surtout le clic si le besoin colle vraiment a son usage principal. Si la routine actuelle demande surtout douceur ou simplification, il faut verifier que ce produit n'ajoute pas une etape de trop.`;
+    const verificationSentence = `Avant de cliquer, l'idee n'est pas juste de voir la photo produit: il faut verifier la fiche, la frequence d'usage conseillee, les avis recents et si le positionnement reel correspond bien a votre besoin du moment.`;
+    const strongerCta = `Voir la fiche ${product.name} pour verifier les avis, la texture et si ce produit correspond vraiment a votre routine.`;
+
+    let nextContent = replaceFinalCta(contentDraft.post.content, strongerCta);
+    nextContent = appendSectionIfMissing(nextContent, "Ce qui distingue vraiment ce produit", `${proofSentence}. C'est ce niveau de preuve qui rend le contenu plus utile qu'un simple article general sur les BHA ou les imperfections.`);
+    nextContent = appendSectionIfMissing(nextContent, "Quand ce n'est pas le meilleur choix", comparisonSentence);
+    nextContent = appendSectionIfMissing(nextContent, "Ce qu'il faut verifier sur la fiche produit", verificationSentence);
+
+    const reviewWarningSummary = review.warnings
+        .map((warning) => warning.trim())
+        .filter(Boolean)
+        .slice(0, 3)
+        .join(" ");
+
+    return {
+        post: {
+            ...contentDraft.post,
+            excerpt: `${contentDraft.post.excerpt} ${proofSentence}.`.replace(/\s+/g, " ").trim(),
+            metaDescription: `${contentDraft.post.metaDescription} Verifiez aussi les avis, le niveau de preuve produit et les limites avant d'acheter.`
+                .replace(/\s+/g, " ")
+                .trim(),
+            content: nextContent,
+        },
+        pins: contentDraft.pins.map((pin, index) => {
+            if (index === 0) {
+                return {
+                    ...pin,
+                    title: `${product.brand || product.name} : faut-il verifier la fiche ?`,
+                    description: `${product.name} cible ${primaryNeed || "un besoin precis"} et affiche ${socialProof || "un bon volume d'avis"}. Un bon pin pour cliquer avant achat, pas juste enregistrer.`,
+                    imagePrompt: `Pinterest vertical premium, flacon hero identifiable ${product.name}, etiquette visible, rendu editorial propre, fond clair elegant, angle achat, texte overlay lisible, aucun lifestyle generique`,
+                    cta: "Verifier fiche + avis",
+                };
+            }
+
+            if (index === 1) {
+                return {
+                    ...pin,
+                    description: `${product.name}: verifier tolerance, frequence et vrai besoin avant achat. ${reviewWarningSummary}`.trim(),
+                    imagePrompt: `Pinterest vertical premium, focus produit et check-list avant achat, etiquette visible, composition epuree, style comparatif utile, pas de visuel generique`,
+                    cta: "Voir les points a verifier",
+                };
+            }
+
+            return {
+                ...pin,
+                description: `${pin.description} ${comparisonSentence}`.replace(/\s+/g, " ").trim(),
+                cta: "Voir si le produit vous convient",
+            };
+        }),
+        generatedAt: new Date().toISOString(),
+        generationMeta: {
+            mode: "deterministic",
+        },
+    };
 }
 
 function buildFileHint(postSlug: string, index: number): string {
@@ -283,12 +433,14 @@ export async function reviseQueueItem(queueItemId: string): Promise<RevisionResu
     }
 
     const contentDraft = readContentDraft(queueItem);
-    const writerPrompt = await resolvePromptVersion("writer", toWriterPromptKey(queueItem.intent));
-    const revisedDraft = await maybeReviseWithAi(queueItem, contentDraft, review, writerPrompt);
-
-    if (!revisedDraft) {
+    const product = getProductBySlug(queueItem.product_ref);
+    if (!product) {
         return null;
     }
+    const writerPrompt = await resolvePromptVersion("writer", toWriterPromptKey(queueItem.intent));
+    const revisedDraft =
+        (await maybeReviseWithAi(queueItem, contentDraft, review, writerPrompt)) ??
+        buildDeterministicRevisionDraft(queueItem, contentDraft, review, product);
 
     const payloadWithoutReview = { ...payload };
     delete payloadWithoutReview.review;
@@ -353,10 +505,6 @@ export async function reviseQueueItem(queueItemId: string): Promise<RevisionResu
 }
 
 export async function reviseNeedsRevisionDrafts(limit = 3): Promise<RevisionResult[]> {
-    if (!hasGrowthAiConfig()) {
-        return [];
-    }
-
     const draftItems = await listContentQueue({
         status: "draft",
         limit: Math.max(limit * 4, limit),
