@@ -157,6 +157,15 @@ function uniqueStrings(items: string[]): string[] {
     return items.filter((item, index, values) => item && values.indexOf(item) === index);
 }
 
+function normalizeForDedup(value: string): string {
+    return value
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, " ")
+        .trim();
+}
+
 function normalizeForMatch(value: string): string {
     return value
         .normalize("NFD")
@@ -166,6 +175,40 @@ function normalizeForMatch(value: string): string {
 
 function trimTrailingPunctuation(value: string): string {
     return value.trim().replace(/[.!?\s]+$/g, "");
+}
+
+function clampText(value: string, maxLength: number): string {
+    if (value.length <= maxLength) {
+        return value;
+    }
+
+    const trimmed = value.slice(0, Math.max(0, maxLength - 1));
+    const safeBreak = Math.max(trimmed.lastIndexOf(" "), trimmed.lastIndexOf(","));
+    const candidate = safeBreak > 80 ? trimmed.slice(0, safeBreak) : trimmed;
+
+    return `${candidate.trim().replace(/[,:;\s]+$/g, "")}.`;
+}
+
+function mergeCopyParts(parts: Array<string | null | undefined>, maxLength: number): string {
+    const seen = new Set<string>();
+    const values: string[] = [];
+
+    for (const part of parts) {
+        const cleaned = typeof part === "string" ? trimTrailingPunctuation(part.replace(/\s+/g, " ").trim()) : "";
+        if (!cleaned) {
+            continue;
+        }
+
+        const normalized = normalizeForDedup(cleaned);
+        if (!normalized || seen.has(normalized)) {
+            continue;
+        }
+
+        seen.add(normalized);
+        values.push(cleaned);
+    }
+
+    return clampText(`${values.join(". ")}.`, maxLength);
 }
 
 function extractBenefitBullets(product: ProductRecord): string[] {
@@ -273,6 +316,28 @@ function buildProductProofPoints(product: ProductRecord, taxonomy: ProductTaxono
     return uniqueStrings(proofPoints).slice(0, 10);
 }
 
+type ParsedDraftSection = {
+    title: string;
+    body: string | null;
+};
+
+function parseDraftSection(section: string): ParsedDraftSection {
+    const titleMatch = section.match(/title:\s*(.+?)(?:\r?\n|$)/i);
+    const bodyMatch = section.match(/body:\s*([\s\S]*)$/i);
+
+    if (titleMatch || bodyMatch) {
+        return {
+            title: trimTrailingPunctuation((titleMatch?.[1] || "Ce qu'il faut verifier").trim()),
+            body: bodyMatch?.[1] ? bodyMatch[1].replace(/\s+/g, " ").trim() : null,
+        };
+    }
+
+    return {
+        title: trimTrailingPunctuation(section.trim()),
+        body: null,
+    };
+}
+
 function buildSectionBody(
     section: string,
     product: ProductRecord,
@@ -280,6 +345,7 @@ function buildSectionBody(
     draftPack: DraftPack,
     queueItem: ContentQueueRow,
 ): string {
+    const parsedSection = parseDraftSection(section);
     const payload = toQueuePayloadObject(queueItem);
     const suggestedAngles = Array.isArray(payload.suggestedAngles)
         ? payload.suggestedAngles.filter((item): item is string => typeof item === "string" && item.trim().length > 0)
@@ -308,8 +374,36 @@ function buildSectionBody(
             : taxonomy.effectiveClusterRef === "soin_du_corps"
               ? "Il parle surtout aux peaux qui tirent vite, marquent le manque de confort ou ont besoin d'un geste nourrissant facile a tenir."
               : "Il convient surtout aux personnes qui cherchent plus de confort, d'eclat ou une routine plus stable sans multiplier les produits.";
+    const seededBody = parsedSection.body ? parsedSection.body.replace(/\s+/g, " ").trim() : "";
+    const sectionKey = parsedSection.title.toLowerCase();
 
-    if (section.toLowerCase().includes("pour qui")) {
+    if (seededBody) {
+        if (sectionKey.includes("pour qui")) {
+            return mergeCopyParts([seededBody, audienceHint], 700);
+        }
+
+        if (sectionKey.includes("erreurs")) {
+            return mergeCopyParts(
+                [seededBody, "Le plus utile est de relier chaque erreur a une vraie decision: frequence, quantite, tolerance et raison de cliquer."],
+                700,
+            );
+        }
+
+        if (sectionKey.includes("routine") || sectionKey.includes("comment")) {
+            return mergeCopyParts([seededBody, usageHint], 700);
+        }
+
+        if (sectionKey.includes("probleme") || sectionKey.includes("fait bien") || sectionKey.includes("pourquoi")) {
+            return mergeCopyParts(
+                [seededBody, `${product.name} doit rester relie a des signaux concrets comme ${signalList || readableCluster}.`],
+                700,
+            );
+        }
+
+        return clampText(seededBody, 700);
+    }
+
+    if (sectionKey.includes("pour qui")) {
         const lead =
             benefitSentence ||
             (signalList
@@ -319,7 +413,7 @@ function buildSectionBody(
         return `${lead} ${audienceHint} Si tu cherches un produit facile a integrer sans transformer toute ta routine, c'est ce type de profil qu'il faut garder en tete avant de cliquer.`;
     }
 
-    if (section.toLowerCase().includes("ce que") && section.toLowerCase().includes("fait bien")) {
+    if (sectionKey.includes("ce que") && sectionKey.includes("fait bien")) {
         const summary =
             descriptionMatchesProduct
                 ? cleanDescription
@@ -334,23 +428,23 @@ function buildSectionBody(
         return `${summary} ${benefits} C'est ce qui peut justifier un clic qualifie quand on veut verifier la fiche, les avis et la texture en detail.`;
     }
 
-    if (section.toLowerCase().includes("quel probleme")) {
+    if (sectionKey.includes("quel probleme")) {
         return `${product.name} peut etre pertinent si le besoin principal tourne autour de ${signalList || readableCluster}. L'important est d'expliquer clairement ce qu'il peut ameliorer, mais aussi de rester lucide: un bon contenu doit montrer dans quels cas le produit aide vraiment et dans quels cas il faut moderer ses attentes.`;
     }
 
-    if (section.toLowerCase().includes("comment utiliser")) {
+    if (sectionKey.includes("comment utiliser")) {
         return `${usageHint} Si la peau ou le cuir chevelu reagit facilement, commence doucement puis augmente selon le confort ressenti. Le bon angle editorial ici consiste a montrer un ordre simple, une frequence realiste et ce qu'il faut observer avant d'aller plus loin.`;
     }
 
-    if (section.toLowerCase().includes("les erreurs")) {
+    if (sectionKey.includes("les erreurs")) {
         return `L'erreur la plus courante est d'attendre trop vite un resultat spectaculaire ou d'empiler trop de produits autour de ${product.name}. Mieux vaut une routine courte, reguliere et facile a suivre, avec un vrai point d'attention sur la tolerance, la texture et la frequence d'usage.`;
     }
 
-    if (section.toLowerCase().includes("les limites")) {
+    if (sectionKey.includes("les limites")) {
         return `${product.name} n'est pas une solution magique, et c'est exactement ce qu'il faut dire dans un bon article de conversion. Selon le besoin, la tolerance ou le niveau d'attente, il peut etre utile de rappeler les limites, le temps d'observation necessaire et les cas ou un autre type de produit serait plus adapte.`;
     }
 
-    if (section.toLowerCase().includes("notre avis") || section.toLowerCase().includes("faut-il cliquer")) {
+    if (sectionKey.includes("notre avis") || sectionKey.includes("faut-il cliquer")) {
         const angleLine =
             suggestedAngles.length > 0
                 ? `L'angle le plus prometteur ici reste ${suggestedAngles[0]}.`
@@ -359,7 +453,7 @@ function buildSectionBody(
         return `${draftPack.article.cta}. ${angleLine} Si le produit correspond au besoin que tu veux traiter, le clic vers la fiche doit servir a verifier les avis, la composition, la texture et le prix avant de trancher.`;
     }
 
-    return `Le sujet doit rester concret, utile et oriente decision: benefices lisibles, limites honnetes et raison claire de cliquer.`;
+    return `${product.name} doit rester relie a un besoin concret, des limites honnetes et une vraie raison de cliquer.`;
 }
 
 function buildMarkdownContent(
@@ -370,19 +464,58 @@ function buildMarkdownContent(
 ): string {
     const intro = draftPack.article.excerpt;
     const sections = draftPack.article.sections
-        .map((section) => `## ${section}\n\n${buildSectionBody(section, product, taxonomy, draftPack, queueItem)}`)
+        .map((section) => {
+            const parsedSection = parseDraftSection(section);
+            return `## ${parsedSection.title}\n\n${buildSectionBody(section, product, taxonomy, draftPack, queueItem)}`;
+        })
         .join("\n\n");
 
     return `# ${draftPack.article.title}\n\n${intro}\n\n${sections}\n\n---\n\nCTA final: ${draftPack.article.cta} sur ${product.name}.`;
 }
 
 function buildPinTitle(productName: string, hook: string): string {
-    const baseTitle = `${productName} | ${hook}`;
-    return baseTitle.length > 100 ? baseTitle.slice(0, 97).trimEnd() + "..." : baseTitle;
+    const normalizedHook = hook.replace(/\s+/g, " ").trim();
+    if (normalizedHook.length > 0 && normalizedHook.length <= 100) {
+        return normalizedHook;
+    }
+
+    const fallback = `${productName} : verifier avant achat`;
+    return fallback.length > 100 ? fallback.slice(0, 97).trimEnd() + "..." : fallback;
 }
 
-function buildPinDescription(productName: string, angle: string, cta: string): string {
-    return `${productName} sous l'angle ${angle.replace(/_/g, " ")}. ${cta}. Une idee de pin pensee pour attirer un trafic qualifie vers Arganor.`;
+function buildPinDescription(
+    product: ProductRecord,
+    taxonomy: ProductTaxonomyResolution,
+    pin: DraftPack["pinDrafts"][number],
+): string {
+    const signals = extractSignals(product, taxonomy);
+    const signalSummary = signals.slice(0, 3).join(", ");
+
+    if (pin.angle.includes("mistake") || pin.angle.includes("erreur")) {
+        return mergeCopyParts(
+            [`${product.name}: verifier tolerance, frequence et bon profil avant achat`, signalSummary ? `focus ${signalSummary}` : null],
+            220,
+        );
+    }
+
+    if (pin.angle.includes("result")) {
+        return mergeCopyParts(
+            [`${product.name}: utile si le besoin colle vraiment a ${signalSummary || "un besoin concret"}`, pin.cta],
+            220,
+        );
+    }
+
+    if (pin.angle.includes("routine")) {
+        return mergeCopyParts(
+            [`${product.name}: routine simple autour de ${signalSummary || taxonomy.effectiveClusterRef.replace(/_/g, " ")}`, pin.cta],
+            220,
+        );
+    }
+
+    return mergeCopyParts(
+        [`${product.name}: ${signalSummary || "points utiles"} a verifier avant achat`, pin.cta],
+        220,
+    );
 }
 
 function buildFileHint(postSlug: string, index: number): string {
@@ -412,7 +545,7 @@ function buildDeterministicContentDraft(
             angle: pin.angle,
             hook: pin.hook,
             title: buildPinTitle(product.name, pin.hook),
-            description: buildPinDescription(product.name, pin.angle, pin.cta),
+            description: buildPinDescription(product, taxonomy, pin),
             imagePrompt: `${pin.visualDirection}. Produit: ${product.name}. Style premium Arganor, ratio Pinterest 2:3.`,
             fileHint: buildFileHint(safeSlug, index),
             cta: pin.cta,
