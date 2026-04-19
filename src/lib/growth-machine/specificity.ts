@@ -32,8 +32,51 @@ function uniqueStrings(items: string[]): string[] {
     return items.filter((item, index, values) => item && values.indexOf(item) === index);
 }
 
+function normalizeForDedup(value: string): string {
+    return value
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, " ")
+        .trim();
+}
+
 function trimTrailingPunctuation(value: string): string {
     return value.trim().replace(/[.!?\s]+$/g, "");
+}
+
+function clampText(value: string, maxLength: number): string {
+    if (value.length <= maxLength) {
+        return value;
+    }
+
+    const trimmed = value.slice(0, Math.max(0, maxLength - 1));
+    const safeBreak = Math.max(trimmed.lastIndexOf(" "), trimmed.lastIndexOf(","));
+    const candidate = safeBreak > 80 ? trimmed.slice(0, safeBreak) : trimmed;
+
+    return `${candidate.trim().replace(/[,:;\s]+$/g, "")}.`;
+}
+
+function mergeCopyParts(parts: Array<string | null | undefined>, maxLength: number): string {
+    const seen = new Set<string>();
+    const values: string[] = [];
+
+    for (const part of parts) {
+        const cleaned = typeof part === "string" ? trimTrailingPunctuation(part.replace(/\s+/g, " ").trim()) : "";
+        if (!cleaned) {
+            continue;
+        }
+
+        const normalized = normalizeForDedup(cleaned);
+        if (!normalized || seen.has(normalized)) {
+            continue;
+        }
+
+        seen.add(normalized);
+        values.push(cleaned);
+    }
+
+    return clampText(`${values.join(". ")}.`, maxLength);
 }
 
 function appendSectionIfMissing(content: string, heading: string, body: string): string {
@@ -180,6 +223,46 @@ function buildVisualBrief(product: Product, signals: string[]): string {
     return `Pinterest vertical premium, packshot ${packshotType} identifiable ${product.name}, branding ${product.brand || "produit"} lisible, rendu editorial propre, aucun lifestyle generique, focus sur ${topSignals || "le besoin produit"}, composition claire orientee clic`;
 }
 
+function buildReviewFocus(reviewWarnings: string[], clusterRef: string): string {
+    const joinedWarnings = normalizeForDedup(reviewWarnings.join(" "));
+    const checkpoints: string[] = [];
+
+    if (joinedWarnings.includes("toler")) {
+        checkpoints.push("la tolerance");
+    }
+
+    if (joinedWarnings.includes("frequen")) {
+        checkpoints.push("la frequence");
+    }
+
+    if (joinedWarnings.includes("profil") || joinedWarnings.includes("type de peau") || joinedWarnings.includes("peau")) {
+        checkpoints.push("le bon profil de peau");
+    }
+
+    if (joinedWarnings.includes("ingredient") || joinedWarnings.includes("formule")) {
+        checkpoints.push("les ingredients");
+    }
+
+    if (joinedWarnings.includes("result")) {
+        checkpoints.push("l'horizon des resultats");
+    }
+
+    if (joinedWarnings.includes("visuel") || joinedWarnings.includes("image")) {
+        checkpoints.push("la coherence du produit");
+    }
+
+    if (clusterRef === "soin_du_visage") {
+        checkpoints.push("la tolerance", "la frequence", "le bon profil de peau");
+    } else if (clusterRef === "soin_des_cheveux") {
+        checkpoints.push("le cuir chevelu", "la frequence", "le vrai besoin");
+    } else {
+        checkpoints.push("la frequence", "le vrai besoin");
+    }
+
+    const focus = uniqueStrings(checkpoints).slice(0, 3);
+    return focus.length > 0 ? focus.join(", ") : "les points utiles avant achat";
+}
+
 export function enhanceContentDraftSpecificity(
     draft: SpecificityDraft,
     product: Product,
@@ -209,21 +292,21 @@ export function enhanceContentDraftSpecificity(
     nextContent = appendSectionIfMissing(nextContent, "Pour quel profil le clic est pertinent", buildFitSentence(product, clusterRef, signals));
     nextContent = appendSectionIfMissing(nextContent, "Quand ralentir ou passer son tour", buildAvoidSentence(product, clusterRef));
     nextContent = appendSectionIfMissing(nextContent, "A quel rythme juger les resultats", buildTimelineSentence(product, clusterRef));
-
-    const warningSummary = reviewWarnings
-        .map((warning) => warning.trim())
-        .filter(Boolean)
-        .slice(0, 2)
-        .join(" ");
+    const reviewFocus = buildReviewFocus(reviewWarnings, clusterRef);
+    const pricingSentence = price ? `prix repere autour de ${price}` : null;
+    const proofSummary = mergeCopyParts([proofSentence], 190);
+    const postExcerpt = mergeCopyParts([draft.post.excerpt, proofSentence], 220);
+    const postMetaDescription = mergeCopyParts(
+        [draft.post.metaDescription, "Verifier aussi les ingredients, les avis et le vrai fit produit avant achat"],
+        165,
+    );
 
     return {
         ...draft,
         post: {
             ...draft.post,
-            excerpt: `${draft.post.excerpt} ${proofSentence}.`.replace(/\s+/g, " ").trim(),
-            metaDescription: `${draft.post.metaDescription} Verifiez aussi les ingredients, les avis et le vrai fit produit avant achat.`
-                .replace(/\s+/g, " ")
-                .trim(),
+            excerpt: postExcerpt,
+            metaDescription: postMetaDescription,
             content: nextContent,
         },
         pins: draft.pins.map((pin, index) => {
@@ -231,7 +314,14 @@ export function enhanceContentDraftSpecificity(
                 return {
                     ...pin,
                     title: `${product.brand || product.name} : verifier avant achat`,
-                    description: `${product.name} se joue sur ${signals.slice(0, 3).join(", ") || "des signaux produit clairs"}. Un pin pense pour cliquer vers la fiche, pas juste enregistrer.`,
+                    description: mergeCopyParts(
+                        [
+                            `${product.name}: ${signals.slice(0, 3).join(", ") || "des signaux produit clairs"}`,
+                            socialProof ? `repere social ${socialProof}` : null,
+                            pricingSentence,
+                        ],
+                        220,
+                    ),
                     imagePrompt: buildVisualBrief(product, signals),
                     cta: "Verifier fiche + avis",
                 };
@@ -240,7 +330,10 @@ export function enhanceContentDraftSpecificity(
             if (index === 1) {
                 return {
                     ...pin,
-                    description: `${product.name}: verifier tolerance, frequence et bon profil avant achat. ${warningSummary}`.replace(/\s+/g, " ").trim(),
+                    description: mergeCopyParts(
+                        [`${product.name}: verifier ${reviewFocus} avant achat`, proofSummary],
+                        220,
+                    ),
                     imagePrompt: `${buildVisualBrief(product, signals)} avec angle checklist avant achat`,
                     cta: "Voir les points a verifier",
                 };
@@ -248,7 +341,7 @@ export function enhanceContentDraftSpecificity(
 
             return {
                 ...pin,
-                description: `${pin.description} ${buildFitSentence(product, clusterRef, signals)}`.replace(/\s+/g, " ").trim(),
+                description: mergeCopyParts([buildFitSentence(product, clusterRef, signals)], 220),
                 imagePrompt: `${buildVisualBrief(product, signals)} avec angle comparaison et fit produit`,
                 cta: "Voir si le produit vous convient",
             };

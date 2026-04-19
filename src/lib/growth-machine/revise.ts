@@ -100,6 +100,53 @@ function trimTrailingPunctuation(value: string): string {
     return value.trim().replace(/[.!?\s]+$/g, "");
 }
 
+function normalizeForDedup(value: string): string {
+    return value
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, " ")
+        .trim();
+}
+
+function clampText(value: string, maxLength: number): string {
+    if (value.length <= maxLength) {
+        return value;
+    }
+
+    const trimmed = value.slice(0, Math.max(0, maxLength - 1));
+    const safeBreak = Math.max(trimmed.lastIndexOf(" "), trimmed.lastIndexOf(","));
+    const candidate = safeBreak > 80 ? trimmed.slice(0, safeBreak) : trimmed;
+
+    return `${candidate.trim().replace(/[,:;\s]+$/g, "")}.`;
+}
+
+function mergeCopyParts(parts: Array<string | null | undefined>, maxLength: number): string {
+    const seen = new Set<string>();
+    const values: string[] = [];
+
+    for (const part of parts) {
+        const cleaned = typeof part === "string" ? trimTrailingPunctuation(part.replace(/\s+/g, " ").trim()) : "";
+        if (!cleaned) {
+            continue;
+        }
+
+        const normalized = normalizeForDedup(cleaned);
+        if (!normalized || seen.has(normalized)) {
+            continue;
+        }
+
+        seen.add(normalized);
+        values.push(cleaned);
+    }
+
+    return clampText(`${values.join(". ")}.`, maxLength);
+}
+
+function buildMarkdownBulletList(items: string[]): string {
+    return items.map((item) => `- ${trimTrailingPunctuation(item)}`).join("\n");
+}
+
 function extractBenefitBullets(product: ProductRecord): string[] {
     if (!product.benefits) {
         return [];
@@ -136,26 +183,6 @@ function formatPrice(price: number): string | null {
     return `${price.toFixed(2)} EUR`;
 }
 
-function replaceFinalCta(content: string, nextCta: string): string {
-    if (/\*\*CTA\s*:\*\*/i.test(content)) {
-        return content.replace(/\*\*CTA\s*:\*\*[\s\S]*$/i, `**CTA :** ${nextCta}`);
-    }
-
-    if (/CTA final:/i.test(content)) {
-        return content.replace(/CTA final:[\s\S]*$/i, `CTA final: ${nextCta}`);
-    }
-
-    return `${content.trim()}\n\n**CTA :** ${nextCta}`;
-}
-
-function appendSectionIfMissing(content: string, heading: string, body: string): string {
-    if (content.includes(`## ${heading}`)) {
-        return content;
-    }
-
-    return `${content.trim()}\n\n## ${heading}\n\n${body}`;
-}
-
 function buildDeterministicRevisionDraft(
     queueItem: ContentQueueRow,
     contentDraft: ContentDraft,
@@ -169,51 +196,97 @@ function buildDeterministicRevisionDraft(
         Number.isFinite(product.rating) && product.rating > 0 && Number.isFinite(product.reviews) && product.reviews >= 0
             ? `${product.rating}/5 sur ${product.reviews} avis`
             : null;
-    const primaryNeed = productSignals.slice(0, 3).join(", ");
-    const proofSentence = [
-        product.brand ? `${product.brand} positionne ici ${product.name} sur un besoin clair` : `${product.name} vise un besoin clair`,
-        primaryNeed ? `autour de ${primaryNeed}` : null,
-        socialProof ? `avec un repere social de ${socialProof}` : null,
-        price ? `et un prix repere autour de ${price}` : null,
-    ]
-        .filter(Boolean)
-        .join(" ")
-        .replace(/\s+/g, " ")
-        .trim();
-    const comparisonSentence =
+    const signalList = productSignals.slice(0, 4);
+    const primaryNeed = signalList.slice(0, 3).join(", ");
+    const productLabel = product.brand ? `${product.brand} ${product.name}` : product.name;
+    const introSentence = mergeCopyParts(
+        [
+            `${productLabel} vaut surtout le clic si le besoin colle vraiment a ${primaryNeed || "un usage tres cible"}`,
+            product.description,
+            socialProof ? `Le produit affiche deja ${socialProof}` : null,
+            price ? `avec un prix repere autour de ${price}` : null,
+        ],
+        320,
+    );
+    const fitSentence =
         taxonomy.effectiveClusterRef === "soin_du_visage"
-            ? `${product.name} merite surtout le clic si l'objectif est de travailler pores, grain de peau ou congestion. Si la priorite du moment est plutot l'apaisement ou la reparation d'une peau tres reactive, ce n'est pas forcement le premier produit a regarder.`
+            ? `${product.name} merite surtout le clic si la priorite est de gerer pores visibles, points noirs, grain irregulier ou brillance recurrente. Si le besoin du moment est plutot l'apaisement, la reparation ou une routine minimaliste, ce n'est pas forcement le premier produit a tester.`
             : `${product.name} merite surtout le clic si le besoin colle vraiment a son usage principal. Si la routine actuelle demande surtout douceur ou simplification, il faut verifier que ce produit n'ajoute pas une etape de trop.`;
-    const verificationSentence = `Avant de cliquer, l'idee n'est pas juste de voir la photo produit: il faut verifier la fiche, la frequence d'usage conseillee, les avis recents et si le positionnement reel correspond bien a votre besoin du moment.`;
-    const strongerCta = `Voir la fiche ${product.name} pour verifier les avis, la texture et si ce produit correspond vraiment a votre routine.`;
-
-    let nextContent = replaceFinalCta(contentDraft.post.content, strongerCta);
-    nextContent = appendSectionIfMissing(nextContent, "Ce qui distingue vraiment ce produit", `${proofSentence}. C'est ce niveau de preuve qui rend le contenu plus utile qu'un simple article general sur les BHA ou les imperfections.`);
-    nextContent = appendSectionIfMissing(nextContent, "Quand ce n'est pas le meilleur choix", comparisonSentence);
-    nextContent = appendSectionIfMissing(nextContent, "Ce qu'il faut verifier sur la fiche produit", verificationSentence);
-
-    const reviewWarningSummary = review.warnings
-        .map((warning) => warning.trim())
-        .filter(Boolean)
-        .slice(0, 3)
-        .join(" ");
+    const avoidSentence =
+        taxonomy.effectiveClusterRef === "soin_du_visage"
+            ? `Le point de vigilance principal reste la tolerance: si la peau est deja irritee, deshydratee ou surchargee en actifs exfoliants, il faut ralentir. Des rougeurs persistantes, des picotements qui durent ou une sensation de tiraillement sont des signaux clairs pour reduire la frequence.`
+            : `Le point de vigilance principal reste l'usage reel dans la routine: si le produit surcharge deja une routine sensible ou complique un geste simple, il vaut mieux ralentir et verifier le bon fit avant achat.`;
+    const timingSentence =
+        taxonomy.effectiveClusterRef === "soin_du_visage"
+            ? `Le bon repere n'est pas un effet spectaculaire en une nuit. Sur ce type de produit, il est plus credible d'observer la peau sur plusieurs applications, souvent sur deux a six semaines, en commencant doucement puis en ajustant selon la tolerance.`
+            : `Le bon repere est la regularite: il faut juger le confort, la tenue dans la routine et la tolerance avant de conclure sur les resultats.`;
+    const verificationBullets = uniqueStrings(
+        [
+            signalList[0] ? `Verifier que la promesse produit repose bien sur ${signalList[0]}` : "",
+            signalList[1] ? `Comparer le besoin principal avec ${signalList[1]}` : "",
+            socialProof ? `Regarder les avis: ${socialProof}` : "",
+            price ? `Valider le prix repere autour de ${price}` : "",
+            "Verifier la frequence d'usage et le bon moment dans la routine",
+        ].filter(Boolean),
+    ).slice(0, 5);
+    const strongerCta = `Voir la fiche ${product.name} pour verifier les ingredients, les avis recents et le vrai fit dans votre routine.`;
+    const finalCtaSentence = `Le clic vaut le coup surtout pour verifier la formule, les avis recents, le rythme d'utilisation conseille et voir si le produit correspond vraiment a votre besoin actuel.`;
+    const contentSections = [
+        `# ${contentDraft.post.title}`,
+        introSentence,
+        "## Ce qu'on verifie vraiment sur la fiche",
+        `${product.brand || product.name} se distingue ici par un cadrage tres clair autour de ${primaryNeed || "quelques signaux produit concrets"}. Le but n'est pas de promettre trop, mais d'aider a voir vite si le produit colle au besoin et au niveau d'exigence de la routine.`,
+        buildMarkdownBulletList(verificationBullets),
+        "## Pour quel profil le clic est pertinent",
+        fitSentence,
+        "## Quand ralentir ou passer son tour",
+        avoidSentence,
+        "## A quel rythme juger les resultats",
+        timingSentence,
+        "## Pourquoi le clic peut valoir le coup",
+        finalCtaSentence,
+        `**CTA :** ${strongerCta}`,
+    ];
+    const nextContent = contentSections.join("\n\n");
+    const nextExcerpt = mergeCopyParts(
+        [
+            `${product.name}: ${primaryNeed || "usage cible"} a verifier avant achat`,
+            socialProof ? `${socialProof}` : null,
+            "Le bon fit compte plus qu'une promesse trop large",
+        ],
+        220,
+    );
+    const nextMetaDescription = mergeCopyParts(
+        [
+            `${product.name}: points forts, limites et bon profil avant achat`,
+            price ? `prix repere ${price}` : null,
+            "Verifier aussi les avis et la frequence d'usage",
+        ],
+        165,
+    );
 
     return {
         post: {
             ...contentDraft.post,
-            excerpt: `${contentDraft.post.excerpt} ${proofSentence}.`.replace(/\s+/g, " ").trim(),
-            metaDescription: `${contentDraft.post.metaDescription} Verifiez aussi les avis, le niveau de preuve produit et les limites avant d'acheter.`
-                .replace(/\s+/g, " ")
-                .trim(),
+            excerpt: nextExcerpt,
+            metaDescription: nextMetaDescription,
             content: nextContent,
         },
         pins: contentDraft.pins.map((pin, index) => {
             if (index === 0) {
                 return {
                     ...pin,
-                    title: `${product.brand || product.name} : faut-il verifier la fiche ?`,
-                    description: `${product.name} cible ${primaryNeed || "un besoin precis"} et affiche ${socialProof || "un bon volume d'avis"}. Un bon pin pour cliquer avant achat, pas juste enregistrer.`,
-                    imagePrompt: `Pinterest vertical premium, flacon hero identifiable ${product.name}, etiquette visible, rendu editorial propre, fond clair elegant, angle achat, texte overlay lisible, aucun lifestyle generique`,
+                    hook: `${product.name}: 3 points a verifier avant achat`,
+                    title: `${product.brand || product.name} : verifier avant achat`,
+                    description: mergeCopyParts(
+                        [
+                            `${product.name}: ${primaryNeed || "un besoin precis"}`,
+                            socialProof ? `repere social ${socialProof}` : null,
+                            price ? `prix repere ${price}` : null,
+                        ],
+                        220,
+                    ),
+                    imagePrompt: `Pinterest vertical premium, packshot identifiable ${product.name}, branding lisible, rendu editorial propre, fond clair elegant, angle achat, focus sur ${primaryNeed || "le besoin produit"}, aucun lifestyle generique`,
                     cta: "Verifier fiche + avis",
                 };
             }
@@ -221,15 +294,21 @@ function buildDeterministicRevisionDraft(
             if (index === 1) {
                 return {
                     ...pin,
-                    description: `${product.name}: verifier tolerance, frequence et vrai besoin avant achat. ${reviewWarningSummary}`.trim(),
-                    imagePrompt: `Pinterest vertical premium, focus produit et check-list avant achat, etiquette visible, composition epuree, style comparatif utile, pas de visuel generique`,
+                    description: mergeCopyParts(
+                        [
+                            `${product.name}: verifier tolerance, frequence et bon profil avant achat`,
+                            "L'objectif est de savoir si le produit colle au besoin, pas juste au mot-cle produit",
+                        ],
+                        220,
+                    ),
+                    imagePrompt: `Pinterest vertical premium, focus produit et checklist avant achat, etiquette visible, composition epuree, angle concret et comparatif, pas de visuel generique`,
                     cta: "Voir les points a verifier",
                 };
             }
 
             return {
                 ...pin,
-                description: `${pin.description} ${comparisonSentence}`.replace(/\s+/g, " ").trim(),
+                description: mergeCopyParts([fitSentence], 220),
                 cta: "Voir si le produit vous convient",
             };
         }),
