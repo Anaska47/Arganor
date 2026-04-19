@@ -1,5 +1,7 @@
 import type { Product } from "@/lib/data";
 
+import { buildProductEvidence } from "./product-evidence";
+
 type SpecificityDraft = {
     post: {
         slug: string;
@@ -107,73 +109,6 @@ function formatPrice(price: number): string | null {
     return `${price.toFixed(2)} EUR`;
 }
 
-function extractBenefitBullets(product: Product): string[] {
-    if (!product.benefits) {
-        return [];
-    }
-
-    return product.benefits
-        .split("\n")
-        .map((line) => line.trim())
-        .filter((line) => line.startsWith("- "))
-        .map((line) => line.replace(/^- /, ""))
-        .map((line) => line.replace(/\*\*(.*?)\*\*/g, "$1"))
-        .map(trimTrailingPunctuation)
-        .filter(Boolean)
-        .slice(0, 4);
-}
-
-function extractNameSignals(product: Product): string[] {
-    const name = product.name;
-    const matches: string[] = [];
-    const percentSignal = name.match(/(\d+\s?%\s*(?:BHA|AHA|niacinamide))/i);
-    if (percentSignal?.[1]) {
-        matches.push(percentSignal[1].toUpperCase().replace(/\s+/g, " "));
-    }
-
-    const mucinSignal = name.match(/(\d+\s*Mucin)/i);
-    if (mucinSignal?.[1]) {
-        matches.push(mucinSignal[1]);
-    }
-
-    if (/romarin/i.test(name) && /menthe/i.test(name)) {
-        matches.push("romarin et menthe");
-    }
-
-    if (/acide hyaluronique/i.test(name)) {
-        matches.push("acide hyaluronique");
-    }
-
-    if (/ceramide/i.test(name) || /ceramides/i.test(name)) {
-        matches.push("ceramides");
-    }
-
-    if (/huile/i.test(name)) {
-        matches.push("format huile");
-    } else if (/essence/i.test(name)) {
-        matches.push("format essence");
-    } else if (/lotion/i.test(name)) {
-        matches.push("format lotion");
-    } else if (/serum|sérum/i.test(name)) {
-        matches.push("format serum");
-    }
-
-    return uniqueStrings(matches);
-}
-
-function buildProductSignals(product: Product): string[] {
-    return uniqueStrings(
-        [
-            ...extractNameSignals(product),
-            ...(Array.isArray(product.features) ? product.features : []),
-            ...(Array.isArray(product.seoTags) ? product.seoTags : []),
-            ...extractBenefitBullets(product),
-        ]
-            .map((item) => (typeof item === "string" ? trimTrailingPunctuation(item) : ""))
-            .filter(Boolean),
-    ).slice(0, 8);
-}
-
 function buildFitSentence(product: Product, clusterRef: string, signals: string[]): string {
     const keySignal = signals.slice(0, 3).join(", ");
 
@@ -182,14 +117,14 @@ function buildFitSentence(product: Product, clusterRef: string, signals: string[
     }
 
     if (clusterRef === "soin_des_cheveux") {
-        return `${product.name} merite surtout le clic si le besoin tourne autour du cuir chevelu, de la longueur fragilisee ou d'une routine croissance simple. Le produit est plus pertinent quand on cherche ${keySignal || "un geste ciblé"} sans multiplier trop d'etapes.`;
+        return `${product.name} merite surtout le clic si le besoin tourne autour du cuir chevelu, de la longueur fragilisee ou d'une routine croissance simple. Le produit est plus pertinent quand on cherche ${keySignal || "un geste cible"} sans multiplier trop d'etapes.`;
     }
 
     if (clusterRef === "soin_du_corps") {
         return `${product.name} merite surtout le clic si la peau manque de confort, de souplesse ou de soutien quotidien. Le meilleur fit est un besoin concret et regulier, pas l'attente d'un resultat spectaculaire des la premiere application.`;
     }
 
-    return `${product.name} merite le clic surtout si le besoin principal correspond aux signaux produit les plus visibles: ${keySignal || "usage simple et ciblé"}.`;
+    return `${product.name} merite le clic surtout si le besoin principal correspond aux signaux produit les plus visibles: ${keySignal || "usage simple et cible"}.`;
 }
 
 function buildShortFitLine(product: Product, clusterRef: string, signals: string[]): string {
@@ -275,19 +210,8 @@ function buildReviewFocus(reviewWarnings: string[], clusterRef: string): string 
         checkpoints.push("la frequence", "le vrai besoin");
     }
 
-    const focus = uniqueStrings(checkpoints).slice(0, 3);
+    const focus = uniqueStrings(checkpoints).slice(0, 2);
     return focus.length > 0 ? focus.join(", ") : "les points utiles avant achat";
-}
-
-function buildShortProofLine(signals: string[], socialProof: string | null, price: string | null): string {
-    return mergeCopyParts(
-        [
-            signals.length > 0 ? `focus ${signals.slice(0, 2).join(", ")}` : null,
-            socialProof ? `repere social ${socialProof}` : null,
-            price ? `prix repere ${price}` : null,
-        ],
-        150,
-    );
 }
 
 function buildShortExcerpt(product: Product, clusterRef: string, socialProof: string | null): string {
@@ -337,12 +261,10 @@ export function enhanceContentDraftSpecificity(
     clusterRef: string,
     reviewWarnings: string[] = [],
 ): SpecificityDraft {
-    const signals = buildProductSignals(product);
-    const price = formatPrice(product.price);
-    const socialProof =
-        Number.isFinite(product.rating) && product.rating > 0 && Number.isFinite(product.reviews) && product.reviews >= 0
-            ? `${product.rating}/5 sur ${product.reviews} avis`
-            : null;
+    const evidence = buildProductEvidence(product);
+    const signals = evidence.signals;
+    const price = evidence.priceLabel || formatPrice(product.price);
+    const socialProof = evidence.socialProofLabel;
     const proofSentence = [
         product.brand ? `${product.brand} signe ici ${product.name}` : product.name,
         signals.length > 0 ? `avec des signaux clairs comme ${signals.slice(0, 4).join(", ")}` : null,
@@ -359,14 +281,18 @@ export function enhanceContentDraftSpecificity(
     let nextContent = replaceFinalCta(draft.post.content, strongerCta);
 
     if (shouldAppendDetailedSections) {
-        nextContent = appendSectionIfMissing(nextContent, "Les signaux produit a verifier", `${proofSentence}. Ce sont ces details concrets qui aident a distinguer ce produit d'un autre actif plus generique du meme univers.`);
+        nextContent = appendSectionIfMissing(
+            nextContent,
+            "Les signaux produit a verifier",
+            `${proofSentence}. Ce sont ces details concrets qui aident a distinguer ce produit d'un autre actif plus generique du meme univers.`,
+        );
         nextContent = appendSectionIfMissing(nextContent, "Pour quel profil le clic est pertinent", buildFitSentence(product, clusterRef, signals));
         nextContent = appendSectionIfMissing(nextContent, "Quand ralentir ou passer son tour", buildAvoidSentence(product, clusterRef));
         nextContent = appendSectionIfMissing(nextContent, "A quel rythme juger les resultats", buildTimelineSentence(product, clusterRef));
     }
+
     const reviewFocus = buildReviewFocus(reviewWarnings, clusterRef);
     const pricingSentence = price ? `prix repere autour de ${price}` : null;
-    const shortProofLine = buildShortProofLine(signals, socialProof, price);
     const postExcerpt = buildShortExcerpt(product, clusterRef, socialProof);
     const postMetaDescription = buildShortMetaDescription(product, clusterRef);
 
@@ -389,7 +315,7 @@ export function enhanceContentDraftSpecificity(
                             socialProof ? `repere social ${socialProof}` : null,
                             pricingSentence ? `prix repere ${price}` : null,
                         ],
-                        170,
+                        165,
                     ),
                     imagePrompt: buildVisualBrief(product, signals),
                     cta: "Verifier fiche + avis",
@@ -400,8 +326,11 @@ export function enhanceContentDraftSpecificity(
                 return {
                     ...pin,
                     description: mergeCopyParts(
-                        [`${product.name}: verifier ${reviewFocus} avant achat`, shortProofLine],
-                        180,
+                        [
+                            `${product.name}: verifier ${reviewFocus} avant achat`,
+                            evidence.clickReasons[0] || `focus ${signals.slice(0, 2).join(", ")}`,
+                        ],
+                        160,
                     ),
                     imagePrompt: `${buildVisualBrief(product, signals)} avec angle checklist avant achat`,
                     cta: "Voir les points a verifier",
@@ -410,7 +339,10 @@ export function enhanceContentDraftSpecificity(
 
             return {
                 ...pin,
-                description: mergeCopyParts([buildShortFitLine(product, clusterRef, signals)], 180),
+                description: mergeCopyParts(
+                    [buildShortFitLine(product, clusterRef, signals), evidence.clickReasons[0]],
+                    160,
+                ),
                 imagePrompt: `${buildVisualBrief(product, signals)} avec angle comparaison et fit produit`,
                 cta: "Voir si le produit vous convient",
             };
