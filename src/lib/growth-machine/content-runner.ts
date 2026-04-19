@@ -5,6 +5,7 @@ import { getProductBySlug } from "@/lib/data";
 
 import { generateGrowthJson, hasGrowthAiConfig } from "./ai";
 import { buildProductEvidence } from "./product-evidence";
+import { resolveDraftPostImage } from "./post-image";
 import { resolvePromptVersion, type ResolvedPromptVersion } from "./prompts";
 import { enhanceContentDraftSpecificity } from "./specificity";
 import { resolveProductTaxonomy, type ProductTaxonomyResolution } from "./taxonomy";
@@ -374,10 +375,31 @@ function buildSectionBody(
                 : "Il convient surtout aux personnes qui cherchent plus de confort, d'eclat ou une routine plus stable sans multiplier les produits.";
     const seededBody = parsedSection.body ? parsedSection.body.replace(/\s+/g, " ").trim() : "";
     const normalizedSectionKey = normalizeForDedup(parsedSection.title);
+    const socialProofLine = evidence.socialProofLabel ? `La preuve sociale reste ${evidence.socialProofLabel}.` : "";
+    const priceLine = evidence.priceLabel ? `Le prix repere tourne autour de ${evidence.priceLabel}.` : "";
+    const asinLine = product.asin ? `La fiche Amazon a verifier correspond a l'ASIN ${product.asin}.` : "";
+    const benefitsLine =
+        benefitBullets.length > 0
+            ? `Les points les plus lisibles sont ${toReadableList(
+                  benefitBullets.slice(0, 3).map((item) => trimTrailingPunctuation(item)),
+              )}.`
+            : "";
+    const objectionLine =
+        evidence.objectionChecklist.length > 0
+            ? `Les points a surveiller avant achat sont ${toReadableList(evidence.objectionChecklist.slice(0, 3))}.`
+            : "";
+    const clickLine =
+        evidence.clickReasons.length > 0
+            ? `Le clic devient utile surtout pour ${toReadableList(evidence.clickReasons.slice(0, 3))}.`
+            : "";
 
     if (seededBody) {
-        if (normalizedSectionKey.includes("pour qui")) {
-            return mergeCopyParts([seededBody, audienceHint], 700);
+        if (
+            normalizedSectionKey.includes("pour qui") ||
+            normalizedSectionKey.includes("pour quel") ||
+            normalizedSectionKey.includes("bon choix")
+        ) {
+            return mergeCopyParts([seededBody, audienceHint, socialProofLine], 700);
         }
 
         if (normalizedSectionKey.includes("erreurs")) {
@@ -387,59 +409,84 @@ function buildSectionBody(
             );
         }
 
-        if (normalizedSectionKey.includes("routine") || normalizedSectionKey.includes("comment")) {
+        if (
+            normalizedSectionKey.includes("routine") ||
+            normalizedSectionKey.includes("comment") ||
+            normalizedSectionKey.includes("appliquer")
+        ) {
             return mergeCopyParts([seededBody, evidence.usageGuidance], 700);
         }
 
         if (
             normalizedSectionKey.includes("probleme") ||
             normalizedSectionKey.includes("fait bien") ||
-            normalizedSectionKey.includes("pourquoi")
+            normalizedSectionKey.includes("pourquoi") ||
+            normalizedSectionKey.includes("apporte vraiment")
         ) {
             return mergeCopyParts(
-                [seededBody, `${product.name} doit rester relie a des signaux concrets comme ${signalList || readableCluster}.`],
+                [
+                    seededBody,
+                    benefitsLine || `${product.name} doit rester relie a des signaux concrets comme ${signalList || readableCluster}.`,
+                    socialProofLine,
+                    priceLine,
+                ],
                 700,
             );
+        }
+
+        if (
+            normalizedSectionKey.includes("ne fera pas") ||
+            normalizedSectionKey.includes("limites") ||
+            normalizedSectionKey.includes("verifier")
+        ) {
+            return mergeCopyParts([seededBody, objectionLine, clickLine, asinLine], 700);
         }
 
         return clampText(seededBody, 700);
     }
 
-    if (normalizedSectionKey.includes("pour qui")) {
+    if (
+        normalizedSectionKey.includes("pour qui") ||
+        normalizedSectionKey.includes("pour quel") ||
+        normalizedSectionKey.includes("bon choix")
+    ) {
         const lead =
             benefitSentence ||
             (signalList
                 ? `${product.name} est surtout interessant si ton besoin tourne autour de ${signalList}.`
                 : `${product.name} vise un besoin simple a comprendre dans une routine ${readableCluster}.`);
 
-        return `${lead} ${audienceHint} Si tu cherches un produit facile a integrer sans transformer toute ta routine, c'est ce type de profil qu'il faut garder en tete avant de cliquer.`;
+        return `${lead} ${audienceHint} ${socialProofLine} Ce n'est pas un achat reflexe pour tout le monde: il faut surtout que le besoin tourne vraiment autour du cuir chevelu, d'une routine simple et d'une attente realiste avant de cliquer.`;
     }
 
-    if (normalizedSectionKey.includes("ce que") && normalizedSectionKey.includes("fait bien")) {
+    if (
+        (normalizedSectionKey.includes("ce que") && normalizedSectionKey.includes("fait bien")) ||
+        normalizedSectionKey.includes("apporte vraiment")
+    ) {
         const summary =
             descriptionMatchesProduct
                 ? cleanDescription
                 : `${product.name} se distingue surtout par une promesse lisible autour de ${signalList || "un besoin simple et concret"}.`;
-        const benefits =
-            benefitBullets.length > 0
-                ? `Ses points forts les plus faciles a comprendre sont ${toReadableList(
-                      benefitBullets.slice(0, 3).map((item) => trimTrailingPunctuation(item)),
-                  )}.`
-                : "";
 
-        return `${summary} ${benefits} C'est ce qui peut justifier un clic qualifie quand on veut verifier la fiche, les avis et la texture en detail.`;
+        return `${summary} ${benefitsLine} ${socialProofLine} ${priceLine} Cela ne prouve pas un miracle, mais donne une raison concrete de comparer la fiche Amazon avec d'autres huiles plus vagues du meme univers.`;
     }
 
     if (normalizedSectionKey.includes("quel probleme")) {
         return `${product.name} peut etre pertinent si le besoin principal tourne autour de ${signalList || readableCluster}. L'important est d'expliquer clairement ce qu'il peut ameliorer, mais aussi de rester lucide: un bon contenu doit montrer dans quels cas le produit aide vraiment et dans quels cas il faut moderer ses attentes.`;
     }
 
+    if (normalizedSectionKey.includes("ne fera pas")) {
+        return `${product.name} ne remplacera ni la regularite de la routine ni des attentes realistes sur la pousse. ${objectionLine} Si les racines regraissent vite ou si le cuir chevelu est reactif, mieux vaut commencer doucement, observer le confort et accepter qu'une huile seule ne corrige pas tout.`;
+    }
+
     if (
         normalizedSectionKey.includes("comment utiliser") ||
         normalizedSectionKey.includes("comment l utiliser") ||
-        normalizedSectionKey.includes("utiliser sans erreur")
+        normalizedSectionKey.includes("utiliser sans erreur") ||
+        normalizedSectionKey.includes("comment l appliquer") ||
+        normalizedSectionKey.includes("appliquer sans erreur")
     ) {
-        return `${evidence.usageGuidance} Si la peau ou le cuir chevelu reagit facilement, commence doucement puis augmente selon le confort ressenti. Le bon angle editorial ici consiste a montrer un ordre simple, une frequence realiste et ce qu'il faut observer avant d'aller plus loin.`;
+        return `${evidence.usageGuidance} L'idee n'est pas d'inonder les longueurs ou de multiplier les gestes, mais de garder un usage cible et facile a tenir. Si le cuir chevelu reagit facilement, commence plus legerement, observe le confort entre deux applications et ajuste seulement si la routine reste stable.`;
     }
 
     if (normalizedSectionKey.includes("les erreurs")) {
@@ -459,7 +506,10 @@ function buildSectionBody(
         normalizedSectionKey.includes("notre avis") ||
         normalizedSectionKey.includes("notre verdict") ||
         normalizedSectionKey.includes("faut il cliquer") ||
-        normalizedSectionKey.includes("voir la fiche produit")
+        normalizedSectionKey.includes("voir la fiche produit") ||
+        normalizedSectionKey.includes("ce qu il faut verifier") ||
+        normalizedSectionKey.includes("avant achat") ||
+        normalizedSectionKey.includes("verifier sur la fiche")
     ) {
         const angleLine =
             suggestedAngles.length > 0
@@ -473,7 +523,15 @@ function buildSectionBody(
         return `${draftPack.article.cta}. ${angleLine} ${clickLine} Si le produit correspond au besoin que tu veux traiter, c'est cette verification concrete qui justifie le passage vers la fiche Amazon.`;
     }
 
-    return `${product.name} doit rester relie a un besoin concret, des limites honnetes et une vraie raison de cliquer.`;
+    return mergeCopyParts(
+        [
+            cleanDescription || `${product.name} reste pertinent surtout si le besoin tourne autour de ${signalList || readableCluster}.`,
+            benefitsLine,
+            objectionLine,
+            clickLine || draftPack.article.cta,
+        ],
+        700,
+    );
 }
 
 function buildMarkdownContent(
@@ -483,14 +541,19 @@ function buildMarkdownContent(
     queueItem: ContentQueueRow,
 ): string {
     const intro = draftPack.article.excerpt;
+    const evidence = buildProductEvidence(product, taxonomy);
     const sections = draftPack.article.sections
         .map((section) => {
             const parsedSection = parseDraftSection(section);
             return `## ${parsedSection.title}\n\n${buildSectionBody(section, product, taxonomy, draftPack, queueItem)}`;
         })
         .join("\n\n");
+    const finalVerification =
+        evidence.clickReasons.length > 0
+            ? toReadableList(evidence.clickReasons.slice(0, 3))
+            : `verifier le prix, les avis recents et le bon usage de ${product.name}`;
 
-    return `# ${draftPack.article.title}\n\n${intro}\n\n${sections}\n\n---\n\nCTA final: ${draftPack.article.cta} sur ${product.name}.`;
+    return `# ${draftPack.article.title}\n\n${intro}\n\n${sections}\n\n---\n\nCTA final: ${draftPack.article.cta}. Le bon reflexe maintenant est de ${finalVerification}.`;
 }
 
 function buildPinTitle(productName: string, hook: string): string {
@@ -552,6 +615,7 @@ function buildDeterministicContentDraft(
     draftPack: DraftPack,
 ): ContentDraft {
     const safeSlug = ensureUniqueSlug(slugify(draftPack.recommendedPostRef));
+    const postImage = resolveDraftPostImage(product);
 
     return {
         post: {
@@ -562,7 +626,7 @@ function buildDeterministicContentDraft(
             content: buildMarkdownContent(product, taxonomy, draftPack, queueItem),
             category: taxonomy.effectiveCategory,
             relatedProductId: product.id,
-            image: product.image,
+            image: postImage,
         },
         pins: draftPack.pinDrafts.map((pin, index) => ({
             angle: pin.angle,
@@ -659,6 +723,7 @@ async function maybeGenerateContentDraftWithAi(
             : [];
         const productProofPoints = buildProductProofPoints(product, taxonomy);
         const buyerObjections = buildBuyerObjections(product, taxonomy);
+        const postImage = resolveDraftPostImage(product);
 
         const result = await generateGrowthJson<AiContentDraft>({
             systemPrompt: [
@@ -697,6 +762,7 @@ async function maybeGenerateContentDraftWithAi(
                         benefits: product.benefits ?? null,
                         features: Array.isArray(product.features) ? product.features : [],
                         seoTags: Array.isArray(product.seoTags) ? product.seoTags : [],
+                        visual: postImage,
                     },
                     taxonomy: {
                         sourceCategory: taxonomy.sourceCategory,
@@ -757,7 +823,7 @@ async function maybeGenerateContentDraftWithAi(
                 content: toNonEmptyString(aiPost.content, fallback.post.content),
                 category: toNonEmptyString(aiPost.category, fallback.post.category),
                 relatedProductId: product.id,
-                image: product.image,
+                image: postImage,
             },
             pins: sanitizePinContentDrafts(result.data.pins, fallback.pins, safeSlug),
             generatedAt: new Date().toISOString(),
