@@ -354,12 +354,16 @@ export function enhanceContentDraftSpecificity(
         .replace(/\s+/g, " ")
         .trim();
     const strongerCta = `Voir la fiche ${product.name} pour verifier les ingredients, la frequence d'usage, les avis recents et la compatibilite avec votre routine.`;
+    const shouldAppendDetailedSections = draft.generationMeta?.mode !== "ai";
 
     let nextContent = replaceFinalCta(draft.post.content, strongerCta);
-    nextContent = appendSectionIfMissing(nextContent, "Les signaux produit a verifier", `${proofSentence}. Ce sont ces details concrets qui aident a distinguer ce produit d'un autre actif plus generique du meme univers.`);
-    nextContent = appendSectionIfMissing(nextContent, "Pour quel profil le clic est pertinent", buildFitSentence(product, clusterRef, signals));
-    nextContent = appendSectionIfMissing(nextContent, "Quand ralentir ou passer son tour", buildAvoidSentence(product, clusterRef));
-    nextContent = appendSectionIfMissing(nextContent, "A quel rythme juger les resultats", buildTimelineSentence(product, clusterRef));
+
+    if (shouldAppendDetailedSections) {
+        nextContent = appendSectionIfMissing(nextContent, "Les signaux produit a verifier", `${proofSentence}. Ce sont ces details concrets qui aident a distinguer ce produit d'un autre actif plus generique du meme univers.`);
+        nextContent = appendSectionIfMissing(nextContent, "Pour quel profil le clic est pertinent", buildFitSentence(product, clusterRef, signals));
+        nextContent = appendSectionIfMissing(nextContent, "Quand ralentir ou passer son tour", buildAvoidSentence(product, clusterRef));
+        nextContent = appendSectionIfMissing(nextContent, "A quel rythme juger les resultats", buildTimelineSentence(product, clusterRef));
+    }
     const reviewFocus = buildReviewFocus(reviewWarnings, clusterRef);
     const pricingSentence = price ? `prix repere autour de ${price}` : null;
     const shortProofLine = buildShortProofLine(signals, socialProof, price);

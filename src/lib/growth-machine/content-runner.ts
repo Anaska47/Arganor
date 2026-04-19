@@ -375,25 +375,29 @@ function buildSectionBody(
               ? "Il parle surtout aux peaux qui tirent vite, marquent le manque de confort ou ont besoin d'un geste nourrissant facile a tenir."
               : "Il convient surtout aux personnes qui cherchent plus de confort, d'eclat ou une routine plus stable sans multiplier les produits.";
     const seededBody = parsedSection.body ? parsedSection.body.replace(/\s+/g, " ").trim() : "";
-    const sectionKey = parsedSection.title.toLowerCase();
+    const normalizedSectionKey = normalizeForDedup(parsedSection.title);
 
     if (seededBody) {
-        if (sectionKey.includes("pour qui")) {
+        if (normalizedSectionKey.includes("pour qui")) {
             return mergeCopyParts([seededBody, audienceHint], 700);
         }
 
-        if (sectionKey.includes("erreurs")) {
+        if (normalizedSectionKey.includes("erreurs")) {
             return mergeCopyParts(
                 [seededBody, "Le plus utile est de relier chaque erreur a une vraie decision: frequence, quantite, tolerance et raison de cliquer."],
                 700,
             );
         }
 
-        if (sectionKey.includes("routine") || sectionKey.includes("comment")) {
+        if (normalizedSectionKey.includes("routine") || normalizedSectionKey.includes("comment")) {
             return mergeCopyParts([seededBody, usageHint], 700);
         }
 
-        if (sectionKey.includes("probleme") || sectionKey.includes("fait bien") || sectionKey.includes("pourquoi")) {
+        if (
+            normalizedSectionKey.includes("probleme") ||
+            normalizedSectionKey.includes("fait bien") ||
+            normalizedSectionKey.includes("pourquoi")
+        ) {
             return mergeCopyParts(
                 [seededBody, `${product.name} doit rester relie a des signaux concrets comme ${signalList || readableCluster}.`],
                 700,
@@ -403,7 +407,7 @@ function buildSectionBody(
         return clampText(seededBody, 700);
     }
 
-    if (sectionKey.includes("pour qui")) {
+    if (normalizedSectionKey.includes("pour qui")) {
         const lead =
             benefitSentence ||
             (signalList
@@ -413,7 +417,7 @@ function buildSectionBody(
         return `${lead} ${audienceHint} Si tu cherches un produit facile a integrer sans transformer toute ta routine, c'est ce type de profil qu'il faut garder en tete avant de cliquer.`;
     }
 
-    if (sectionKey.includes("ce que") && sectionKey.includes("fait bien")) {
+    if (normalizedSectionKey.includes("ce que") && normalizedSectionKey.includes("fait bien")) {
         const summary =
             descriptionMatchesProduct
                 ? cleanDescription
@@ -428,23 +432,32 @@ function buildSectionBody(
         return `${summary} ${benefits} C'est ce qui peut justifier un clic qualifie quand on veut verifier la fiche, les avis et la texture en detail.`;
     }
 
-    if (sectionKey.includes("quel probleme")) {
+    if (normalizedSectionKey.includes("quel probleme")) {
         return `${product.name} peut etre pertinent si le besoin principal tourne autour de ${signalList || readableCluster}. L'important est d'expliquer clairement ce qu'il peut ameliorer, mais aussi de rester lucide: un bon contenu doit montrer dans quels cas le produit aide vraiment et dans quels cas il faut moderer ses attentes.`;
     }
 
-    if (sectionKey.includes("comment utiliser")) {
+    if (
+        normalizedSectionKey.includes("comment utiliser") ||
+        normalizedSectionKey.includes("comment l utiliser") ||
+        normalizedSectionKey.includes("utiliser sans erreur")
+    ) {
         return `${usageHint} Si la peau ou le cuir chevelu reagit facilement, commence doucement puis augmente selon le confort ressenti. Le bon angle editorial ici consiste a montrer un ordre simple, une frequence realiste et ce qu'il faut observer avant d'aller plus loin.`;
     }
 
-    if (sectionKey.includes("les erreurs")) {
+    if (normalizedSectionKey.includes("les erreurs")) {
         return `L'erreur la plus courante est d'attendre trop vite un resultat spectaculaire ou d'empiler trop de produits autour de ${product.name}. Mieux vaut une routine courte, reguliere et facile a suivre, avec un vrai point d'attention sur la tolerance, la texture et la frequence d'usage.`;
     }
 
-    if (sectionKey.includes("les limites")) {
+    if (normalizedSectionKey.includes("les limites")) {
         return `${product.name} n'est pas une solution magique, et c'est exactement ce qu'il faut dire dans un bon article de conversion. Selon le besoin, la tolerance ou le niveau d'attente, il peut etre utile de rappeler les limites, le temps d'observation necessaire et les cas ou un autre type de produit serait plus adapte.`;
     }
 
-    if (sectionKey.includes("notre avis") || sectionKey.includes("faut-il cliquer")) {
+    if (
+        normalizedSectionKey.includes("notre avis") ||
+        normalizedSectionKey.includes("notre verdict") ||
+        normalizedSectionKey.includes("faut il cliquer") ||
+        normalizedSectionKey.includes("voir la fiche produit")
+    ) {
         const angleLine =
             suggestedAngles.length > 0
                 ? `L'angle le plus prometteur ici reste ${suggestedAngles[0]}.`
