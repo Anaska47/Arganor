@@ -1,12 +1,13 @@
 import { MetadataRoute } from 'next';
-import { getProducts } from '@/lib/data';
+import { getPublicProducts } from '@/lib/data';
 import { getBlogPosts } from '@/lib/blog';
+import { getSiteUrl } from '@/lib/site';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://arganor.vercel.app'; // URL de production exacte
+    const baseUrl = getSiteUrl();
 
     // Get all products
-    const products = getProducts();
+    const products = getPublicProducts();
     const productUrls = products.map((product) => ({
         url: `${baseUrl}/products/${product.slug}`,
         lastModified: new Date(),
@@ -37,6 +38,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '',
         '/products',
         '/blog',
+        '/about',
+        '/contact',
     ].map((route) => ({
         url: `${baseUrl}${route}`,
         lastModified: new Date(),

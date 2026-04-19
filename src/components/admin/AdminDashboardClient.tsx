@@ -1,306 +1,346 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { 
-    Package, 
-    FileText, 
-    DollarSign, 
-    TrendingUp, 
-    Star, 
-    Zap,
-    PlusCircle,
-    RefreshCw,
-    CheckCircle
-} from "lucide-react";
+import type { CSSProperties } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { AlertTriangle, CheckCircle2, ExternalLink, KeyRound, RefreshCw, Rocket, Workflow } from "lucide-react";
 
-interface Stats {
-    totalProducts: number;
-    blogPosts: number;
-    totalReviews: number;
-    avgRating: string;
-    revenue: string;
-    clicks: number;
-    isLive: boolean;
-}
-
-interface Activity {
+type ActivityItem = {
     id: number;
     type: "sale" | "blog" | "pinterest" | "product";
     text: string;
     time: string;
     status: "success" | "info" | "warning";
+};
+
+type AutopilotStats = {
+    status: string;
+    lastRunAt: string | null;
+    lastSuccessAt: string | null;
+    generatedProducts: number;
+    generatedPosts: number;
+    generatedPins: number;
+    feedPins: number;
+    message: string;
+    errors: string[];
+    warnings: string[];
+    supabaseRunId: string | null;
+    workflowRunUrl: string | null;
+    triggerSource: string | null;
+    validationAt: string | null;
+    warningCount: number;
+    errorCount: number;
+};
+
+type FeedHealth = {
+    status: string;
+    feedPins: number;
+    warningCount: number;
+    errorCount: number;
+    validatedAt: string | null;
+    feedUrl: string;
+    memoryKey: string | null;
+};
+
+type StatsResponse = {
+    totalProducts: number;
+    blogPosts: number;
+    rssPins: number;
+    latestPostDate: string | null;
+    totalReviews: number;
+    avgRating: string;
+    revenue: string;
+    clicks: number;
+    apiKeyConfigured: boolean;
+    autopilot: AutopilotStats;
+    feedHealth: FeedHealth;
+    activities: ActivityItem[];
+    isLive: boolean;
+};
+
+type ConfigResponse = {
+    apiKeyConfigured: boolean;
+    requiresApiKey: boolean;
+    keyStorageName: string;
+};
+
+type GrowthOverview = {
+    queue: { total: number; queued: number; running: number; failed: number };
+    runs: { total: number; completed: number; failed: number };
+    memory: { total: number; patterns: number; constraints: number; recentKeys: string[] };
+    prompts: { total: number; active: number };
+    experiments: { total: number; running: number };
+};
+
+type GrowthAiStatus = {
+    enabled: boolean;
+    provider: string;
+    model: string;
+};
+
+type GrowthResponse = {
+    success: boolean;
+    overview: GrowthOverview;
+    ai: GrowthAiStatus;
+    message?: string;
+    error?: string;
+};
+
+type Banner = { tone: "success" | "warning" | "info" | "error"; text: string } | null;
+
+const panel: CSSProperties = { background: "#fff", border: "1px solid #e5e7eb", borderRadius: 12, padding: 20, boxShadow: "0 2px 6px rgba(15,23,42,0.04)" };
+const muted: CSSProperties = { color: "#6b7280", fontSize: 13, lineHeight: 1.5 };
+const label: CSSProperties = { ...muted, fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 700 };
+const buttonBase: CSSProperties = { display: "inline-flex", alignItems: "center", gap: 8, borderRadius: 6, padding: "9px 12px", fontSize: 13, fontWeight: 600, cursor: "pointer", border: "1px solid #d1d5db", background: "#fff", color: "#111827" };
+
+function getAdminHeaders(apiKey: string): HeadersInit {
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    if (apiKey.trim()) {
+        headers.Authorization = `Bearer ${apiKey.trim()}`;
+    }
+    return headers;
+}
+
+async function fetchJson<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
+    const response = await fetch(input, { cache: "no-store", ...init });
+    const data = (await response.json()) as Record<string, unknown>;
+    if (!response.ok) {
+        throw new Error(typeof data.error === "string" ? data.error : `Request failed (${response.status})`);
+    }
+    return data as T;
+}
+
+function formatDate(value: string | null) {
+    if (!value) return "n/a";
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? value : date.toLocaleString("fr-FR");
+}
+
+function statusChip(status: string): CSSProperties {
+    if (["completed", "validated", "active", "success"].includes(status)) return { background: "#dcfce7", color: "#166534" };
+    if (["failed", "error"].includes(status)) return { background: "#fee2e2", color: "#991b1b" };
+    if (["running", "queued"].includes(status)) return { background: "#dbeafe", color: "#1d4ed8" };
+    return { background: "#fef3c7", color: "#92400e" };
+}
+
+function bannerStyle(tone: NonNullable<Banner>["tone"]): CSSProperties {
+    if (tone === "success") return { background: "#f0fdf4", borderColor: "#bbf7d0", color: "#166534" };
+    if (tone === "error") return { background: "#fef2f2", borderColor: "#fecaca", color: "#991b1b" };
+    if (tone === "warning") return { background: "#fffbeb", borderColor: "#fde68a", color: "#92400e" };
+    return { background: "#eff6ff", borderColor: "#bfdbfe", color: "#1d4ed8" };
+}
+
+function MetricCard({ labelText, value, note }: { labelText: string; value: string | number; note: string }) {
+    return (
+        <div style={panel}>
+            <div style={label}>{labelText}</div>
+            <div style={{ marginTop: 8, fontSize: 28, fontWeight: 700, color: "#111827" }}>{value}</div>
+            <p style={{ ...muted, margin: "8px 0 0" }}>{note}</p>
+        </div>
+    );
 }
 
 export default function AdminDashboardClient() {
-    const [stats, setStats] = useState<Stats | null>(null);
+    const [stats, setStats] = useState<StatsResponse | null>(null);
+    const [growth, setGrowth] = useState<GrowthResponse | null>(null);
+    const [config, setConfig] = useState<ConfigResponse | null>(null);
+    const [apiKey, setApiKey] = useState("");
     const [loading, setLoading] = useState(true);
-    const [activities, setActivities] = useState<Activity[]>([]);
-    const [generatingStatus, setGeneratingStatus] = useState<{type: string, status: 'loading' | 'success' | 'error' | null, message: string}>({ type: '', status: null, message: '' });
+    const [busy, setBusy] = useState<string | null>(null);
+    const [feedback, setFeedback] = useState<Banner>(null);
+    const [growthError, setGrowthError] = useState<string | null>(null);
 
-    const fetchStats = useCallback(async () => {
+    const loadDashboard = useCallback(async (silent = false) => {
+        if (!silent) setLoading(true);
+        const storedApiKey = window.localStorage.getItem("arganorAdminApiKey") || "";
+        setApiKey(storedApiKey);
+
         try {
-            const res = await fetch("/api/admin/stats");
-            const data = await res.json();
-            setStats(data);
-            if (data.activities && data.activities.length > 0) {
-                setActivities(data.activities);
+            const [statsData, configData] = await Promise.all([
+                fetchJson<StatsResponse>("/api/admin/stats"),
+                fetchJson<ConfigResponse>("/api/admin/config"),
+            ]);
+            setStats(statsData);
+            setConfig(configData);
+            setGrowthError(null);
+
+            try {
+                const growthData = await fetchJson<GrowthResponse>("/api/admin/growth", {
+                    headers: getAdminHeaders(storedApiKey),
+                });
+                setGrowth(growthData);
+            } catch (error) {
+                setGrowth(null);
+                setGrowthError(error instanceof Error ? error.message : "Growth overview indisponible");
             }
-        } catch (err) {
-            console.error("Failed to fetch stats", err);
+        } catch (error) {
+            setFeedback({ tone: "error", text: error instanceof Error ? error.message : "Chargement admin impossible" });
         } finally {
             setLoading(false);
         }
     }, []);
 
     useEffect(() => {
-        fetchStats();
-    }, [fetchStats]);
+        loadDashboard();
+    }, [loadDashboard]);
 
-    const handleGenerate = async (type: 'product' | 'article' | 'pin') => {
-        setGeneratingStatus({ type, status: 'loading', message: 'Génération en cours...' });
-        try {
-            const res = await fetch("/api/admin/generate", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ type })
-            });
-            const data = await res.json();
-            
-            if (data.success) {
-                setGeneratingStatus({ type, status: 'success', message: data.message });
-                // Rafraîchir les stats
-                fetchStats();
-                setTimeout(() => setGeneratingStatus({ type: '', status: null, message: '' }), 5000);
-            } else {
-                setGeneratingStatus({ type, status: 'error', message: "Erreur : " + data.error });
-            }
-        } catch (error) {
-            console.error("Failed to generate content", error);
-            setGeneratingStatus({ type, status: 'error', message: "Erreur inattendue" });
+    const alert = useMemo<Banner>(() => {
+        if (!stats) return null;
+        if (stats.feedHealth.status === "failed") {
+            return { tone: "error", text: `Le feed RSS a echoue a la derniere validation (${stats.feedHealth.errorCount} erreur(s)).` };
         }
-    };
+        if (stats.autopilot.status === "failed") {
+            return { tone: "warning", text: "Le dernier run autopilot a echoue. Il faut verifier le workflow GitHub avant de relancer." };
+        }
+        if (stats.autopilot.warningCount >= 10) {
+            return { tone: "warning", text: `Le feed passe, mais il remonte ${stats.autopilot.warningCount} warnings. On doit nettoyer ca avant de scaler.` };
+        }
+        return { tone: "success", text: "La machine est debout: on a maintenant un point de verite clair sur le run, le feed et la queue growth." };
+    }, [stats]);
 
-    if (loading) {
-        return (
-            <div className="dashboard-loading">
-                <div className="spinner"></div>
-                <p>Analyse des performances d'Arganor...</p>
-            </div>
-        );
+    const saveApiKey = useCallback(() => {
+        window.localStorage.setItem("arganorAdminApiKey", apiKey.trim());
+        setFeedback({ tone: "info", text: "Cle admin sauvegardee dans ce navigateur." });
+        void loadDashboard(true);
+    }, [apiKey, loadDashboard]);
+
+    const runGrowth = useCallback(async (labelText: string, payload: Record<string, unknown>) => {
+        if (config?.requiresApiKey && !apiKey.trim()) {
+            setFeedback({ tone: "error", text: "ARGANOR_API_KEY requise pour lancer les actions growth." });
+            return;
+        }
+
+        setBusy(labelText);
+        try {
+            const response = await fetchJson<GrowthResponse>("/api/admin/growth", {
+                method: "POST",
+                headers: getAdminHeaders(apiKey),
+                body: JSON.stringify(payload),
+            });
+            setGrowth(response);
+            setFeedback({ tone: "success", text: response.message || `${labelText} termine.` });
+            await loadDashboard(true);
+        } catch (error) {
+            setFeedback({ tone: "error", text: error instanceof Error ? error.message : `${labelText} a echoue.` });
+        } finally {
+            setBusy(null);
+        }
+    }, [apiKey, config?.requiresApiKey, loadDashboard]);
+
+    if (loading || !stats) {
+        return <div style={{ display: "flex", alignItems: "center", gap: 10, minHeight: 260, color: "#6b7280" }}><RefreshCw size={18} /><span>Chargement du cockpit admin...</span></div>;
     }
 
     return (
-        <div className="dashboard-home">
-            <header className="page-header-admin">
-                <div className="header-top">
-                    <h1 className="dashboard-title">✨ Arganor Dashboard</h1>
-                    <span className="live-badge">🚀 SITE EN LIGNE (Vercel)</span>
+        <div style={{ display: "grid", gap: 20 }}>
+            <header style={{ display: "flex", justifyContent: "space-between", gap: 16, flexWrap: "wrap", alignItems: "flex-start" }}>
+                <div>
+                    <h1 style={{ margin: 0, fontSize: 32, color: "#111827" }}>Admin Dashboard</h1>
+                    <p style={{ ...muted, margin: "8px 0 0", maxWidth: 760 }}>On centralise ici la sante du projet: contenu, autopilot, feed Pinterest et couche growth machine.</p>
                 </div>
-                <p>Tableau de bord de performance et d'affiliation.</p>
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                    <button style={buttonBase} onClick={() => loadDashboard(true)} disabled={Boolean(busy)}><RefreshCw size={16} />Rafraichir</button>
+                    <a href="/admin/growth" style={{ ...buttonBase, textDecoration: "none" }}><Workflow size={16} />Ouvrir Growth</a>
+                    <button style={{ ...buttonBase, background: "#111827", color: "#fff", borderColor: "#111827" }} onClick={() => runGrowth("Cycle growth", { limit: 3 })} disabled={Boolean(busy)}><Rocket size={16} />{busy === "Cycle growth" ? "Cycle..." : "Cycle growth"}</button>
+                </div>
             </header>
 
-            <div className="stats-grid">
-                {/* ── Revenue Estimation ── */}
-                <div className="stat-card accent-card">
-                    <div className="stat-header">
-                        <div className="stat-icon-bg bg-gold"><DollarSign size={20} /></div>
+            {alert ? <div style={{ ...panel, ...bannerStyle(alert.tone), padding: 16 }}>{alert.text}</div> : null}
+            {feedback ? <div style={{ ...panel, ...bannerStyle(feedback.tone), padding: 16 }}>{feedback.text}</div> : null}
+
+            <section style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 16 }}>
+                <MetricCard labelText="Produits" value={stats.totalProducts} note={`${stats.totalReviews} avis cumules`} />
+                <MetricCard labelText="Articles" value={stats.blogPosts} note={`Dernier: ${formatDate(stats.latestPostDate)}`} />
+                <MetricCard labelText="Pins feed" value={stats.feedHealth.feedPins} note={`${stats.feedHealth.status} / ${stats.feedHealth.warningCount} warning(s)`} />
+                <MetricCard labelText="Clics" value={stats.clicks} note={`CA estime: ${stats.revenue} EUR`} />
+                <MetricCard labelText="Note moyenne" value={stats.avgRating} note={stats.isLive ? "Site en ligne" : "Site non confirme"} />
+            </section>
+
+            <section style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.45fr) minmax(320px, 1fr)", gap: 16, alignItems: "start" }}>
+                <div style={{ ...panel, display: "grid", gap: 16 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+                        <div>
+                            <div style={label}>Autopilot</div>
+                            <h2 style={{ margin: "8px 0 0", fontSize: 22 }}>Run + feed health</h2>
+                        </div>
+                        <span style={{ ...statusChip(stats.autopilot.status), borderRadius: 999, padding: "6px 10px", fontSize: 12, fontWeight: 700 }}>{stats.autopilot.status}</span>
                     </div>
-                    <div className="stat-info-main">
-                        <p className="stat-label">Revenus Estimés (Amazon)</p>
-                        <h3 className="stat-number">{stats?.revenue || "0.00"}€</h3>
-                        <p className="stat-sub">Basé sur les {stats?.clicks} clics réels</p>
+                    <p style={{ ...muted, margin: 0 }}>{stats.autopilot.message}</p>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12 }}>
+                        <div><div style={label}>Dernier run</div><div style={{ marginTop: 6 }}>{formatDate(stats.autopilot.lastRunAt)}</div></div>
+                        <div><div style={label}>Dernier succes</div><div style={{ marginTop: 6 }}>{formatDate(stats.autopilot.lastSuccessAt)}</div></div>
+                        <div><div style={label}>Trigger</div><div style={{ marginTop: 6 }}>{stats.autopilot.triggerSource || "n/a"}</div></div>
+                        <div><div style={label}>Validation</div><div style={{ marginTop: 6 }}>{formatDate(stats.autopilot.validationAt)}</div></div>
+                        <div><div style={label}>Generation</div><div style={{ marginTop: 6 }}>{stats.autopilot.generatedProducts} prod / {stats.autopilot.generatedPosts} posts / {stats.autopilot.generatedPins} pins</div></div>
+                        <div><div style={label}>RSS</div><div style={{ marginTop: 6 }}>{stats.feedHealth.feedPins} pins / {stats.feedHealth.errorCount} erreur(s)</div></div>
                     </div>
+                    <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                        {stats.autopilot.workflowRunUrl ? <a href={stats.autopilot.workflowRunUrl} target="_blank" rel="noreferrer" style={{ ...buttonBase, textDecoration: "none" }}><ExternalLink size={16} />Workflow run</a> : null}
+                        <a href={stats.feedHealth.feedUrl} target="_blank" rel="noreferrer" style={{ ...buttonBase, textDecoration: "none" }}><ExternalLink size={16} />Voir feed.xml</a>
+                        <button style={{ ...buttonBase, borderColor: "#111827" }} onClick={() => runGrowth("Cycle + promote", { limit: 3, promoteApproved: true, promoteLimit: 2 })} disabled={Boolean(busy)}><Rocket size={16} />{busy === "Cycle + promote" ? "Promotion..." : "Cycle + promote"}</button>
+                    </div>
+                    {stats.autopilot.errors.length > 0 ? <div style={{ padding: 14, borderRadius: 8, background: "#fef2f2", color: "#991b1b" }}><strong>Erreurs</strong><ul style={{ margin: "10px 0 0", paddingLeft: 18 }}>{stats.autopilot.errors.slice(0, 4).map((item) => <li key={item}>{item}</li>)}</ul></div> : null}
+                    {stats.autopilot.warnings.length > 0 ? <div style={{ padding: 14, borderRadius: 8, background: "#fffbeb", color: "#92400e" }}><strong>Warnings</strong><ul style={{ margin: "10px 0 0", paddingLeft: 18 }}>{stats.autopilot.warnings.slice(0, 4).map((item) => <li key={item}>{item}</li>)}</ul></div> : null}
                 </div>
 
-                {/* ── Total Products ── */}
-                <div className="stat-card">
-                    <div className="stat-header">
-                        <div className="stat-icon-bg bg-blue"><Package size={20} /></div>
+                <div style={{ display: "grid", gap: 16 }}>
+                    <div style={panel}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                            <KeyRound size={16} />
+                            <strong>Admin API key</strong>
+                        </div>
+                        <p style={{ ...muted, margin: "10px 0 14px" }}>
+                            {config?.requiresApiKey ? "Les routes sensibles demandent une cle locale dans ce navigateur." : "Aucune cle requise en local pour le moment."}
+                        </p>
+                        <input type="password" value={apiKey} onChange={(event) => setApiKey(event.target.value)} placeholder="ARGANOR_API_KEY" style={{ width: "100%", padding: "10px 12px", borderRadius: 6, border: "1px solid #d1d5db", marginBottom: 10 }} />
+                        <button style={buttonBase} onClick={saveApiKey}>Sauvegarder la cle</button>
                     </div>
-                    <div className="stat-info-main">
-                        <p className="stat-label">Catalogue Produits</p>
-                        <h3 className="stat-number">{stats?.totalProducts || 0}</h3>
-                        <p className="stat-sub">Tous actifs sur le site</p>
-                    </div>
-                </div>
 
-                {/* ── Clicks Estimations ── */}
-                <div className="stat-card">
-                    <div className="stat-header">
-                        <div className="stat-icon-bg bg-green"><TrendingUp size={20} /></div>
-                    </div>
-                    <div className="stat-info-main">
-                        <p className="stat-label">Clics affiliés cumulés</p>
-                        <h3 className="stat-number">{stats?.clicks || 0}</h3>
-                        <p className="stat-sub">Trafic réel converti</p>
-                    </div>
-                </div>
-
-                {/* ── Social Proof ── */}
-                <div className="stat-card">
-                    <div className="stat-header">
-                        <div className="stat-icon-bg bg-red"><Star size={20} /></div>
-                    </div>
-                    <div className="stat-info-main">
-                        <p className="stat-label">Avis Clients Importés</p>
-                        <h3 className="stat-number">{stats?.totalReviews?.toLocaleString() || 0}</h3>
-                        <p className="stat-sub">Score moyen global : {stats?.avgRating || "4.5"}/5</p>
-                    </div>
-                </div>
-            </div>
-
-            <div className="dashboard-main-content">
-                {/* ── Recent Activity ── */}
-                <div className="activity-panel">
-                    <h2 className="panel-title">📋 Flux d'activité des clics</h2>
-                    <div className="activity-list">
-                        {activities.length > 0 ? activities.map((act, i) => (
-                            <div key={i} className="activity-item-new">
-                                <div className={`activity-dot ${act.status}`}></div>
-                                <div className="activity-content">
-                                    <p className="activity-text">{act.text}</p>
-                                    <span className="activity-time">{act.time}</span>
+                    <div style={panel}>
+                        <div style={label}>Growth machine</div>
+                        <h2 style={{ margin: "8px 0 0", fontSize: 22 }}>Queue et memoire</h2>
+                        {growth?.overview ? (
+                            <div style={{ display: "grid", gap: 10, marginTop: 14 }}>
+                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                                    <div><strong>{growth.overview.queue.total}</strong><div style={muted}>items queue</div></div>
+                                    <div><strong>{growth.overview.runs.total}</strong><div style={muted}>runs growth</div></div>
+                                    <div><strong>{growth.overview.memory.total}</strong><div style={muted}>memo entries</div></div>
+                                    <div><strong>{growth.overview.experiments.total}</strong><div style={muted}>experiments</div></div>
                                 </div>
+                                <p style={{ ...muted, margin: 0 }}>IA: {growth.ai.enabled ? `${growth.ai.provider} / ${growth.ai.model}` : "inactive"}</p>
+                                <p style={{ ...muted, margin: 0 }}>Queue: {growth.overview.queue.queued} queued, {growth.overview.queue.running} running, {growth.overview.queue.failed} failed.</p>
+                                {growth.overview.memory.recentKeys.length > 0 ? <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{growth.overview.memory.recentKeys.slice(0, 4).map((item) => <span key={item} style={{ background: "#f3f4f6", borderRadius: 999, padding: "6px 10px", fontSize: 12, color: "#374151" }}>{item}</span>)}</div> : null}
                             </div>
-                        )) : (
-                            <p className="text-muted" style={{fontSize: '12px', color: '#666'}}>Aucune activité récente. Les clics apparaîtront ici en temps réel.</p>
+                        ) : (
+                            <div style={{ marginTop: 14, color: "#92400e", display: "grid", gap: 8 }}>
+                                <div style={{ display: "flex", gap: 8, alignItems: "center" }}><AlertTriangle size={16} />Growth overview non charge.</div>
+                                <div style={muted}>{growthError || "Ajoute la cle admin si la route est protegee."}</div>
+                            </div>
                         )}
                     </div>
-                </div>
 
-                {/* ── Meta Section & Generative Actions ── */}
-                <div className="quick-stats-panel">
-                    <h2 className="panel-title">🦾 Générateurs IA</h2>
-                    
-                    {generatingStatus.message ? (
-                        <div className={`status-message ${generatingStatus.status || ''}`}>
-                            {generatingStatus.status === 'loading' && <RefreshCw size={14} className="spin-icon" />}
-                            {generatingStatus.status !== 'loading' && <CheckCircle size={14} />}
-                            <span>{generatingStatus.message}</span>
-                        </div>
-                    ) : null}
-
-                    <div className="quick-stats-inner" style={{marginTop: '15px'}}>
-                        {/* Produit */}
-                        <div className="mini-stat admin-generate-row">
-                            <Package size={18} className="text-blue" />
-                            <div className="mini-info" style={{flex: 1}}>
-                                <strong>Générer de Nouveaux Produits</strong>
-                                <p>Catalogue Luxe Complet (40)</p>
-                            </div>
-                            <button 
-                                className="action-btn-small" 
-                                disabled={generatingStatus.status === 'loading'}
-                                onClick={() => handleGenerate('product')}
-                            >
-                                <PlusCircle size={16} /> Créer
-                            </button>
-                        </div>
-                        
-                        {/* Article */}
-                        <div className="mini-stat admin-generate-row">
-                            <FileText size={18} className="text-orange" />
-                            <div className="mini-info" style={{flex: 1}}>
-                                <strong>Générer un Nouvel Article</strong>
-                                <p>Blogging SEO Autopilot</p>
-                            </div>
-                            <button 
-                                className="action-btn-small" 
-                                disabled={generatingStatus.status === 'loading'}
-                                onClick={() => handleGenerate('article')}
-                            >
-                                <PlusCircle size={16} /> Créer
-                            </button>
-                        </div>
-
-                        {/* Épingles Pinterest */}
-                        <div className="mini-stat admin-generate-row">
-                            <Zap size={18} className="text-green" />
-                            <div className="mini-info" style={{flex: 1}}>
-                                <strong>Générer de Nouvelles Épingles</strong>
-                                <p>Création massive d'images Pinterest</p>
-                            </div>
-                            <button 
-                                className="action-btn-small" 
-                                disabled={generatingStatus.status === 'loading'}
-                                onClick={() => handleGenerate('pin')}
-                            >
-                                <PlusCircle size={16} /> Créer
-                            </button>
+                    <div style={panel}>
+                        <div style={label}>Recent activity</div>
+                        <div style={{ display: "grid", gap: 12, marginTop: 14 }}>
+                            {stats.activities.length > 0 ? stats.activities.map((activity) => (
+                                <div key={activity.id} style={{ display: "grid", gridTemplateColumns: "14px 1fr auto", gap: 10, alignItems: "center" }}>
+                                    <span style={{ width: 10, height: 10, borderRadius: "50%", background: activity.status === "success" ? "#22c55e" : activity.status === "warning" ? "#f59e0b" : "#3b82f6" }} />
+                                    <span>{activity.text}</span>
+                                    <span style={muted}>{activity.time}</span>
+                                </div>
+                            )) : <div style={muted}>Aucune activite recente.</div>}
                         </div>
                     </div>
-                    
-                    <div className="dashboard-cta" style={{marginTop: '25px'}}>
-                        <button className="btn btn-primary w-full" onClick={() => window.location.href='/admin/pinterest'}>
-                            Gérer les Pins Pinterest →
-                        </button>
+
+                    <div style={{ ...panel, background: "#f8fafc" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#0f172a" }}><CheckCircle2 size={16} /><strong>Ce qui est deja en place</strong></div>
+                        <ul style={{ ...muted, margin: "12px 0 0", paddingLeft: 18 }}>
+                            <li>telemetrie des runs GitHub vers Supabase</li>
+                            <li>memoire persistante pour le dernier run et la sante du feed</li>
+                            <li>cockpit growth separe sur /admin/growth</li>
+                        </ul>
                     </div>
                 </div>
-            </div>
-
-            <style jsx>{`
-                .dashboard-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 300px; gap: 15px; }
-                .spinner { width: 30px; height: 30px; border: 3px solid #eee; border-top-color: #c9973a; border-radius: 50%; animation: spin 0.8s linear infinite; }
-                .spin-icon { animation: spin 1s linear infinite; }
-                @keyframes spin { to { transform: rotate(360deg); } }
-
-                .live-badge { background: #dcfce7; color: #15803d; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; margin-left: 10px; border: 1px solid #bdf2cc; }
-                .dashboard-title { display: inline-flex; align-items: center; margin: 0; }
-
-                .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 25px 0; }
-                .stat-card { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #e5e5e5; position: relative; transition: all 0.2s; }
-                .stat-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-                .accent-card { background: linear-gradient(135deg, #fff, #fefce8); border-color: #fde047; }
-                .stat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-                .stat-icon-bg { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
-                .bg-gold { background: #fef9c3; color: #854d0e; }
-                .bg-blue { background: #dbeafe; color: #1e40af; }
-                .bg-green { background: #dcfce7; color: #15803d; }
-                .bg-red { background: #fee2e2; color: #991b1b; }
-                
-                .stat-info-main { display: flex; flex-direction: column; }
-                .stat-label { font-size: 12px; color: #666; margin: 0 0 5px 0; font-weight: 500; }
-                .stat-number { font-size: 24px; font-weight: 800; margin: 0; color: #111; }
-                .stat-sub { font-size: 11px; color: #999; margin: 5px 0 0 0; }
-
-                .dashboard-main-content { display: grid; grid-template-columns: 1fr 350px; gap: 20px; }
-                .panel-title { font-size: 14px; font-weight: 700; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; color: #333; }
-                
-                .activity-panel { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #e5e5e5; }
-                .activity-list { display: flex; flex-direction: column; gap: 15px; }
-                .activity-item-new { display: flex; gap: 12px; align-items: flex-start; }
-                .activity-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
-                .activity-dot.success { background: #16a34a; box-shadow: 0 0 10px rgba(22,163,74,0.3); }
-                .activity-dot.info { background: #3b82f6; box-shadow: 0 0 10px rgba(59,130,246,0.3); }
-                .activity-content { flex: 1; }
-                .activity-text { font-size: 13px; color: #111; margin: 0; line-height: 1.4; font-weight: 500; }
-                .activity-time { font-size: 11px; color: #999; }
-
-                .quick-stats-panel { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #e5e5e5; }
-                .quick-stats-inner { display: flex; flex-direction: column; gap: 15px; }
-                
-                .admin-generate-row { display: flex; align-items: center; gap: 15px; justify-content: space-between; }
-                .mini-stat { padding: 12px; background: #fafafa; border-radius: 8px; border: 1px solid #eee; transition: all 0.2s; }
-                .mini-stat:hover { border-color: #ddd; background: #fdfdfd; }
-                .mini-info strong { display: block; font-size: 13px; color: #222; margin-bottom: 2px; }
-                .mini-info p { font-size: 11px; color: #777; margin: 0; }
-                
-                .text-orange { color: #ea580c; }
-                .text-blue { color: #2563eb; }
-                .text-green { color: #16a34a; }
-
-                .action-btn-small { display: flex; align-items: center; gap: 6px; background: #fff; border: 1px solid #ddd; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; color: #444; transition: all 0.2s; }
-                .action-btn-small:hover:not(:disabled) { background: #f5f5f5; border-color: #ccc; }
-                .action-btn-small:disabled { opacity: 0.5; cursor: not-allowed; }
-                
-                .status-message { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; margin-bottom: 15px; transition: all 0.3s ease; }
-                .status-message.loading { background: #f0f9ff; color: #0369a1; border: 1px solid #bae6fd; }
-                .status-message.success { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
-                .status-message.error { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
-
-                .btn-primary { background: linear-gradient(135deg, #111, #333); color: #fff; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; }
-                .w-full { width: 100%; }
-            `}</style>
+            </section>
         </div>
     );
 }

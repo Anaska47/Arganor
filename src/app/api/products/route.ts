@@ -1,32 +1,28 @@
-import { NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
+import { NextResponse } from "next/server";
 
-const dataFilePath = path.join(process.cwd(), 'src/data/products.json');
+import { isAuthorizedRequest, unauthorizedJson } from "@/lib/api-auth";
+import { appendRuntimeProduct, readRuntimeProducts } from "@/lib/runtime-content-store";
 
 export async function GET() {
     try {
-        const fileContents = await fs.readFile(dataFilePath, 'utf8');
-        const products = JSON.parse(fileContents);
+        const products = await readRuntimeProducts<unknown>();
         return NextResponse.json(products);
     } catch {
-        return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });
+        return NextResponse.json({ error: "Failed to fetch products" }, { status: 500 });
     }
 }
 
 export async function POST(request: Request) {
+    if (!isAuthorizedRequest(request)) {
+        return unauthorizedJson();
+    }
+
     try {
         const newProduct = await request.json();
-        const fileContents = await fs.readFile(dataFilePath, 'utf8');
-        const products = JSON.parse(fileContents);
+        await appendRuntimeProduct(newProduct, "api:products");
 
-        // Add new product
-        products.push(newProduct);
-
-        await fs.writeFile(dataFilePath, JSON.stringify(products, null, 2));
-
-        return NextResponse.json({ message: 'Product created successfully', product: newProduct });
+        return NextResponse.json({ message: "Product created successfully", product: newProduct });
     } catch {
-        return NextResponse.json({ error: 'Failed to create product' }, { status: 500 });
+        return NextResponse.json({ error: "Failed to create product" }, { status: 500 });
     }
 }

@@ -1,84 +1,45 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from 'fs';
-import path from 'path';
+
+import { getAffiliateLink, getAmazonSearchLink } from "@/lib/affiliate";
+import { readClicksDataAsync, repairTrackedText, writeClicksDataAsync } from "@/lib/click-tracking";
 import { getProductById } from "@/lib/data";
-
-const CLICKS_PATH = path.join(process.cwd(), 'src/data/clicks.json');
-
-type ClicksData = {
-    totalClicks: number;
-    productClicks: Record<string, number>;
-    recentClicks: Array<{
-        productId: string;
-        productName: string;
-        source: string;
-        time: string;
-    }>;
-};
-
-function getEmptyClicks(): ClicksData {
-    return { totalClicks: 0, productClicks: {}, recentClicks: [] };
-}
-
-function getClicks(): ClicksData {
-    try {
-        if (!fs.existsSync(CLICKS_PATH)) return getEmptyClicks();
-        return JSON.parse(fs.readFileSync(CLICKS_PATH, 'utf8')) as ClicksData;
-    } catch {
-        return getEmptyClicks();
-    }
-}
-
-function saveClicks(data: ClicksData) {
-    try {
-        fs.writeFileSync(CLICKS_PATH, JSON.stringify(data, null, 2));
-    } catch (e) {
-        console.error("Save click failed", e);
-    }
-}
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const productId = searchParams.get("id");
-    const source = searchParams.get("s") || "direct"; // p=pinterest, b=blog, s=search
+    const searchQuery = (searchParams.get("q") || searchParams.get("query") || "").trim();
+    const source = searchParams.get("s") || "direct";
 
-    if (!productId) return NextResponse.redirect(new URL('/', req.url));
+    const product = productId ? getProductById(productId) : undefined;
+    if (!product && !searchQuery) {
+        return NextResponse.redirect(new URL("/", req.url));
+    }
 
-    const product = getProductById(productId);
-    if (!product) return NextResponse.redirect(new URL('/', req.url));
+    const data = await readClicksDataAsync();
+    const trackedTargetId = product?.id || `search:${searchQuery.toLowerCase()}`;
+    const trackedProductName = repairTrackedText(product?.name || searchQuery);
 
-    // ── Update Tracking Data ─────────────────────────────────
-    const data = getClicks();
     data.totalClicks = (data.totalClicks || 0) + 1;
-    
-    if (!data.productClicks[productId]) data.productClicks[productId] = 0;
-    data.productClicks[productId]++;
+    if (!data.productClicks[trackedTargetId]) data.productClicks[trackedTargetId] = 0;
+    data.productClicks[trackedTargetId]++;
 
-    // Log recent activity (keep last 50)
     data.recentClicks.unshift({
-        productId,
-        productName: product.name,
+        productId: trackedTargetId,
+        productName: trackedProductName,
         source,
-        time: new Date().toISOString()
+        time: new Date().toISOString(),
     });
     data.recentClicks = data.recentClicks.slice(0, 50);
 
-    saveClicks(data);
-
-    // ── Build Affiliate Link ─────────────────────────────────
-    let amazonLink = "";
-    const affiliateTag = "arganor-21";
-
-    if (product.asin) {
-        // Direct Product Page
-        amazonLink = `https://www.amazon.fr/dp/${product.asin}?tag=${affiliateTag}`;
-    } else {
-        // Fallback: Amazon Search results for the exact product name
-        // This guarantees the user finds the accurate product (or very close) and the affiliate cookie is still set!
-        const searchQuery = encodeURIComponent(product.name);
-        amazonLink = `https://www.amazon.fr/s?k=${searchQuery}&tag=${affiliateTag}`;
+    try {
+        await writeClicksDataAsync(data);
+    } catch (error) {
+        console.error("Save click failed", error);
     }
-    
-    // REDIRECT to Amazon immediately!
+
+    const amazonLink = product
+        ? getAffiliateLink(product, "fr")
+        : getAmazonSearchLink(searchQuery, "fr");
+
     return NextResponse.redirect(amazonLink);
 }

@@ -1,35 +1,37 @@
-import { NextResponse } from "next/server";
 import { exec } from "child_process";
 import path from "path";
 import util from "util";
+import { NextResponse } from "next/server";
+
+import { isAuthorizedRequest, unauthorizedJson } from "@/lib/api-auth";
 
 const execPromise = util.promisify(exec);
 
 export async function POST(req: Request) {
+    if (!isAuthorizedRequest(req)) {
+        return unauthorizedJson();
+    }
+
     try {
         const body = await req.json();
-        const { type } = body; // 'product', 'article', 'pin'
+        const { type } = body as { type?: string };
 
         let scriptPath = "";
         let successMessage = "";
 
         if (type === "product") {
-            // Re-generates products
             scriptPath = path.join(process.cwd(), "src/scripts/generate-french-luxury.js");
-            successMessage = "Nouveaux produits générés avec succès !";
+            successMessage = "Catalogue produits realigne avec succes !";
         } else if (type === "article") {
-            // Generates 1 article & 1 pin
             scriptPath = path.join(process.cwd(), "src/scripts/autopilot-content.js");
-            successMessage = "Nouvel article SEO et épingle générés avec succès !";
+            successMessage = "Nouvel article SEO et epingles generes avec succes !";
         } else if (type === "pin") {
-            // Generates pins
             scriptPath = path.join(process.cwd(), "src/scripts/generate-all-pins.js");
-            successMessage = "Nouvelles épingles générées avec succès !";
+            successMessage = "Nouvelles epingles generees avec succes !";
         } else {
-            return NextResponse.json({ error: "Type de génération invalide" }, { status: 400 });
+            return NextResponse.json({ error: "Type de generation invalide" }, { status: 400 });
         }
 
-        // Run the script
         const { stdout, stderr } = await execPromise(`node "${scriptPath}"`);
         console.log(stdout);
 
@@ -39,7 +41,7 @@ export async function POST(req: Request) {
 
         return NextResponse.json({ success: true, message: successMessage, output: stdout });
     } catch (error: unknown) {
-        console.error("Erreur de génération:", error);
+        console.error("Erreur de generation:", error);
         const message = error instanceof Error ? error.message : "Erreur inconnue";
         return NextResponse.json({ success: false, error: message }, { status: 500 });
     }

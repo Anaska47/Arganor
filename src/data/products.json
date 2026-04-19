@@ -1,690 +1,7 @@
 [
   {
-    "id": "auto_p_1776558854086_9873",
-    "asin": "B00949CTQQ",
-    "name": "Lotion Exfoliante Perfectrice 2% BHA",
-    "slug": "lotion-exfoliante-perfectrice-2-bha-9873",
-    "description": "L'exfoliant liquide n°1 avec 2% de BHA (acide salicylique) qui élimine les cellules mortes, désobstrue les pores et lisse visiblement les rides.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 39,
-    "category": "Soin du Visage",
-    "brand": "Paula's Choice",
-    "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
-    "rating": 4.8,
-    "reviews": 275,
-    "features": [
-      "exfoliant BHA",
-      "pores dilatés",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "exfoliant BHA",
-      "pores dilatés",
-      "points noirs",
-      "acide salicylique",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1776558840108_870",
-    "asin": "B00AE6WNY8",
-    "name": "Huile Prodigieuse Multi-Fonctions",
-    "slug": "huile-prodigieuse-multi-fonctions-870",
-    "description": "L'iconique huile sèche nourrissante pour visage, corps et cheveux au parfum d'été mythique.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 26.9,
-    "category": "Soin du Corps",
-    "brand": "NUXE",
-    "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
-    "rating": 4.8,
-    "reviews": 427,
-    "features": [
-      "huile sèche",
-      "hydratation corps",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "huile sèche",
-      "hydratation corps",
-      "nuxe",
-      "huile prodigieuse",
-      "éclat naturel",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1776512817932_1955",
-    "asin": "B00DEXA0LY",
-    "name": "Sérum Expert Réparateur de Nuit",
-    "slug": "serum-expert-reparateur-de-nuit-1955",
-    "description": "Un sérum de nuit concentré conçu pour restaurer l'élasticité et repulper l'épiderme pendant votre sommeil avec des résultats rapides.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 28.9,
-    "category": "Soin Anti-Âge",
-    "brand": "Soin Expert Nuit",
-    "image": "https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1974&auto=format&fit=crop",
-    "rating": 4.7,
-    "reviews": 842,
-    "features": [
-      "sérum nuit",
-      "réparation cutanée",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "sérum nuit",
-      "réparation cutanée",
-      "anti-rides",
-      "hydratation",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1776512807781_5406",
-    "asin": "B00PBX3L7K",
-    "name": "Essence Advanced Snail 96 Mucin Power",
-    "slug": "essence-advanced-snail-96-mucin-power-5406",
-    "description": "Composée à 96% de mucine (bave d'escargot), cette essence légère répare la barrière cutanée et offre une hydratation longue durée radieuse.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 24.5,
-    "category": "Soin du Visage",
-    "brand": "COSRX",
-    "image": "https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1974&auto=format&fit=crop",
-    "rating": 4.7,
-    "reviews": 857,
-    "features": [
-      "bave escargot",
-      "hydratation intense",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "bave escargot",
-      "hydratation intense",
-      "glass skin",
-      "skincare coréenne",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1776502702577_3046",
-    "asin": "B00IMJ0HDU",
-    "name": "Gel Moussant Purifiant Peaux Grasses Effaclar",
-    "slug": "gel-moussant-purifiant-peaux-grasses-effaclar-3046",
-    "description": "Le nettoyant purifiant n°1 pour l'acné, formulé sans alcool pour nettoyer et éliminer l'excès de sébum en douceur.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 15.9,
-    "category": "Soin du Visage",
-    "brand": "La Roche-Posay",
-    "image": "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=1974&auto=format&fit=crop",
-    "rating": 4.9,
-    "reviews": 558,
-    "features": [
-      "nettoyant visage",
-      "acné",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "nettoyant visage",
-      "acné",
-      "peau grasse",
-      "effaclar",
-      "la roche-posay",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1776502690283_7719",
-    "asin": "B00AE6WNY8",
-    "name": "Huile Prodigieuse Multi-Fonctions",
-    "slug": "huile-prodigieuse-multi-fonctions-7719",
-    "description": "L'iconique huile sèche nourrissante pour visage, corps et cheveux au parfum d'été mythique.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 26.9,
-    "category": "Soin du Corps",
-    "brand": "NUXE",
-    "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop",
-    "rating": 4.8,
-    "reviews": 585,
-    "features": [
-      "huile sèche",
-      "hydratation corps",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "huile sèche",
-      "hydratation corps",
-      "nuxe",
-      "huile prodigieuse",
-      "éclat naturel",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1776417894079_7085",
-    "asin": "B00DEXA0LY",
-    "name": "Sérum Expert Réparateur de Nuit",
-    "slug": "serum-expert-reparateur-de-nuit-7085",
-    "description": "Un sérum de nuit concentré conçu pour restaurer l'élasticité et repulper l'épiderme pendant votre sommeil avec des résultats rapides.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 28.9,
-    "category": "Soin Anti-Âge",
-    "brand": "Soin Expert Nuit",
-    "image": "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=1974&auto=format&fit=crop",
-    "rating": 5,
-    "reviews": 475,
-    "features": [
-      "sérum nuit",
-      "réparation cutanée",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "sérum nuit",
-      "réparation cutanée",
-      "anti-rides",
-      "hydratation",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1776417882705_318",
-    "asin": "B07C5VJGDF",
-    "name": "Baume Hydratant Visage et Corps Peaux Sèches",
-    "slug": "baume-hydratant-visage-et-corps-peaux-seches-318",
-    "description": "Enrichi aux 3 céramides essentiels et à l'acide hyaluronique, ce baume restaure la barrière cutanée sans fini gras.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 16.5,
-    "category": "Soin du Corps",
-    "brand": "CeraVe",
-    "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop",
-    "rating": 4.9,
-    "reviews": 361,
-    "features": [
-      "hydratation",
-      "céramides",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "hydratation",
-      "céramides",
-      "peau sèche",
-      "baume cerave",
-      "dermatologique",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1776331548949_4197",
-    "asin": "B01N33X44C",
-    "name": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
-    "slug": "serum-anti-imperfections-niacinamide-10-zinc-1--4197",
-    "description": "Un sérum ultra-concentré en niacinamide pour réguler le sébum, resserrer les pores et atténuer les imperfections rapidement.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 10.9,
-    "category": "Soin du Visage",
-    "brand": "The Ordinary",
-    "image": "https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1974&auto=format&fit=crop",
-    "rating": 4.9,
-    "reviews": 919,
-    "features": [
-      "niacinamide",
-      "peau grasse",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "niacinamide",
-      "peau grasse",
-      "sérum the ordinary",
-      "imperfections",
-      "pores",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1776331535756_5524",
-    "asin": "B00949CTQQ",
-    "name": "Lotion Exfoliante Perfectrice 2% BHA",
-    "slug": "lotion-exfoliante-perfectrice-2-bha-5524",
-    "description": "L'exfoliant liquide n°1 avec 2% de BHA (acide salicylique) qui élimine les cellules mortes, désobstrue les pores et lisse visiblement les rides.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 39,
-    "category": "Soin du Visage",
-    "brand": "Paula's Choice",
-    "image": "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1974&auto=format&fit=crop",
-    "rating": 4.7,
-    "reviews": 476,
-    "features": [
-      "exfoliant BHA",
-      "pores dilatés",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "exfoliant BHA",
-      "pores dilatés",
-      "points noirs",
-      "acide salicylique",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1776245234291_4619",
-    "asin": "B00949CTQQ",
-    "name": "Lotion Exfoliante Perfectrice 2% BHA",
-    "slug": "lotion-exfoliante-perfectrice-2-bha-4619",
-    "description": "L'exfoliant liquide n°1 avec 2% de BHA (acide salicylique) qui élimine les cellules mortes, désobstrue les pores et lisse visiblement les rides.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 39,
-    "category": "Soin du Visage",
-    "brand": "Paula's Choice",
-    "image": "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=1974&auto=format&fit=crop",
-    "rating": 4.8,
-    "reviews": 449,
-    "features": [
-      "exfoliant BHA",
-      "pores dilatés",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "exfoliant BHA",
-      "pores dilatés",
-      "points noirs",
-      "acide salicylique",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1776245219737_5004",
-    "asin": "B00PBX3L7K",
-    "name": "Essence Advanced Snail 96 Mucin Power",
-    "slug": "essence-advanced-snail-96-mucin-power-5004",
-    "description": "Composée à 96% de mucine (bave d'escargot), cette essence légère répare la barrière cutanée et offre une hydratation longue durée radieuse.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 24.5,
-    "category": "Soin du Visage",
-    "brand": "COSRX",
-    "image": "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=1974&auto=format&fit=crop",
-    "rating": 4.7,
-    "reviews": 653,
-    "features": [
-      "bave escargot",
-      "hydratation intense",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "bave escargot",
-      "hydratation intense",
-      "glass skin",
-      "skincare coréenne",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1776158758218_4077",
-    "asin": "B01N33X44C",
-    "name": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
-    "slug": "serum-anti-imperfections-niacinamide-10-zinc-1--4077",
-    "description": "Un sérum ultra-concentré en niacinamide pour réguler le sébum, resserrer les pores et atténuer les imperfections rapidement.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 10.9,
-    "category": "Soin du Visage",
-    "brand": "The Ordinary",
-    "image": "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1974&auto=format&fit=crop",
-    "rating": 5,
-    "reviews": 756,
-    "features": [
-      "niacinamide",
-      "peau grasse",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "niacinamide",
-      "peau grasse",
-      "sérum the ordinary",
-      "imperfections",
-      "pores",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1776158744213_5097",
-    "asin": "B00PBX3L7K",
-    "name": "Essence Advanced Snail 96 Mucin Power",
-    "slug": "essence-advanced-snail-96-mucin-power-5097",
-    "description": "Composée à 96% de mucine (bave d'escargot), cette essence légère répare la barrière cutanée et offre une hydratation longue durée radieuse.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 24.5,
-    "category": "Soin du Visage",
-    "brand": "COSRX",
-    "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
-    "rating": 4.8,
-    "reviews": 217,
-    "features": [
-      "bave escargot",
-      "hydratation intense",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "bave escargot",
-      "hydratation intense",
-      "glass skin",
-      "skincare coréenne",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1776074489142_2472",
-    "asin": "B00DEXA0LY",
-    "name": "Sérum Expert Réparateur de Nuit",
-    "slug": "serum-expert-reparateur-de-nuit-2472",
-    "description": "Un sérum de nuit concentré conçu pour restaurer l'élasticité et repulper l'épiderme pendant votre sommeil avec des résultats rapides.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 28.9,
-    "category": "Soin Anti-Âge",
-    "brand": "Soin Expert Nuit",
-    "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
-    "rating": 4.9,
-    "reviews": 665,
-    "features": [
-      "sérum nuit",
-      "réparation cutanée",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "sérum nuit",
-      "réparation cutanée",
-      "anti-rides",
-      "hydratation",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1776074476638_9023",
-    "asin": "B00IMJ0HDU",
-    "name": "Gel Moussant Purifiant Peaux Grasses Effaclar",
-    "slug": "gel-moussant-purifiant-peaux-grasses-effaclar-9023",
-    "description": "Le nettoyant purifiant n°1 pour l'acné, formulé sans alcool pour nettoyer et éliminer l'excès de sébum en douceur.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 15.9,
-    "category": "Soin du Visage",
-    "brand": "La Roche-Posay",
-    "image": "https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1974&auto=format&fit=crop",
-    "rating": 4.6,
-    "reviews": 244,
-    "features": [
-      "nettoyant visage",
-      "acné",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "nettoyant visage",
-      "acné",
-      "peau grasse",
-      "effaclar",
-      "la roche-posay",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1775984231030_3504",
-    "asin": "B01N33X44C",
-    "name": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
-    "slug": "serum-anti-imperfections-niacinamide-10-zinc-1--3504",
-    "description": "Un sérum ultra-concentré en niacinamide pour réguler le sébum, resserrer les pores et atténuer les imperfections rapidement.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 10.9,
-    "category": "Soin du Visage",
-    "brand": "The Ordinary",
-    "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop",
-    "rating": 4.7,
-    "reviews": 566,
-    "features": [
-      "niacinamide",
-      "peau grasse",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "niacinamide",
-      "peau grasse",
-      "sérum the ordinary",
-      "imperfections",
-      "pores",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1775984217041_5792",
-    "asin": "B01N33X44C",
-    "name": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
-    "slug": "serum-anti-imperfections-niacinamide-10-zinc-1--5792",
-    "description": "Un sérum ultra-concentré en niacinamide pour réguler le sébum, resserrer les pores et atténuer les imperfections rapidement.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 10.9,
-    "category": "Soin du Visage",
-    "brand": "The Ordinary",
-    "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
-    "rating": 4.7,
-    "reviews": 333,
-    "features": [
-      "niacinamide",
-      "peau grasse",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "niacinamide",
-      "peau grasse",
-      "sérum the ordinary",
-      "imperfections",
-      "pores",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1775897632277_7705",
-    "asin": "B00PBX3L7K",
-    "name": "Essence Advanced Snail 96 Mucin Power",
-    "slug": "essence-advanced-snail-96-mucin-power-7705",
-    "description": "Composée à 96% de mucine (bave d'escargot), cette essence légère répare la barrière cutanée et offre une hydratation longue durée radieuse.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 24.5,
-    "category": "Soin du Visage",
-    "brand": "COSRX",
-    "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop",
-    "rating": 4.9,
-    "reviews": 439,
-    "features": [
-      "bave escargot",
-      "hydratation intense",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "bave escargot",
-      "hydratation intense",
-      "glass skin",
-      "skincare coréenne",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1775897619614_1676",
-    "asin": "B00DEXA0LY",
-    "name": "Sérum Expert Réparateur de Nuit",
-    "slug": "serum-expert-reparateur-de-nuit-1676",
-    "description": "Un sérum de nuit concentré conçu pour restaurer l'élasticité et repulper l'épiderme pendant votre sommeil avec des résultats rapides.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 28.9,
-    "category": "Soin Anti-Âge",
-    "brand": "Soin Expert Nuit",
-    "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
-    "rating": 4.6,
-    "reviews": 605,
-    "features": [
-      "sérum nuit",
-      "réparation cutanée",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "sérum nuit",
-      "réparation cutanée",
-      "anti-rides",
-      "hydratation",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1775812664022_5201",
-    "asin": "B00AE6WNY8",
-    "name": "Huile Prodigieuse Multi-Fonctions",
-    "slug": "huile-prodigieuse-multi-fonctions-5201",
-    "description": "L'iconique huile sèche nourrissante pour visage, corps et cheveux au parfum d'été mythique.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 26.9,
-    "category": "Soin du Corps",
-    "brand": "NUXE",
-    "image": "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1974&auto=format&fit=crop",
-    "rating": 4.8,
-    "reviews": 361,
-    "features": [
-      "huile sèche",
-      "hydratation corps",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "huile sèche",
-      "hydratation corps",
-      "nuxe",
-      "huile prodigieuse",
-      "éclat naturel",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1775812651833_6107",
-    "asin": "B07C5VJGDF",
-    "name": "Baume Hydratant Visage et Corps Peaux Sèches",
-    "slug": "baume-hydratant-visage-et-corps-peaux-seches-6107",
-    "description": "Enrichi aux 3 céramides essentiels et à l'acide hyaluronique, ce baume restaure la barrière cutanée sans fini gras.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 16.5,
-    "category": "Soin du Corps",
-    "brand": "CeraVe",
-    "image": "https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1974&auto=format&fit=crop",
-    "rating": 4.9,
-    "reviews": 792,
-    "features": [
-      "hydratation",
-      "céramides",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "hydratation",
-      "céramides",
-      "peau sèche",
-      "baume cerave",
-      "dermatologique",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1775726199035_5366",
-    "asin": "B07N7PK9QK",
-    "name": "Huile Fortifiante Cuir Chevelu Romarin Menthe",
-    "slug": "huile-fortifiante-cuir-chevelu-romarin-menthe-5366",
-    "description": "Cette huile infusée au romarin et à la menthe fortifie la fibre capillaire, stimule la pousse et apaise les cuirs chevelus irrités.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 14.99,
-    "category": "Soin des Cheveux",
-    "brand": "Mielle Organics",
-    "image": "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=1974&auto=format&fit=crop",
-    "rating": 4.6,
-    "reviews": 398,
-    "features": [
-      "pousse cheveux",
-      "romarin",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "pousse cheveux",
-      "romarin",
-      "alopécie",
-      "fortifiant capillaire",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
-    "id": "auto_p_1775726185910_7736",
-    "asin": "B00949CTQQ",
-    "name": "Lotion Exfoliante Perfectrice 2% BHA",
-    "slug": "lotion-exfoliante-perfectrice-2-bha-7736",
-    "description": "L'exfoliant liquide n°1 avec 2% de BHA (acide salicylique) qui élimine les cellules mortes, désobstrue les pores et lisse visiblement les rides.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
-    "price": 39,
-    "category": "Soin du Visage",
-    "brand": "Paula's Choice",
-    "image": "https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1974&auto=format&fit=crop",
-    "rating": 4.7,
-    "reviews": 393,
-    "features": [
-      "exfoliant BHA",
-      "pores dilatés",
-      "Incontournable",
-      "Best-Seller"
-    ],
-    "seoTags": [
-      "exfoliant BHA",
-      "pores dilatés",
-      "points noirs",
-      "acide salicylique",
-      "beauté",
-      "tendance"
-    ]
-  },
-  {
     "id": "auto_p_the_ordinary_niac",
-    "name": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+    "name": "Serum Anti-Imperfections Niacinamide 10% + Zinc 1%",
     "brand": "The Ordinary",
     "asin": "B01N33X44C",
     "price": 10.9,
@@ -693,14 +10,23 @@
     "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop",
     "rating": 4.8,
     "reviews": 1540,
-    "description": "Luxe et efficacité pour votre routine.",
-    "benefits": "### Avantages\n- Naturel\n- Bio",
+    "description": "Un serum concentre en niacinamide et zinc pour aider a reguler l'exces de sebum, affiner visuellement les pores et calmer les imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: niacinamide.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: The Ordinary reste une reference connue sur ce besoin.",
     "features": [
-      "Bio",
-      "Luxe"
+      "niacinamide",
+      "imperfections",
+      "pores",
+      "The Ordinary",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "beauté"
+      "niacinamide",
+      "imperfections",
+      "pores",
+      "peau grasse",
+      "the ordinary",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -708,8 +34,8 @@
     "asin": "B00949CTQQ",
     "name": "Lotion Exfoliante Perfectrice 2% BHA",
     "slug": "lotion-exfoliante-perfectrice-2-bha-2952",
-    "description": "L'exfoliant liquide n°1 avec 2% de BHA (acide salicylique) qui élimine les cellules mortes, désobstrue les pores et lisse visiblement les rides.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "description": "Un exfoliant liquide au BHA qui aide a desobstruer les pores, lisser le grain de peau et limiter l'apparition des imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: exfoliant bha.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: Paula's Choice reste une reference connue sur ce besoin.",
     "price": 39,
     "category": "Soin du Visage",
     "brand": "Paula's Choice",
@@ -717,18 +43,20 @@
     "rating": 4.7,
     "reviews": 929,
     "features": [
-      "exfoliant BHA",
-      "pores dilatés",
-      "Incontournable",
-      "Best-Seller"
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "Paula's Choice",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "exfoliant BHA",
-      "pores dilatés",
+      "exfoliant bha",
+      "pores",
       "points noirs",
       "acide salicylique",
-      "beauté",
-      "tendance"
+      "paula's choice",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -736,28 +64,29 @@
     "asin": "B07N7PK9QK",
     "name": "Huile Fortifiante Cuir Chevelu Romarin Menthe",
     "slug": "serum-anti-imperfections-niacinamide-10-zinc-1--3023",
-    "description": "Un sérum ultra-concentré en niacinamide pour réguler le sébum, resserrer les pores et atténuer les imperfections rapidement.",
-    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "description": "Une huile capillaire ciblee pour fortifier le cuir chevelu, accompagner la pousse et apporter plus de confort sur les longueurs fragilisees.",
+    "benefits": "### Points forts\n- **Besoin cible**: pousse cheveux.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin des cheveux.\n- **Repere clair**: Mielle Organics reste une reference connue sur ce besoin.",
     "price": 10.9,
-    "category": "Soin du Visage",
+    "category": "Soin des Cheveux",
     "brand": "Mielle Organics",
     "image": "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1974&auto=format&fit=crop",
     "rating": 4.9,
     "reviews": 595,
     "features": [
-      "niacinamide",
-      "peau grasse",
-      "Incontournable",
-      "Best-Seller"
+      "pousse cheveux",
+      "romarin",
+      "fortifiant capillaire",
+      "Mielle Organics",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "niacinamide",
-      "peau grasse",
-      "sérum the ordinary",
-      "imperfections",
-      "pores",
-      "beauté",
-      "tendance"
+      "pousse cheveux",
+      "romarin",
+      "fortifiant capillaire",
+      "cuir chevelu",
+      "mielle organics",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -765,8 +94,8 @@
     "asin": "B00PBX3L7K",
     "name": "Essence Advanced Snail 96 Mucin Power",
     "slug": "rituel-royal-de-huile-d-argan-pure",
-    "description": "Découvrez l'ultime raffinement avec **Rituel Royal de Huile d'Argan Pure**. Cette formule précieuse exploite toute la puissance de Huile d'Argan Pure pour offrir des résultats exceptionnels.",
-    "benefits": "### Transformez votre routine\n- **Nutrition Profonde**: Une hydratation pénétrante.\n- **Résultats Visibles**: Une routine transformée en 7 jours.\n- **Éthique & Pur**: Le meilleur de la nature pour vous.",
+    "description": "Une essence legere riche en mucine pour soutenir l'hydratation, apaiser la peau et renforcer la barriere cutanee au quotidien.",
+    "benefits": "### Points forts\n- **Besoin cible**: mucine.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: COSRX reste une reference connue sur ce besoin.",
     "price": 104.9,
     "category": "Soin du Visage",
     "brand": "COSRX",
@@ -774,74 +103,80 @@
     "rating": 4.9,
     "reviews": 323,
     "features": [
-      "argan pur",
-      "or liquide",
-      "100% Bio",
-      "Luxe"
+      "mucine",
+      "hydratation",
+      "barriere cutanee",
+      "COSRX",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "argan pur",
-      "or liquide",
-      "anti-âge",
-      "hydratation intense",
-      "beauté de luxe",
-      "arganor"
+      "mucine",
+      "hydratation",
+      "barriere cutanee",
+      "glass skin",
+      "cosrx",
+      "beaute",
+      "routine"
     ]
   },
   {
     "id": "auto_p_1774826604528_620",
     "asin": "B01N33X44C",
-    "name": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+    "name": "Serum Anti-Imperfections Niacinamide 10% + Zinc 1%",
     "slug": "luxe-lumineux-de-huile-de-ricin-royale",
-    "description": "Découvrez l'ultime raffinement avec **Luxe Lumineux de Huile de Ricin Royale**. Cette formule précieuse exploite toute la puissance de Huile de Ricin Royale pour offrir des résultats exceptionnels.",
-    "benefits": "### Transformez votre routine\n- **Nutrition Profonde**: Une hydratation pénétrante.\n- **Résultats Visibles**: Une routine transformée en 7 jours.\n- **Éthique & Pur**: Le meilleur de la nature pour vous.",
+    "description": "Un serum concentre en niacinamide et zinc pour aider a reguler l'exces de sebum, affiner visuellement les pores et calmer les imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: niacinamide.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: The Ordinary reste une reference connue sur ce besoin.",
     "price": 82.9,
-    "category": "Soin des Cheveux",
+    "category": "Soin du Visage",
     "brand": "The Ordinary",
     "image": "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1974&auto=format&fit=crop",
     "rating": 4.9,
     "reviews": 462,
     "features": [
-      "ricin bio",
-      "cils longs",
-      "100% Bio",
-      "Luxe"
+      "niacinamide",
+      "imperfections",
+      "pores",
+      "The Ordinary",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "ricin bio",
-      "cils longs",
-      "sourcils denses",
-      "cuir chevelu",
-      "beauté de luxe",
-      "arganor"
+      "niacinamide",
+      "imperfections",
+      "pores",
+      "peau grasse",
+      "the ordinary",
+      "beaute",
+      "routine"
     ]
   },
   {
     "id": "auto_p_1774826585221_470",
     "asin": "B07C5VJGDF",
-    "name": "Baume Hydratant Visage et Corps",
+    "name": "Baume Hydratant Visage et Corps Peaux Seches",
     "slug": "rituel-eternel-de-soin-anti-age-supreme",
-    "description": "Découvrez l'ultime raffinement avec **Rituel Éternel de Soin Anti-Âge Suprême**. Cette formule précieuse exploite toute la puissance de Soin Anti-Âge Suprême pour offrir des résultats exceptionnels.",
-    "benefits": "### Transformez votre routine\n- **Nutrition Profonde**: Une hydratation pénétrante.\n- **Résultats Visibles**: Une routine transformée en 7 jours.\n- **Éthique & Pur**: Le meilleur de la nature pour vous.",
+    "description": "Un baume riche aux ceramides pour nourrir durablement la peau seche et soutenir une barriere cutanee plus confortable.",
+    "benefits": "### Points forts\n- **Besoin cible**: ceramides.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du corps.\n- **Repere clair**: CeraVe reste une reference connue sur ce besoin.",
     "price": 44.9,
-    "category": "Soin du Visage",
+    "category": "Soin du Corps",
     "brand": "CeraVe",
     "image": "https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1974&auto=format&fit=crop",
     "rating": 4.7,
     "reviews": 530,
     "features": [
-      "rides",
-      "collagène",
-      "100% Bio",
-      "Luxe"
+      "ceramides",
+      "peau seche",
+      "hydratation",
+      "CeraVe",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "rides",
-      "collagène",
-      "fermeté",
-      "éclat",
-      "beauté de luxe",
-      "arganor"
+      "ceramides",
+      "peau seche",
+      "hydratation",
+      "baume",
+      "cerave",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -849,8 +184,8 @@
     "asin": "B00949CTQQ",
     "name": "Lotion Exfoliante Perfectrice 2% BHA",
     "slug": "eclat-royal-de-soin-anti-age-supreme",
-    "description": "Découvrez l'ultime raffinement avec **Éclat Royal de Soin Anti-Âge Suprême**. Cette formule précieuse exploite toute la puissance de Soin Anti-Âge Suprême pour offrir des résultats exceptionnels.",
-    "benefits": "### Transformez votre routine\n- **Nutrition Profonde**: Une hydratation pénétrante.\n- **Résultats Visibles**: Une routine transformée en 7 jours.\n- **Éthique & Pur**: Le meilleur de la nature pour vous.",
+    "description": "Un exfoliant liquide au BHA qui aide a desobstruer les pores, lisser le grain de peau et limiter l'apparition des imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: exfoliant bha.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: Paula's Choice reste une reference connue sur ce besoin.",
     "price": 45.9,
     "category": "Soin du Visage",
     "brand": "Paula's Choice",
@@ -858,18 +193,20 @@
     "rating": 4.8,
     "reviews": 444,
     "features": [
-      "rides",
-      "collagène",
-      "100% Bio",
-      "Luxe"
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "Paula's Choice",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "rides",
-      "collagène",
-      "fermeté",
-      "éclat",
-      "beauté de luxe",
-      "arganor"
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "acide salicylique",
+      "paula's choice",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -877,28 +214,29 @@
     "asin": "B07N7PK9QK",
     "name": "Huile Fortifiante Cuir Chevelu Romarin Menthe",
     "slug": "infusion-éternel-de-huile-d-argan-pure",
-    "description": "Découvrez l'ultime raffinement avec **Infusion Éternel de Huile d'Argan Pure**. Cette formule précieuse exploite toute la puissance de Huile d'Argan Pure pour offrir des résultats inégalés. Conçu pour celles et ceux qui exigent l'excellence, il transforme chaque soin en un rituel sacré.",
-    "benefits": "### Pourquoi c'est une exception\n- **Éclat Naturel**: Libère la luminance originelle de votre teint.\n- **Correction Temps**: Cible efficacement les signes de fatigue et l'âge.\n- **Expérience Sensorielle**: Une texture fine pour un moment de bien-être absolu.",
+    "description": "Une huile capillaire ciblee pour fortifier le cuir chevelu, accompagner la pousse et apporter plus de confort sur les longueurs fragilisees.",
+    "benefits": "### Points forts\n- **Besoin cible**: pousse cheveux.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin des cheveux.\n- **Repere clair**: Mielle Organics reste une reference connue sur ce besoin.",
     "price": 70.9,
-    "category": "Soin du Visage",
+    "category": "Soin des Cheveux",
     "brand": "Mielle Organics",
     "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1887&auto=format&fit=crop",
     "rating": 4.8,
     "reviews": 588,
     "features": [
-      "argan pur",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "pousse cheveux",
+      "romarin",
+      "fortifiant capillaire",
+      "Mielle Organics",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "argan pur",
-      "or liquide",
-      "anti-âge",
-      "hydratation intense",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "pousse cheveux",
+      "romarin",
+      "fortifiant capillaire",
+      "cuir chevelu",
+      "mielle organics",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -906,86 +244,89 @@
     "asin": "B00PBX3L7K",
     "name": "Essence Advanced Snail 96 Mucin Power",
     "slug": "nectar-radiant-de-sérum-croissance",
-    "description": "Découvrez l'ultime raffinement avec **Nectar Radiant de Sérum Croissance**. Cette formule précieuse exploite toute la puissance de Sérum Croissance pour offrir des résultats inégalés. Conçu pour celles et ceux qui exigent l'excellence, il transforme chaque soin en un rituel sacré.",
-    "benefits": "### La Puissance de Sérum Croissance\n- **Bio-Actif**: Formule haute puissance pour une absorption maximale.\n- **Protection Totale**: Bouclier contre les agressions environnementales.\n- **Restauration**: Répare et régénère les tissus en profondeur.",
+    "description": "Une essence legere riche en mucine pour soutenir l'hydratation, apaiser la peau et renforcer la barriere cutanee au quotidien.",
+    "benefits": "### Points forts\n- **Besoin cible**: mucine.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: COSRX reste une reference connue sur ce besoin.",
     "price": 64.9,
-    "category": "Soin des Cheveux",
+    "category": "Soin du Visage",
     "brand": "COSRX",
     "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
     "rating": 4.6,
     "reviews": 240,
     "features": [
-      "croissance cheveux",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "mucine",
+      "hydratation",
+      "barriere cutanee",
+      "COSRX",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "croissance cheveux",
-      "biotine",
-      "fortifiant",
-      "chevelure dense",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "mucine",
+      "hydratation",
+      "barriere cutanee",
+      "glass skin",
+      "cosrx",
+      "beaute",
+      "routine"
     ]
   },
   {
     "id": "p2002",
     "asin": "B01N33X44C",
-    "name": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+    "name": "Serum Anti-Imperfections Niacinamide 10% + Zinc 1%",
     "slug": "infusion-sublime-de-huile-de-ricin-royale",
-    "description": "Laissez-vous envoûter par **Infusion Sublime de Huile de Ricin Royale**, un chef-d'œuvre de la cosmétique naturelle. Formulé avec soin à partir de Huile de Ricin Royale issue du commerce équitable, il procure une nutrition intense. Ressentez la différence d'un luxe authentique.",
-    "benefits": "### Transformez votre routine\n- **Nutrition Profonde**: Infusé avec Huile de Ricin Royale pour une hydratation pénétrante.\n- **Résultats Visibles**: Une peau plus lisse et éclatante en seulement 7 jours.\n- **Éthique & Pur**: Des ingrédients certifiés qui respectent votre nature.",
+    "description": "Un serum concentre en niacinamide et zinc pour aider a reguler l'exces de sebum, affiner visuellement les pores et calmer les imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: niacinamide.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: The Ordinary reste une reference connue sur ce besoin.",
     "price": 87.9,
-    "category": "Soin des Cheveux",
+    "category": "Soin du Visage",
     "brand": "The Ordinary",
     "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
     "rating": 4.7,
     "reviews": 657,
     "features": [
-      "ricin bio",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "niacinamide",
+      "imperfections",
+      "pores",
+      "The Ordinary",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "ricin bio",
-      "cils longs",
-      "sourcils denses",
-      "cuir chevelu",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "niacinamide",
+      "imperfections",
+      "pores",
+      "peau grasse",
+      "the ordinary",
+      "beaute",
+      "routine"
     ]
   },
   {
     "id": "p2003",
     "asin": "B07C5VJGDF",
-    "name": "Baume Hydratant Visage et Corps",
+    "name": "Baume Hydratant Visage et Corps Peaux Seches",
     "slug": "infusion-sublime-de-élixir-de-romarin",
-    "description": "Le secret d'une beauté intemporelle réside dans **Infusion Sublime de Élixir de Romarin**. Enrichi en Élixir de Romarin pure, ce traitement pénètre au cœur des cellules pour restaurer vitalité et éclat. Un indispensable de toute collection cosmétique de prestige.",
-    "benefits": "### Transformez votre routine\n- **Nutrition Profonde**: Infusé avec Élixir de Romarin pour une hydratation pénétrante.\n- **Résultats Visibles**: Une peau plus lisse et éclatante en seulement 7 jours.\n- **Éthique & Pur**: Des ingrédients certifiés qui respectent votre nature.",
+    "description": "Un baume riche aux ceramides pour nourrir durablement la peau seche et soutenir une barriere cutanee plus confortable.",
+    "benefits": "### Points forts\n- **Besoin cible**: ceramides.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du corps.\n- **Repere clair**: CeraVe reste une reference connue sur ce besoin.",
     "price": 119.9,
-    "category": "Soin des Cheveux",
+    "category": "Soin du Corps",
     "brand": "CeraVe",
     "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop",
     "rating": 4.8,
     "reviews": 916,
     "features": [
-      "romarin",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "ceramides",
+      "peau seche",
+      "hydratation",
+      "CeraVe",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "romarin",
-      "circulation",
-      "vitalité",
-      "repousse",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "ceramides",
+      "peau seche",
+      "hydratation",
+      "baume",
+      "cerave",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -993,8 +334,8 @@
     "asin": "B00949CTQQ",
     "name": "Lotion Exfoliante Perfectrice 2% BHA",
     "slug": "sérum-velours-de-soin-anti-âge-suprême",
-    "description": "Découvrez l'ultime raffinement avec **Sérum Velours de Soin Anti-Âge Suprême**. Cette formule précieuse exploite toute la puissance de Soin Anti-Âge Suprême pour offrir des résultats inégalés. Conçu pour celles et ceux qui exigent l'excellence, il transforme chaque soin en un rituel sacré.",
-    "benefits": "### Transformez votre routine\n- **Nutrition Profonde**: Infusé avec Soin Anti-Âge Suprême pour une hydratation pénétrante.\n- **Résultats Visibles**: Une peau plus lisse et éclatante en seulement 7 jours.\n- **Éthique & Pur**: Des ingrédients certifiés qui respectent votre nature.",
+    "description": "Un exfoliant liquide au BHA qui aide a desobstruer les pores, lisser le grain de peau et limiter l'apparition des imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: exfoliant bha.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: Paula's Choice reste une reference connue sur ce besoin.",
     "price": 65.9,
     "category": "Soin du Visage",
     "brand": "Paula's Choice",
@@ -1002,19 +343,20 @@
     "rating": 4.7,
     "reviews": 661,
     "features": [
-      "rides",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "Paula's Choice",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "rides",
-      "collagène",
-      "fermeté",
-      "éclat",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "acide salicylique",
+      "paula's choice",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -1022,28 +364,29 @@
     "asin": "B07N7PK9QK",
     "name": "Huile Fortifiante Cuir Chevelu Romarin Menthe",
     "slug": "luxe-opulent-de-lait-corps-soyeux",
-    "description": "Laissez-vous envoûter par **Luxe Opulent de Lait Corps Soyeux**, un chef-d'œuvre de la cosmétique naturelle. Formulé avec soin à partir de Lait Corps Soyeux issue du commerce équitable, il procure une nutrition intense. Ressentez la différence d'un luxe authentique.",
-    "benefits": "### La Puissance de Lait Corps Soyeux\n- **Bio-Actif**: Formule haute puissance pour une absorption maximale.\n- **Protection Totale**: Bouclier contre les agressions environnementales.\n- **Restauration**: Répare et régénère les tissus en profondeur.",
+    "description": "Une huile capillaire ciblee pour fortifier le cuir chevelu, accompagner la pousse et apporter plus de confort sur les longueurs fragilisees.",
+    "benefits": "### Points forts\n- **Besoin cible**: pousse cheveux.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin des cheveux.\n- **Repere clair**: Mielle Organics reste une reference connue sur ce besoin.",
     "price": 129.9,
-    "category": "Soin du Corps",
+    "category": "Soin des Cheveux",
     "brand": "Mielle Organics",
     "image": "https://images.unsplash.com/photo-1629198688000-71f23e745b6e?q=80&w=2080&auto=format&fit=crop",
     "rating": 4.7,
     "reviews": 710,
     "features": [
-      "hydratation",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "pousse cheveux",
+      "romarin",
+      "fortifiant capillaire",
+      "Mielle Organics",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "hydratation",
-      "peau douce",
-      "nutrition",
-      "velouté",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "pousse cheveux",
+      "romarin",
+      "fortifiant capillaire",
+      "cuir chevelu",
+      "mielle organics",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -1051,8 +394,8 @@
     "asin": "B00PBX3L7K",
     "name": "Essence Advanced Snail 96 Mucin Power",
     "slug": "ambrosie-doré-de-huile-d-argan-pure",
-    "description": "Le secret d'une beauté intemporelle réside dans **Ambrosie Doré de Huile d'Argan Pure**. Enrichi en Huile d'Argan Pure pure, ce traitement pénètre au cœur des cellules pour restaurer vitalité et éclat. Un indispensable de toute collection cosmétique de prestige.",
-    "benefits": "### La Puissance de Huile d'Argan Pure\n- **Bio-Actif**: Formule haute puissance pour une absorption maximale.\n- **Protection Totale**: Bouclier contre les agressions environnementales.\n- **Restauration**: Répare et régénère les tissus en profondeur.",
+    "description": "Une essence legere riche en mucine pour soutenir l'hydratation, apaiser la peau et renforcer la barriere cutanee au quotidien.",
+    "benefits": "### Points forts\n- **Besoin cible**: mucine.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: COSRX reste une reference connue sur ce besoin.",
     "price": 124.9,
     "category": "Soin du Visage",
     "brand": "COSRX",
@@ -1060,77 +403,80 @@
     "rating": 4.8,
     "reviews": 296,
     "features": [
-      "argan pur",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "mucine",
+      "hydratation",
+      "barriere cutanee",
+      "COSRX",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "argan pur",
-      "or liquide",
-      "anti-âge",
-      "hydratation intense",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "mucine",
+      "hydratation",
+      "barriere cutanee",
+      "glass skin",
+      "cosrx",
+      "beaute",
+      "routine"
     ]
   },
   {
     "id": "p2007",
     "asin": "B01N33X44C",
-    "name": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+    "name": "Serum Anti-Imperfections Niacinamide 10% + Zinc 1%",
     "slug": "nectar-éternel-de-sérum-croissance",
-    "description": "Le secret d'une beauté intemporelle réside dans **Nectar Éternel de Sérum Croissance**. Enrichi en Sérum Croissance pure, ce traitement pénètre au cœur des cellules pour restaurer vitalité et éclat. Un indispensable de toute collection cosmétique de prestige.",
-    "benefits": "### La Puissance de Sérum Croissance\n- **Bio-Actif**: Formule haute puissance pour une absorption maximale.\n- **Protection Totale**: Bouclier contre les agressions environnementales.\n- **Restauration**: Répare et régénère les tissus en profondeur.",
+    "description": "Un serum concentre en niacinamide et zinc pour aider a reguler l'exces de sebum, affiner visuellement les pores et calmer les imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: niacinamide.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: The Ordinary reste une reference connue sur ce besoin.",
     "price": 124.9,
-    "category": "Soin des Cheveux",
+    "category": "Soin du Visage",
     "brand": "The Ordinary",
     "image": "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?q=80&w=1887&auto=format&fit=crop",
     "rating": 5,
     "reviews": 843,
     "features": [
-      "croissance cheveux",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "niacinamide",
+      "imperfections",
+      "pores",
+      "The Ordinary",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "croissance cheveux",
-      "biotine",
-      "fortifiant",
-      "chevelure dense",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "niacinamide",
+      "imperfections",
+      "pores",
+      "peau grasse",
+      "the ordinary",
+      "beaute",
+      "routine"
     ]
   },
   {
     "id": "p2008",
     "asin": "B07C5VJGDF",
-    "name": "Baume Hydratant Visage et Corps",
+    "name": "Baume Hydratant Visage et Corps Peaux Seches",
     "slug": "nectar-velours-de-huile-de-ricin-royale",
-    "description": "Découvrez l'ultime raffinement avec **Nectar Velours de Huile de Ricin Royale**. Cette formule précieuse exploite toute la puissance de Huile de Ricin Royale pour offrir des résultats inégalés. Conçu pour celles et ceux qui exigent l'excellence, il transforme chaque soin en un rituel sacré.",
-    "benefits": "### La Puissance de Huile de Ricin Royale\n- **Bio-Actif**: Formule haute puissance pour une absorption maximale.\n- **Protection Totale**: Bouclier contre les agressions environnementales.\n- **Restauration**: Répare et régénère les tissus en profondeur.",
+    "description": "Un baume riche aux ceramides pour nourrir durablement la peau seche et soutenir une barriere cutanee plus confortable.",
+    "benefits": "### Points forts\n- **Besoin cible**: ceramides.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du corps.\n- **Repere clair**: CeraVe reste une reference connue sur ce besoin.",
     "price": 43.9,
-    "category": "Soin des Cheveux",
+    "category": "Soin du Corps",
     "brand": "CeraVe",
     "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop",
     "rating": 4.8,
     "reviews": 911,
     "features": [
-      "ricin bio",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "ceramides",
+      "peau seche",
+      "hydratation",
+      "CeraVe",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "ricin bio",
-      "cils longs",
-      "sourcils denses",
-      "cuir chevelu",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "ceramides",
+      "peau seche",
+      "hydratation",
+      "baume",
+      "cerave",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -1138,28 +484,29 @@
     "asin": "B00949CTQQ",
     "name": "Lotion Exfoliante Perfectrice 2% BHA",
     "slug": "secret-radiant-de-élixir-de-romarin",
-    "description": "Le secret d'une beauté intemporelle réside dans **Secret Radiant de Élixir de Romarin**. Enrichi en Élixir de Romarin pure, ce traitement pénètre au cœur des cellules pour restaurer vitalité et éclat. Un indispensable de toute collection cosmétique de prestige.",
-    "benefits": "### Pourquoi c'est une exception\n- **Éclat Naturel**: Libère la luminance originelle de votre teint.\n- **Correction Temps**: Cible efficacement les signes de fatigue et l'âge.\n- **Expérience Sensorielle**: Une texture fine pour un moment de bien-être absolu.",
+    "description": "Un exfoliant liquide au BHA qui aide a desobstruer les pores, lisser le grain de peau et limiter l'apparition des imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: exfoliant bha.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: Paula's Choice reste une reference connue sur ce besoin.",
     "price": 89.9,
-    "category": "Soin des Cheveux",
+    "category": "Soin du Visage",
     "brand": "Paula's Choice",
     "image": "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?q=80&w=1887&auto=format&fit=crop",
     "rating": 5,
     "reviews": 142,
     "features": [
-      "romarin",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "Paula's Choice",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "romarin",
-      "circulation",
-      "vitalité",
-      "repousse",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "acide salicylique",
+      "paula's choice",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -1167,28 +514,29 @@
     "asin": "B07N7PK9QK",
     "name": "Huile Fortifiante Cuir Chevelu Romarin Menthe",
     "slug": "thérapie-royal-de-soin-anti-âge-suprême",
-    "description": "Laissez-vous envoûter par **Thérapie Royal de Soin Anti-Âge Suprême**, un chef-d'œuvre de la cosmétique naturelle. Formulé avec soin à partir de Soin Anti-Âge Suprême issue du commerce équitable, il procure une nutrition intense. Ressentez la différence d'un luxe authentique.",
-    "benefits": "### La Puissance de Soin Anti-Âge Suprême\n- **Bio-Actif**: Formule haute puissance pour une absorption maximale.\n- **Protection Totale**: Bouclier contre les agressions environnementales.\n- **Restauration**: Répare et régénère les tissus en profondeur.",
+    "description": "Une huile capillaire ciblee pour fortifier le cuir chevelu, accompagner la pousse et apporter plus de confort sur les longueurs fragilisees.",
+    "benefits": "### Points forts\n- **Besoin cible**: pousse cheveux.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin des cheveux.\n- **Repere clair**: Mielle Organics reste une reference connue sur ce besoin.",
     "price": 111.9,
-    "category": "Soin du Visage",
+    "category": "Soin des Cheveux",
     "brand": "Mielle Organics",
     "image": "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1974&auto=format&fit=crop",
     "rating": 4.7,
     "reviews": 640,
     "features": [
-      "rides",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "pousse cheveux",
+      "romarin",
+      "fortifiant capillaire",
+      "Mielle Organics",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "rides",
-      "collagène",
-      "fermeté",
-      "éclat",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "pousse cheveux",
+      "romarin",
+      "fortifiant capillaire",
+      "cuir chevelu",
+      "mielle organics",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -1196,37 +544,38 @@
     "asin": "B00PBX3L7K",
     "name": "Essence Advanced Snail 96 Mucin Power",
     "slug": "sérum-élixir-de-lait-corps-soyeux",
-    "description": "Laissez-vous envoûter par **Sérum Élixir de Lait Corps Soyeux**, un chef-d'œuvre de la cosmétique naturelle. Formulé avec soin à partir de Lait Corps Soyeux issue du commerce équitable, il procure une nutrition intense. Ressentez la différence d'un luxe authentique.",
-    "benefits": "### Pourquoi c'est une exception\n- **Éclat Naturel**: Libère la luminance originelle de votre teint.\n- **Correction Temps**: Cible efficacement les signes de fatigue et l'âge.\n- **Expérience Sensorielle**: Une texture fine pour un moment de bien-être absolu.",
+    "description": "Une essence legere riche en mucine pour soutenir l'hydratation, apaiser la peau et renforcer la barriere cutanee au quotidien.",
+    "benefits": "### Points forts\n- **Besoin cible**: mucine.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: COSRX reste une reference connue sur ce besoin.",
     "price": 138.9,
-    "category": "Soin du Corps",
+    "category": "Soin du Visage",
     "brand": "COSRX",
     "image": "https://images.unsplash.com/photo-1629198688000-71f23e745b6e?q=80&w=2080&auto=format&fit=crop",
     "rating": 4.9,
     "reviews": 587,
     "features": [
+      "mucine",
       "hydratation",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "barriere cutanee",
+      "COSRX",
+      "Routine ciblee"
     ],
     "seoTags": [
+      "mucine",
       "hydratation",
-      "peau douce",
-      "nutrition",
-      "velouté",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "barriere cutanee",
+      "glass skin",
+      "cosrx",
+      "beaute",
+      "routine"
     ]
   },
   {
     "id": "p2012",
     "asin": "B01N33X44C",
-    "name": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+    "name": "Serum Anti-Imperfections Niacinamide 10% + Zinc 1%",
     "slug": "ambrosie-précieux-de-huile-d-argan-pure",
-    "description": "Laissez-vous envoûter par **Ambrosie Précieux de Huile d'Argan Pure**, un chef-d'œuvre de la cosmétique naturelle. Formulé avec soin à partir de Huile d'Argan Pure issue du commerce équitable, il procure une nutrition intense. Ressentez la différence d'un luxe authentique.",
-    "benefits": "### Transformez votre routine\n- **Nutrition Profonde**: Infusé avec Huile d'Argan Pure pour une hydratation pénétrante.\n- **Résultats Visibles**: Une peau plus lisse et éclatante en seulement 7 jours.\n- **Éthique & Pur**: Des ingrédients certifiés qui respectent votre nature.",
+    "description": "Un serum concentre en niacinamide et zinc pour aider a reguler l'exces de sebum, affiner visuellement les pores et calmer les imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: niacinamide.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: The Ordinary reste une reference connue sur ce besoin.",
     "price": 78.9,
     "category": "Soin du Visage",
     "brand": "The Ordinary",
@@ -1234,48 +583,50 @@
     "rating": 4.9,
     "reviews": 763,
     "features": [
-      "argan pur",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "niacinamide",
+      "imperfections",
+      "pores",
+      "The Ordinary",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "argan pur",
-      "or liquide",
-      "anti-âge",
-      "hydratation intense",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "niacinamide",
+      "imperfections",
+      "pores",
+      "peau grasse",
+      "the ordinary",
+      "beaute",
+      "routine"
     ]
   },
   {
     "id": "p2013",
     "asin": "B07C5VJGDF",
-    "name": "Baume Hydratant Visage et Corps",
+    "name": "Baume Hydratant Visage et Corps Peaux Seches",
     "slug": "infusion-majestueux-de-sérum-croissance",
-    "description": "Laissez-vous envoûter par **Infusion Majestueux de Sérum Croissance**, un chef-d'œuvre de la cosmétique naturelle. Formulé avec soin à partir de Sérum Croissance issue du commerce équitable, il procure une nutrition intense. Ressentez la différence d'un luxe authentique.",
-    "benefits": "### Transformez votre routine\n- **Nutrition Profonde**: Infusé avec Sérum Croissance pour une hydratation pénétrante.\n- **Résultats Visibles**: Une peau plus lisse et éclatante en seulement 7 jours.\n- **Éthique & Pur**: Des ingrédients certifiés qui respectent votre nature.",
+    "description": "Un baume riche aux ceramides pour nourrir durablement la peau seche et soutenir une barriere cutanee plus confortable.",
+    "benefits": "### Points forts\n- **Besoin cible**: ceramides.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du corps.\n- **Repere clair**: CeraVe reste une reference connue sur ce besoin.",
     "price": 117.9,
-    "category": "Soin des Cheveux",
+    "category": "Soin du Corps",
     "brand": "CeraVe",
     "image": "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?q=80&w=1887&auto=format&fit=crop",
     "rating": 4.7,
     "reviews": 304,
     "features": [
-      "croissance cheveux",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "ceramides",
+      "peau seche",
+      "hydratation",
+      "CeraVe",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "croissance cheveux",
-      "biotine",
-      "fortifiant",
-      "chevelure dense",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "ceramides",
+      "peau seche",
+      "hydratation",
+      "baume",
+      "cerave",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -1283,28 +634,29 @@
     "asin": "B00949CTQQ",
     "name": "Lotion Exfoliante Perfectrice 2% BHA",
     "slug": "essence-élixir-de-huile-de-ricin-royale",
-    "description": "Le secret d'une beauté intemporelle réside dans **Essence Élixir de Huile de Ricin Royale**. Enrichi en Huile de Ricin Royale pure, ce traitement pénètre au cœur des cellules pour restaurer vitalité et éclat. Un indispensable de toute collection cosmétique de prestige.",
-    "benefits": "### La Puissance de Huile de Ricin Royale\n- **Bio-Actif**: Formule haute puissance pour une absorption maximale.\n- **Protection Totale**: Bouclier contre les agressions environnementales.\n- **Restauration**: Répare et régénère les tissus en profondeur.",
+    "description": "Un exfoliant liquide au BHA qui aide a desobstruer les pores, lisser le grain de peau et limiter l'apparition des imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: exfoliant bha.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: Paula's Choice reste une reference connue sur ce besoin.",
     "price": 47.9,
-    "category": "Soin des Cheveux",
+    "category": "Soin du Visage",
     "brand": "Paula's Choice",
     "image": "https://images.unsplash.com/photo-1629198688000-71f23e745b6e?q=80&w=2080&auto=format&fit=crop",
     "rating": 5,
     "reviews": 187,
     "features": [
-      "ricin bio",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "Paula's Choice",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "ricin bio",
-      "cils longs",
-      "sourcils denses",
-      "cuir chevelu",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "acide salicylique",
+      "paula's choice",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -1312,8 +664,8 @@
     "asin": "B07N7PK9QK",
     "name": "Huile Fortifiante Cuir Chevelu Romarin Menthe",
     "slug": "éclat-éternel-de-élixir-de-romarin",
-    "description": "Le secret d'une beauté intemporelle réside dans **Éclat Éternel de Élixir de Romarin**. Enrichi en Élixir de Romarin pure, ce traitement pénètre au cœur des cellules pour restaurer vitalité et éclat. Un indispensable de toute collection cosmétique de prestige.",
-    "benefits": "### La Puissance de Élixir de Romarin\n- **Bio-Actif**: Formule haute puissance pour une absorption maximale.\n- **Protection Totale**: Bouclier contre les agressions environnementales.\n- **Restauration**: Répare et régénère les tissus en profondeur.",
+    "description": "Une huile capillaire ciblee pour fortifier le cuir chevelu, accompagner la pousse et apporter plus de confort sur les longueurs fragilisees.",
+    "benefits": "### Points forts\n- **Besoin cible**: pousse cheveux.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin des cheveux.\n- **Repere clair**: Mielle Organics reste une reference connue sur ce besoin.",
     "price": 98.9,
     "category": "Soin des Cheveux",
     "brand": "Mielle Organics",
@@ -1321,19 +673,20 @@
     "rating": 4.7,
     "reviews": 642,
     "features": [
+      "pousse cheveux",
       "romarin",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "fortifiant capillaire",
+      "Mielle Organics",
+      "Routine ciblee"
     ],
     "seoTags": [
+      "pousse cheveux",
       "romarin",
-      "circulation",
-      "vitalité",
-      "repousse",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "fortifiant capillaire",
+      "cuir chevelu",
+      "mielle organics",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -1341,8 +694,8 @@
     "asin": "B00PBX3L7K",
     "name": "Essence Advanced Snail 96 Mucin Power",
     "slug": "sérum-opulent-de-soin-anti-âge-suprême",
-    "description": "Le secret d'une beauté intemporelle réside dans **Sérum Opulent de Soin Anti-Âge Suprême**. Enrichi en Soin Anti-Âge Suprême pure, ce traitement pénètre au cœur des cellules pour restaurer vitalité et éclat. Un indispensable de toute collection cosmétique de prestige.",
-    "benefits": "### Transformez votre routine\n- **Nutrition Profonde**: Infusé avec Soin Anti-Âge Suprême pour une hydratation pénétrante.\n- **Résultats Visibles**: Une peau plus lisse et éclatante en seulement 7 jours.\n- **Éthique & Pur**: Des ingrédients certifiés qui respectent votre nature.",
+    "description": "Une essence legere riche en mucine pour soutenir l'hydratation, apaiser la peau et renforcer la barriere cutanee au quotidien.",
+    "benefits": "### Points forts\n- **Besoin cible**: mucine.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: COSRX reste une reference connue sur ce besoin.",
     "price": 81.9,
     "category": "Soin du Visage",
     "brand": "COSRX",
@@ -1350,106 +703,110 @@
     "rating": 4.7,
     "reviews": 815,
     "features": [
-      "rides",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "mucine",
+      "hydratation",
+      "barriere cutanee",
+      "COSRX",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "rides",
-      "collagène",
-      "fermeté",
-      "éclat",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "mucine",
+      "hydratation",
+      "barriere cutanee",
+      "glass skin",
+      "cosrx",
+      "beaute",
+      "routine"
     ]
   },
   {
     "id": "p2017",
     "asin": "B01N33X44C",
-    "name": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+    "name": "Serum Anti-Imperfections Niacinamide 10% + Zinc 1%",
     "slug": "rituel-royal-de-lait-corps-soyeux",
-    "description": "Laissez-vous envoûter par **Rituel Royal de Lait Corps Soyeux**, un chef-d'œuvre de la cosmétique naturelle. Formulé avec soin à partir de Lait Corps Soyeux issue du commerce équitable, il procure une nutrition intense. Ressentez la différence d'un luxe authentique.",
-    "benefits": "### Pourquoi c'est une exception\n- **Éclat Naturel**: Libère la luminance originelle de votre teint.\n- **Correction Temps**: Cible efficacement les signes de fatigue et l'âge.\n- **Expérience Sensorielle**: Une texture fine pour un moment de bien-être absolu.",
+    "description": "Un serum concentre en niacinamide et zinc pour aider a reguler l'exces de sebum, affiner visuellement les pores et calmer les imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: niacinamide.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: The Ordinary reste une reference connue sur ce besoin.",
     "price": 135.9,
-    "category": "Soin du Corps",
+    "category": "Soin du Visage",
     "brand": "The Ordinary",
     "image": "https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1974&auto=format&fit=crop",
     "rating": 5,
     "reviews": 467,
     "features": [
-      "hydratation",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "niacinamide",
+      "imperfections",
+      "pores",
+      "The Ordinary",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "hydratation",
-      "peau douce",
-      "nutrition",
-      "velouté",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "niacinamide",
+      "imperfections",
+      "pores",
+      "peau grasse",
+      "the ordinary",
+      "beaute",
+      "routine"
     ]
   },
   {
     "id": "p2018",
     "asin": "B07C5VJGDF",
-    "name": "Baume Hydratant Visage et Corps",
+    "name": "Baume Hydratant Visage et Corps Peaux Seches",
     "slug": "thérapie-velours-de-huile-d-argan-pure",
-    "description": "Laissez-vous envoûter par **Thérapie Velours de Huile d'Argan Pure**, un chef-d'œuvre de la cosmétique naturelle. Formulé avec soin à partir de Huile d'Argan Pure issue du commerce équitable, il procure une nutrition intense. Ressentez la différence d'un luxe authentique.",
-    "benefits": "### La Puissance de Huile d'Argan Pure\n- **Bio-Actif**: Formule haute puissance pour une absorption maximale.\n- **Protection Totale**: Bouclier contre les agressions environnementales.\n- **Restauration**: Répare et régénère les tissus en profondeur.",
+    "description": "Un baume riche aux ceramides pour nourrir durablement la peau seche et soutenir une barriere cutanee plus confortable.",
+    "benefits": "### Points forts\n- **Besoin cible**: ceramides.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du corps.\n- **Repere clair**: CeraVe reste une reference connue sur ce besoin.",
     "price": 125.9,
-    "category": "Soin du Visage",
+    "category": "Soin du Corps",
     "brand": "CeraVe",
     "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1887&auto=format&fit=crop",
     "rating": 4.6,
     "reviews": 121,
     "features": [
-      "argan pur",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "ceramides",
+      "peau seche",
+      "hydratation",
+      "CeraVe",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "argan pur",
-      "or liquide",
-      "anti-âge",
-      "hydratation intense",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "ceramides",
+      "peau seche",
+      "hydratation",
+      "baume",
+      "cerave",
+      "beaute",
+      "routine"
     ]
   },
   {
     "id": "p2019",
     "asin": "B00949CTQQ",
     "name": "Lotion Exfoliante Perfectrice 2% BHA",
-    "slug": "nectar-éternel-de-sérum-croissance",
-    "description": "Laissez-vous envoûter par **Nectar Éternel de Sérum Croissance**, un chef-d'œuvre de la cosmétique naturelle. Formulé avec soin à partir de Sérum Croissance issue du commerce équitable, il procure une nutrition intense. Ressentez la différence d'un luxe authentique.",
-    "benefits": "### La Puissance de Sérum Croissance\n- **Bio-Actif**: Formule haute puissance pour une absorption maximale.\n- **Protection Totale**: Bouclier contre les agressions environnementales.\n- **Restauration**: Répare et régénère les tissus en profondeur.",
+    "slug": "nectar-eternel-de-serum-croissance-p2019",
+    "description": "Un exfoliant liquide au BHA qui aide a desobstruer les pores, lisser le grain de peau et limiter l'apparition des imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: exfoliant bha.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: Paula's Choice reste une reference connue sur ce besoin.",
     "price": 62.9,
-    "category": "Soin des Cheveux",
+    "category": "Soin du Visage",
     "brand": "Paula's Choice",
     "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop",
     "rating": 5,
     "reviews": 221,
     "features": [
-      "croissance cheveux",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "Paula's Choice",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "croissance cheveux",
-      "biotine",
-      "fortifiant",
-      "chevelure dense",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "acide salicylique",
+      "paula's choice",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -1457,8 +814,8 @@
     "asin": "B07N7PK9QK",
     "name": "Huile Fortifiante Cuir Chevelu Romarin Menthe",
     "slug": "essence-botanique-de-huile-de-ricin-royale",
-    "description": "Le secret d'une beauté intemporelle réside dans **Essence Botanique de Huile de Ricin Royale**. Enrichi en Huile de Ricin Royale pure, ce traitement pénètre au cœur des cellules pour restaurer vitalité et éclat. Un indispensable de toute collection cosmétique de prestige.",
-    "benefits": "### Pourquoi c'est une exception\n- **Éclat Naturel**: Libère la luminance originelle de votre teint.\n- **Correction Temps**: Cible efficacement les signes de fatigue et l'âge.\n- **Expérience Sensorielle**: Une texture fine pour un moment de bien-être absolu.",
+    "description": "Une huile capillaire ciblee pour fortifier le cuir chevelu, accompagner la pousse et apporter plus de confort sur les longueurs fragilisees.",
+    "benefits": "### Points forts\n- **Besoin cible**: pousse cheveux.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin des cheveux.\n- **Repere clair**: Mielle Organics reste une reference connue sur ce besoin.",
     "price": 52.9,
     "category": "Soin des Cheveux",
     "brand": "Mielle Organics",
@@ -1466,19 +823,20 @@
     "rating": 4.6,
     "reviews": 900,
     "features": [
-      "ricin bio",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "pousse cheveux",
+      "romarin",
+      "fortifiant capillaire",
+      "Mielle Organics",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "ricin bio",
-      "cils longs",
-      "sourcils denses",
+      "pousse cheveux",
+      "romarin",
+      "fortifiant capillaire",
       "cuir chevelu",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "mielle organics",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -1486,37 +844,38 @@
     "asin": "B00PBX3L7K",
     "name": "Essence Advanced Snail 96 Mucin Power",
     "slug": "infusion-opulent-de-élixir-de-romarin",
-    "description": "Découvrez l'ultime raffinement avec **Infusion Opulent de Élixir de Romarin**. Cette formule précieuse exploite toute la puissance de Élixir de Romarin pour offrir des résultats inégalés. Conçu pour celles et ceux qui exigent l'excellence, il transforme chaque soin en un rituel sacré.",
-    "benefits": "### Transformez votre routine\n- **Nutrition Profonde**: Infusé avec Élixir de Romarin pour une hydratation pénétrante.\n- **Résultats Visibles**: Une peau plus lisse et éclatante en seulement 7 jours.\n- **Éthique & Pur**: Des ingrédients certifiés qui respectent votre nature.",
+    "description": "Une essence legere riche en mucine pour soutenir l'hydratation, apaiser la peau et renforcer la barriere cutanee au quotidien.",
+    "benefits": "### Points forts\n- **Besoin cible**: mucine.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: COSRX reste une reference connue sur ce besoin.",
     "price": 44.9,
-    "category": "Soin des Cheveux",
+    "category": "Soin du Visage",
     "brand": "COSRX",
     "image": "https://images.unsplash.com/photo-1629198688000-71f23e745b6e?q=80&w=2080&auto=format&fit=crop",
     "rating": 4.9,
     "reviews": 644,
     "features": [
-      "romarin",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "mucine",
+      "hydratation",
+      "barriere cutanee",
+      "COSRX",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "romarin",
-      "circulation",
-      "vitalité",
-      "repousse",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "mucine",
+      "hydratation",
+      "barriere cutanee",
+      "glass skin",
+      "cosrx",
+      "beaute",
+      "routine"
     ]
   },
   {
     "id": "p2022",
     "asin": "B01N33X44C",
-    "name": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+    "name": "Serum Anti-Imperfections Niacinamide 10% + Zinc 1%",
     "slug": "miracle-cristallin-de-soin-anti-âge-suprême",
-    "description": "Laissez-vous envoûter par **Miracle Cristallin de Soin Anti-Âge Suprême**, un chef-d'œuvre de la cosmétique naturelle. Formulé avec soin à partir de Soin Anti-Âge Suprême issue du commerce équitable, il procure une nutrition intense. Ressentez la différence d'un luxe authentique.",
-    "benefits": "### La Puissance de Soin Anti-Âge Suprême\n- **Bio-Actif**: Formule haute puissance pour une absorption maximale.\n- **Protection Totale**: Bouclier contre les agressions environnementales.\n- **Restauration**: Répare et régénère les tissus en profondeur.",
+    "description": "Un serum concentre en niacinamide et zinc pour aider a reguler l'exces de sebum, affiner visuellement les pores et calmer les imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: niacinamide.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: The Ordinary reste une reference connue sur ce besoin.",
     "price": 88.9,
     "category": "Soin du Visage",
     "brand": "The Ordinary",
@@ -1524,28 +883,29 @@
     "rating": 4.6,
     "reviews": 400,
     "features": [
-      "rides",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "niacinamide",
+      "imperfections",
+      "pores",
+      "The Ordinary",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "rides",
-      "collagène",
-      "fermeté",
-      "éclat",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "niacinamide",
+      "imperfections",
+      "pores",
+      "peau grasse",
+      "the ordinary",
+      "beaute",
+      "routine"
     ]
   },
   {
     "id": "p2023",
     "asin": "B07C5VJGDF",
-    "name": "Baume Hydratant Visage et Corps",
+    "name": "Baume Hydratant Visage et Corps Peaux Seches",
     "slug": "thérapie-royal-de-lait-corps-soyeux",
-    "description": "Laissez-vous envoûter par **Thérapie Royal de Lait Corps Soyeux**, un chef-d'œuvre de la cosmétique naturelle. Formulé avec soin à partir de Lait Corps Soyeux issue du commerce équitable, il procure une nutrition intense. Ressentez la différence d'un luxe authentique.",
-    "benefits": "### Transformez votre routine\n- **Nutrition Profonde**: Infusé avec Lait Corps Soyeux pour une hydratation pénétrante.\n- **Résultats Visibles**: Une peau plus lisse et éclatante en seulement 7 jours.\n- **Éthique & Pur**: Des ingrédients certifiés qui respectent votre nature.",
+    "description": "Un baume riche aux ceramides pour nourrir durablement la peau seche et soutenir une barriere cutanee plus confortable.",
+    "benefits": "### Points forts\n- **Besoin cible**: ceramides.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du corps.\n- **Repere clair**: CeraVe reste une reference connue sur ce besoin.",
     "price": 64.9,
     "category": "Soin du Corps",
     "brand": "CeraVe",
@@ -1553,19 +913,20 @@
     "rating": 4.7,
     "reviews": 129,
     "features": [
+      "ceramides",
+      "peau seche",
       "hydratation",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "CeraVe",
+      "Routine ciblee"
     ],
     "seoTags": [
+      "ceramides",
+      "peau seche",
       "hydratation",
-      "peau douce",
-      "nutrition",
-      "velouté",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "baume",
+      "cerave",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -1573,8 +934,8 @@
     "asin": "B00949CTQQ",
     "name": "Lotion Exfoliante Perfectrice 2% BHA",
     "slug": "ambrosie-cristallin-de-huile-d-argan-pure",
-    "description": "Le secret d'une beauté intemporelle réside dans **Ambrosie Cristallin de Huile d'Argan Pure**. Enrichi en Huile d'Argan Pure pure, ce traitement pénètre au cœur des cellules pour restaurer vitalité et éclat. Un indispensable de toute collection cosmétique de prestige.",
-    "benefits": "### Pourquoi c'est une exception\n- **Éclat Naturel**: Libère la luminance originelle de votre teint.\n- **Correction Temps**: Cible efficacement les signes de fatigue et l'âge.\n- **Expérience Sensorielle**: Une texture fine pour un moment de bien-être absolu.",
+    "description": "Un exfoliant liquide au BHA qui aide a desobstruer les pores, lisser le grain de peau et limiter l'apparition des imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: exfoliant bha.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: Paula's Choice reste une reference connue sur ce besoin.",
     "price": 114.9,
     "category": "Soin du Visage",
     "brand": "Paula's Choice",
@@ -1582,19 +943,20 @@
     "rating": 4.6,
     "reviews": 591,
     "features": [
-      "argan pur",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "Paula's Choice",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "argan pur",
-      "or liquide",
-      "anti-âge",
-      "hydratation intense",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "acide salicylique",
+      "paula's choice",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -1602,8 +964,8 @@
     "asin": "B07N7PK9QK",
     "name": "Huile Fortifiante Cuir Chevelu Romarin Menthe",
     "slug": "infusion-intense-de-sérum-croissance",
-    "description": "Découvrez l'ultime raffinement avec **Infusion Intense de Sérum Croissance**. Cette formule précieuse exploite toute la puissance de Sérum Croissance pour offrir des résultats inégalés. Conçu pour celles et ceux qui exigent l'excellence, il transforme chaque soin en un rituel sacré.",
-    "benefits": "### La Puissance de Sérum Croissance\n- **Bio-Actif**: Formule haute puissance pour une absorption maximale.\n- **Protection Totale**: Bouclier contre les agressions environnementales.\n- **Restauration**: Répare et régénère les tissus en profondeur.",
+    "description": "Une huile capillaire ciblee pour fortifier le cuir chevelu, accompagner la pousse et apporter plus de confort sur les longueurs fragilisees.",
+    "benefits": "### Points forts\n- **Besoin cible**: pousse cheveux.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin des cheveux.\n- **Repere clair**: Mielle Organics reste une reference connue sur ce besoin.",
     "price": 139.9,
     "category": "Soin des Cheveux",
     "brand": "Mielle Organics",
@@ -1611,19 +973,20 @@
     "rating": 4.8,
     "reviews": 686,
     "features": [
-      "croissance cheveux",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "pousse cheveux",
+      "romarin",
+      "fortifiant capillaire",
+      "Mielle Organics",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "croissance cheveux",
-      "biotine",
-      "fortifiant",
-      "chevelure dense",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "pousse cheveux",
+      "romarin",
+      "fortifiant capillaire",
+      "cuir chevelu",
+      "mielle organics",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -1631,86 +994,89 @@
     "asin": "B00PBX3L7K",
     "name": "Essence Advanced Snail 96 Mucin Power",
     "slug": "luxe-pur-de-huile-de-ricin-royale",
-    "description": "Le secret d'une beauté intemporelle réside dans **Luxe Pur de Huile de Ricin Royale**. Enrichi en Huile de Ricin Royale pure, ce traitement pénètre au cœur des cellules pour restaurer vitalité et éclat. Un indispensable de toute collection cosmétique de prestige.",
-    "benefits": "### La Puissance de Huile de Ricin Royale\n- **Bio-Actif**: Formule haute puissance pour une absorption maximale.\n- **Protection Totale**: Bouclier contre les agressions environnementales.\n- **Restauration**: Répare et régénère les tissus en profondeur.",
+    "description": "Une essence legere riche en mucine pour soutenir l'hydratation, apaiser la peau et renforcer la barriere cutanee au quotidien.",
+    "benefits": "### Points forts\n- **Besoin cible**: mucine.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: COSRX reste une reference connue sur ce besoin.",
     "price": 142.9,
-    "category": "Soin des Cheveux",
+    "category": "Soin du Visage",
     "brand": "COSRX",
     "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop",
     "rating": 4.6,
     "reviews": 370,
     "features": [
-      "ricin bio",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "mucine",
+      "hydratation",
+      "barriere cutanee",
+      "COSRX",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "ricin bio",
-      "cils longs",
-      "sourcils denses",
-      "cuir chevelu",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "mucine",
+      "hydratation",
+      "barriere cutanee",
+      "glass skin",
+      "cosrx",
+      "beaute",
+      "routine"
     ]
   },
   {
     "id": "p2027",
     "asin": "B01N33X44C",
-    "name": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+    "name": "Serum Anti-Imperfections Niacinamide 10% + Zinc 1%",
     "slug": "oasis-velours-de-élixir-de-romarin",
-    "description": "Le secret d'une beauté intemporelle réside dans **Oasis Velours de Élixir de Romarin**. Enrichi en Élixir de Romarin pure, ce traitement pénètre au cœur des cellules pour restaurer vitalité et éclat. Un indispensable de toute collection cosmétique de prestige.",
-    "benefits": "### La Puissance de Élixir de Romarin\n- **Bio-Actif**: Formule haute puissance pour une absorption maximale.\n- **Protection Totale**: Bouclier contre les agressions environnementales.\n- **Restauration**: Répare et régénère les tissus en profondeur.",
+    "description": "Un serum concentre en niacinamide et zinc pour aider a reguler l'exces de sebum, affiner visuellement les pores et calmer les imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: niacinamide.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: The Ordinary reste une reference connue sur ce besoin.",
     "price": 70.9,
-    "category": "Soin des Cheveux",
+    "category": "Soin du Visage",
     "brand": "The Ordinary",
     "image": "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1974&auto=format&fit=crop",
     "rating": 4.7,
     "reviews": 660,
     "features": [
-      "romarin",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "niacinamide",
+      "imperfections",
+      "pores",
+      "The Ordinary",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "romarin",
-      "circulation",
-      "vitalité",
-      "repousse",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "niacinamide",
+      "imperfections",
+      "pores",
+      "peau grasse",
+      "the ordinary",
+      "beaute",
+      "routine"
     ]
   },
   {
     "id": "p2028",
     "asin": "B07C5VJGDF",
-    "name": "Baume Hydratant Visage et Corps",
+    "name": "Baume Hydratant Visage et Corps Peaux Seches",
     "slug": "éclat-botanique-de-soin-anti-âge-suprême",
-    "description": "Découvrez l'ultime raffinement avec **Éclat Botanique de Soin Anti-Âge Suprême**. Cette formule précieuse exploite toute la puissance de Soin Anti-Âge Suprême pour offrir des résultats inégalés. Conçu pour celles et ceux qui exigent l'excellence, il transforme chaque soin en un rituel sacré.",
-    "benefits": "### La Puissance de Soin Anti-Âge Suprême\n- **Bio-Actif**: Formule haute puissance pour une absorption maximale.\n- **Protection Totale**: Bouclier contre les agressions environnementales.\n- **Restauration**: Répare et régénère les tissus en profondeur.",
+    "description": "Un baume riche aux ceramides pour nourrir durablement la peau seche et soutenir une barriere cutanee plus confortable.",
+    "benefits": "### Points forts\n- **Besoin cible**: ceramides.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du corps.\n- **Repere clair**: CeraVe reste une reference connue sur ce besoin.",
     "price": 138.9,
-    "category": "Soin du Visage",
+    "category": "Soin du Corps",
     "brand": "CeraVe",
     "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1887&auto=format&fit=crop",
     "rating": 4.9,
     "reviews": 412,
     "features": [
-      "rides",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "ceramides",
+      "peau seche",
+      "hydratation",
+      "CeraVe",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "rides",
-      "collagène",
-      "fermeté",
-      "éclat",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "ceramides",
+      "peau seche",
+      "hydratation",
+      "baume",
+      "cerave",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -1718,28 +1084,29 @@
     "asin": "B00949CTQQ",
     "name": "Lotion Exfoliante Perfectrice 2% BHA",
     "slug": "sérum-divin-de-lait-corps-soyeux",
-    "description": "Découvrez l'ultime raffinement avec **Sérum Divin de Lait Corps Soyeux**. Cette formule précieuse exploite toute la puissance de Lait Corps Soyeux pour offrir des résultats inégalés. Conçu pour celles et ceux qui exigent l'excellence, il transforme chaque soin en un rituel sacré.",
-    "benefits": "### Pourquoi c'est une exception\n- **Éclat Naturel**: Libère la luminance originelle de votre teint.\n- **Correction Temps**: Cible efficacement les signes de fatigue et l'âge.\n- **Expérience Sensorielle**: Une texture fine pour un moment de bien-être absolu.",
+    "description": "Un exfoliant liquide au BHA qui aide a desobstruer les pores, lisser le grain de peau et limiter l'apparition des imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: exfoliant bha.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: Paula's Choice reste une reference connue sur ce besoin.",
     "price": 136.9,
-    "category": "Soin du Corps",
+    "category": "Soin du Visage",
     "brand": "Paula's Choice",
     "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1887&auto=format&fit=crop",
     "rating": 4.6,
     "reviews": 156,
     "features": [
-      "hydratation",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "Paula's Choice",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "hydratation",
-      "peau douce",
-      "nutrition",
-      "velouté",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "acide salicylique",
+      "paula's choice",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -1747,28 +1114,29 @@
     "asin": "B07N7PK9QK",
     "name": "Huile Fortifiante Cuir Chevelu Romarin Menthe",
     "slug": "thérapie-royal-de-huile-d-argan-pure",
-    "description": "Découvrez l'ultime raffinement avec **Thérapie Royal de Huile d'Argan Pure**. Cette formule précieuse exploite toute la puissance de Huile d'Argan Pure pour offrir des résultats inégalés. Conçu pour celles et ceux qui exigent l'excellence, il transforme chaque soin en un rituel sacré.",
-    "benefits": "### La Puissance de Huile d'Argan Pure\n- **Bio-Actif**: Formule haute puissance pour une absorption maximale.\n- **Protection Totale**: Bouclier contre les agressions environnementales.\n- **Restauration**: Répare et régénère les tissus en profondeur.",
+    "description": "Une huile capillaire ciblee pour fortifier le cuir chevelu, accompagner la pousse et apporter plus de confort sur les longueurs fragilisees.",
+    "benefits": "### Points forts\n- **Besoin cible**: pousse cheveux.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin des cheveux.\n- **Repere clair**: Mielle Organics reste une reference connue sur ce besoin.",
     "price": 86.9,
-    "category": "Soin du Visage",
+    "category": "Soin des Cheveux",
     "brand": "Mielle Organics",
     "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
     "rating": 4.8,
     "reviews": 360,
     "features": [
-      "argan pur",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "pousse cheveux",
+      "romarin",
+      "fortifiant capillaire",
+      "Mielle Organics",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "argan pur",
-      "or liquide",
-      "anti-âge",
-      "hydratation intense",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "pousse cheveux",
+      "romarin",
+      "fortifiant capillaire",
+      "cuir chevelu",
+      "mielle organics",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -1776,37 +1144,38 @@
     "asin": "B00PBX3L7K",
     "name": "Essence Advanced Snail 96 Mucin Power",
     "slug": "éclat-précieux-de-sérum-croissance",
-    "description": "Laissez-vous envoûter par **Éclat Précieux de Sérum Croissance**, un chef-d'œuvre de la cosmétique naturelle. Formulé avec soin à partir de Sérum Croissance issue du commerce équitable, il procure une nutrition intense. Ressentez la différence d'un luxe authentique.",
-    "benefits": "### La Puissance de Sérum Croissance\n- **Bio-Actif**: Formule haute puissance pour une absorption maximale.\n- **Protection Totale**: Bouclier contre les agressions environnementales.\n- **Restauration**: Répare et régénère les tissus en profondeur.",
+    "description": "Une essence legere riche en mucine pour soutenir l'hydratation, apaiser la peau et renforcer la barriere cutanee au quotidien.",
+    "benefits": "### Points forts\n- **Besoin cible**: mucine.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: COSRX reste une reference connue sur ce besoin.",
     "price": 42.9,
-    "category": "Soin des Cheveux",
+    "category": "Soin du Visage",
     "brand": "COSRX",
     "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop",
     "rating": 4.6,
     "reviews": 479,
     "features": [
-      "croissance cheveux",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "mucine",
+      "hydratation",
+      "barriere cutanee",
+      "COSRX",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "croissance cheveux",
-      "biotine",
-      "fortifiant",
-      "chevelure dense",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "mucine",
+      "hydratation",
+      "barriere cutanee",
+      "glass skin",
+      "cosrx",
+      "beaute",
+      "routine"
     ]
   },
   {
     "id": "p2032",
     "asin": "B07N7PK9QK",
-    "name": "Huile Fortifiante Menthe et Romarin",
+    "name": "Huile Fortifiante Cuir Chevelu Romarin Menthe",
     "slug": "essence-lumineux-de-huile-de-ricin-royale",
-    "description": "Découvrez l'ultime raffinement avec **Essence Lumineux de Huile de Ricin Royale**. Cette formule précieuse exploite toute la puissance de Huile de Ricin Royale pour offrir des résultats inégalés. Conçu pour celles et ceux qui exigent l'excellence, il transforme chaque soin en un rituel sacré.",
-    "benefits": "### La Puissance de Huile de Ricin Royale\n- **Bio-Actif**: Formule haute puissance pour une absorption maximale.\n- **Protection Totale**: Bouclier contre les agressions environnementales.\n- **Restauration**: Répare et régénère les tissus en profondeur.",
+    "description": "Une huile capillaire ciblee pour fortifier le cuir chevelu, accompagner la pousse et apporter plus de confort sur les longueurs fragilisees.",
+    "benefits": "### Points forts\n- **Besoin cible**: pousse cheveux.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin des cheveux.\n- **Repere clair**: Mielle Organics reste une reference connue sur ce besoin.",
     "price": 14.99,
     "category": "Soin des Cheveux",
     "brand": "Mielle Organics",
@@ -1814,48 +1183,50 @@
     "rating": 4.9,
     "reviews": 345,
     "features": [
-      "ricin bio",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "pousse cheveux",
+      "romarin",
+      "fortifiant capillaire",
+      "Mielle Organics",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "ricin bio",
-      "cils longs",
-      "sourcils denses",
+      "pousse cheveux",
+      "romarin",
+      "fortifiant capillaire",
       "cuir chevelu",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "mielle organics",
+      "beaute",
+      "routine"
     ]
   },
   {
     "id": "p2033",
     "asin": "B07C5VJGDF",
-    "name": "Baume Hydratant Visage et Corps",
+    "name": "Baume Hydratant Visage et Corps Peaux Seches",
     "slug": "éclat-sublime-de-élixir-de-romarin",
-    "description": "Laissez-vous envoûter par **Éclat Sublime de Élixir de Romarin**, un chef-d'œuvre de la cosmétique naturelle. Formulé avec soin à partir de Élixir de Romarin issue du commerce équitable, il procure une nutrition intense. Ressentez la différence d'un luxe authentique.",
-    "benefits": "### Transformez votre routine\n- **Nutrition Profonde**: Infusé avec Élixir de Romarin pour une hydratation pénétrante.\n- **Résultats Visibles**: Une peau plus lisse et éclatante en seulement 7 jours.\n- **Éthique & Pur**: Des ingrédients certifiés qui respectent votre nature.",
+    "description": "Un baume riche aux ceramides pour nourrir durablement la peau seche et soutenir une barriere cutanee plus confortable.",
+    "benefits": "### Points forts\n- **Besoin cible**: ceramides.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du corps.\n- **Repere clair**: CeraVe reste une reference connue sur ce besoin.",
     "price": 129.9,
-    "category": "Soin des Cheveux",
+    "category": "Soin du Corps",
     "brand": "CeraVe",
     "image": "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1974&auto=format&fit=crop",
     "rating": 4.9,
     "reviews": 177,
     "features": [
-      "romarin",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "ceramides",
+      "peau seche",
+      "hydratation",
+      "CeraVe",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "romarin",
-      "circulation",
-      "vitalité",
-      "repousse",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "ceramides",
+      "peau seche",
+      "hydratation",
+      "baume",
+      "cerave",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -1863,8 +1234,8 @@
     "asin": "B00949CTQQ",
     "name": "Lotion Exfoliante Perfectrice 2% BHA",
     "slug": "éclat-suprême-de-soin-anti-âge-suprême",
-    "description": "Laissez-vous envoûter par **Éclat Suprême de Soin Anti-Âge Suprême**, un chef-d'œuvre de la cosmétique naturelle. Formulé avec soin à partir de Soin Anti-Âge Suprême issue du commerce équitable, il procure une nutrition intense. Ressentez la différence d'un luxe authentique.",
-    "benefits": "### La Puissance de Soin Anti-Âge Suprême\n- **Bio-Actif**: Formule haute puissance pour une absorption maximale.\n- **Protection Totale**: Bouclier contre les agressions environnementales.\n- **Restauration**: Répare et régénère les tissus en profondeur.",
+    "description": "Un exfoliant liquide au BHA qui aide a desobstruer les pores, lisser le grain de peau et limiter l'apparition des imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: exfoliant bha.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: Paula's Choice reste une reference connue sur ce besoin.",
     "price": 51.9,
     "category": "Soin du Visage",
     "brand": "Paula's Choice",
@@ -1872,19 +1243,20 @@
     "rating": 5,
     "reviews": 918,
     "features": [
-      "rides",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "Paula's Choice",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "rides",
-      "collagène",
-      "fermeté",
-      "éclat",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "acide salicylique",
+      "paula's choice",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -1892,28 +1264,29 @@
     "asin": "B07N7PK9QK",
     "name": "Huile Fortifiante Cuir Chevelu Romarin Menthe",
     "slug": "miracle-intense-de-lait-corps-soyeux",
-    "description": "Le secret d'une beauté intemporelle réside dans **Miracle Intense de Lait Corps Soyeux**. Enrichi en Lait Corps Soyeux pure, ce traitement pénètre au cœur des cellules pour restaurer vitalité et éclat. Un indispensable de toute collection cosmétique de prestige.",
-    "benefits": "### Pourquoi c'est une exception\n- **Éclat Naturel**: Libère la luminance originelle de votre teint.\n- **Correction Temps**: Cible efficacement les signes de fatigue et l'âge.\n- **Expérience Sensorielle**: Une texture fine pour un moment de bien-être absolu.",
+    "description": "Une huile capillaire ciblee pour fortifier le cuir chevelu, accompagner la pousse et apporter plus de confort sur les longueurs fragilisees.",
+    "benefits": "### Points forts\n- **Besoin cible**: pousse cheveux.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin des cheveux.\n- **Repere clair**: Mielle Organics reste une reference connue sur ce besoin.",
     "price": 78.9,
-    "category": "Soin du Corps",
+    "category": "Soin des Cheveux",
     "brand": "Mielle Organics",
     "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop",
     "rating": 4.7,
     "reviews": 581,
     "features": [
-      "hydratation",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "pousse cheveux",
+      "romarin",
+      "fortifiant capillaire",
+      "Mielle Organics",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "hydratation",
-      "peau douce",
-      "nutrition",
-      "velouté",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "pousse cheveux",
+      "romarin",
+      "fortifiant capillaire",
+      "cuir chevelu",
+      "mielle organics",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -1921,8 +1294,8 @@
     "asin": "B00PBX3L7K",
     "name": "Essence Advanced Snail 96 Mucin Power",
     "slug": "ambrosie-majestueux-de-huile-d-argan-pure",
-    "description": "Le secret d'une beauté intemporelle réside dans **Ambrosie Majestueux de Huile d'Argan Pure**. Enrichi en Huile d'Argan Pure pure, ce traitement pénètre au cœur des cellules pour restaurer vitalité et éclat. Un indispensable de toute collection cosmétique de prestige.",
-    "benefits": "### Pourquoi c'est une exception\n- **Éclat Naturel**: Libère la luminance originelle de votre teint.\n- **Correction Temps**: Cible efficacement les signes de fatigue et l'âge.\n- **Expérience Sensorielle**: Une texture fine pour un moment de bien-être absolu.",
+    "description": "Une essence legere riche en mucine pour soutenir l'hydratation, apaiser la peau et renforcer la barriere cutanee au quotidien.",
+    "benefits": "### Points forts\n- **Besoin cible**: mucine.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: COSRX reste une reference connue sur ce besoin.",
     "price": 138.9,
     "category": "Soin du Visage",
     "brand": "COSRX",
@@ -1930,77 +1303,80 @@
     "rating": 4.7,
     "reviews": 695,
     "features": [
-      "argan pur",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "mucine",
+      "hydratation",
+      "barriere cutanee",
+      "COSRX",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "argan pur",
-      "or liquide",
-      "anti-âge",
-      "hydratation intense",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "mucine",
+      "hydratation",
+      "barriere cutanee",
+      "glass skin",
+      "cosrx",
+      "beaute",
+      "routine"
     ]
   },
   {
     "id": "p2037",
     "asin": "B01N33X44C",
-    "name": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+    "name": "Serum Anti-Imperfections Niacinamide 10% + Zinc 1%",
     "slug": "essence-soyeux-de-sérum-croissance",
-    "description": "Découvrez l'ultime raffinement avec **Essence Soyeux de Sérum Croissance**. Cette formule précieuse exploite toute la puissance de Sérum Croissance pour offrir des résultats inégalés. Conçu pour celles et ceux qui exigent l'excellence, il transforme chaque soin en un rituel sacré.",
-    "benefits": "### Transformez votre routine\n- **Nutrition Profonde**: Infusé avec Sérum Croissance pour une hydratation pénétrante.\n- **Résultats Visibles**: Une peau plus lisse et éclatante en seulement 7 jours.\n- **Éthique & Pur**: Des ingrédients certifiés qui respectent votre nature.",
+    "description": "Un serum concentre en niacinamide et zinc pour aider a reguler l'exces de sebum, affiner visuellement les pores et calmer les imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: niacinamide.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: The Ordinary reste une reference connue sur ce besoin.",
     "price": 104.9,
-    "category": "Soin des Cheveux",
+    "category": "Soin du Visage",
     "brand": "The Ordinary",
     "image": "https://images.unsplash.com/photo-1629198688000-71f23e745b6e?q=80&w=2080&auto=format&fit=crop",
     "rating": 4.8,
     "reviews": 296,
     "features": [
-      "croissance cheveux",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "niacinamide",
+      "imperfections",
+      "pores",
+      "The Ordinary",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "croissance cheveux",
-      "biotine",
-      "fortifiant",
-      "chevelure dense",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "niacinamide",
+      "imperfections",
+      "pores",
+      "peau grasse",
+      "the ordinary",
+      "beaute",
+      "routine"
     ]
   },
   {
     "id": "p2038",
     "asin": "B07C5VJGDF",
-    "name": "Baume Hydratant Visage et Corps",
+    "name": "Baume Hydratant Visage et Corps Peaux Seches",
     "slug": "rituel-velours-de-huile-de-ricin-royale",
-    "description": "Découvrez l'ultime raffinement avec **Rituel Velours de Huile de Ricin Royale**. Cette formule précieuse exploite toute la puissance de Huile de Ricin Royale pour offrir des résultats inégalés. Conçu pour celles et ceux qui exigent l'excellence, il transforme chaque soin en un rituel sacré.",
-    "benefits": "### Pourquoi c'est une exception\n- **Éclat Naturel**: Libère la luminance originelle de votre teint.\n- **Correction Temps**: Cible efficacement les signes de fatigue et l'âge.\n- **Expérience Sensorielle**: Une texture fine pour un moment de bien-être absolu.",
+    "description": "Un baume riche aux ceramides pour nourrir durablement la peau seche et soutenir une barriere cutanee plus confortable.",
+    "benefits": "### Points forts\n- **Besoin cible**: ceramides.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du corps.\n- **Repere clair**: CeraVe reste une reference connue sur ce besoin.",
     "price": 102.9,
-    "category": "Soin des Cheveux",
+    "category": "Soin du Corps",
     "brand": "CeraVe",
     "image": "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1974&auto=format&fit=crop",
     "rating": 4.7,
     "reviews": 593,
     "features": [
-      "ricin bio",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "ceramides",
+      "peau seche",
+      "hydratation",
+      "CeraVe",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "ricin bio",
-      "cils longs",
-      "sourcils denses",
-      "cuir chevelu",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "ceramides",
+      "peau seche",
+      "hydratation",
+      "baume",
+      "cerave",
+      "beaute",
+      "routine"
     ]
   },
   {
@@ -2008,28 +1384,29 @@
     "asin": "B00949CTQQ",
     "name": "Lotion Exfoliante Perfectrice 2% BHA",
     "slug": "luxe-botanique-de-élixir-de-romarin",
-    "description": "Découvrez l'ultime raffinement avec **Luxe Botanique de Élixir de Romarin**. Cette formule précieuse exploite toute la puissance de Élixir de Romarin pour offrir des résultats inégalés. Conçu pour celles et ceux qui exigent l'excellence, il transforme chaque soin en un rituel sacré.",
-    "benefits": "### Pourquoi c'est une exception\n- **Éclat Naturel**: Libère la luminance originelle de votre teint.\n- **Correction Temps**: Cible efficacement les signes de fatigue et l'âge.\n- **Expérience Sensorielle**: Une texture fine pour un moment de bien-être absolu.",
+    "description": "Un exfoliant liquide au BHA qui aide a desobstruer les pores, lisser le grain de peau et limiter l'apparition des imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: exfoliant bha.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: Paula's Choice reste une reference connue sur ce besoin.",
     "price": 146.9,
-    "category": "Soin des Cheveux",
+    "category": "Soin du Visage",
     "brand": "Paula's Choice",
     "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1887&auto=format&fit=crop",
     "rating": 4.7,
     "reviews": 756,
     "features": [
-      "romarin",
-      "100% Bio",
-      "Ethique",
-      "Luxe"
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "Paula's Choice",
+      "Routine ciblee"
     ],
     "seoTags": [
-      "romarin",
-      "circulation",
-      "vitalité",
-      "repousse",
-      "beauté de luxe",
-      "arganor",
-      "cosmétique marocaine"
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "acide salicylique",
+      "paula's choice",
+      "beaute",
+      "routine"
     ]
   }
 ]

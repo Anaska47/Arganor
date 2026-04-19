@@ -1,20 +1,103 @@
 {
-  "totalClicks": 13,
+  "totalClicks": 26,
   "productClicks": {
-    "real-1002": 1,
-    "real-1070": 1,
-    "real-1022": 1,
-    "real-1063": 1,
-    "real-1032": 1,
-    "real-1007": 1,
-    "real-1081": 1,
-    "real-1056": 1,
-    "real-1082": 1,
+    "p2039": 1,
     "real-1000": 2,
+    "real-1002": 1,
     "real-1005": 1,
-    "auto_p_1774826573249_685": 1
+    "real-1007": 1,
+    "real-1022": 1,
+    "real-1032": 1,
+    "real-1056": 1,
+    "real-1063": 1,
+    "real-1070": 1,
+    "real-1081": 1,
+    "real-1082": 1,
+    "auto_p_1774826573249_685": 1,
+    "auto_p_the_ordinary_niac": 7,
+    "auto_p_1774827676180_2952": 1,
+    "search:intense skin hydration miracle": 2,
+    "search:rituel royal de huile d'argan pure": 2
   },
   "recentClicks": [
+    {
+      "productId": "auto_p_the_ordinary_niac",
+      "productName": "Serum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+      "source": "runtime-check",
+      "time": "2026-04-18T10:50:31.059Z"
+    },
+    {
+      "productId": "auto_p_the_ordinary_niac",
+      "productName": "Serum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+      "source": "runtime-check",
+      "time": "2026-04-18T10:50:18.701Z"
+    },
+    {
+      "productId": "auto_p_the_ordinary_niac",
+      "productName": "Serum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+      "source": "qa",
+      "time": "2026-04-18T00:00:09.113Z"
+    },
+    {
+      "productId": "auto_p_the_ordinary_niac",
+      "productName": "Serum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+      "source": "qa",
+      "time": "2026-04-18T00:00:00.915Z"
+    },
+    {
+      "productId": "search:rituel royal de huile d'argan pure",
+      "productName": "Rituel Royal de Huile d'Argan Pure",
+      "source": "blog-cta",
+      "time": "2026-04-15T22:03:36.592Z"
+    },
+    {
+      "productId": "search:rituel royal de huile d'argan pure",
+      "productName": "Rituel Royal de Huile d'Argan Pure",
+      "source": "blog-cta",
+      "time": "2026-04-15T22:03:28.456Z"
+    },
+    {
+      "productId": "auto_p_the_ordinary_niac",
+      "productName": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+      "source": "blog-cta",
+      "time": "2026-04-15T00:39:02.543Z"
+    },
+    {
+      "productId": "search:intense skin hydration miracle",
+      "productName": "Intense Skin Hydration Miracle",
+      "source": "blog-cta",
+      "time": "2026-04-15T00:39:02.522Z"
+    },
+    {
+      "productId": "auto_p_the_ordinary_niac",
+      "productName": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+      "source": "blog-cta",
+      "time": "2026-04-15T00:38:43.140Z"
+    },
+    {
+      "productId": "search:intense skin hydration miracle",
+      "productName": "Intense Skin Hydration Miracle",
+      "source": "blog-cta",
+      "time": "2026-04-15T00:38:43.123Z"
+    },
+    {
+      "productId": "auto_p_the_ordinary_niac",
+      "productName": "Sérum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+      "source": "blog-cta",
+      "time": "2026-04-15T00:31:06.563Z"
+    },
+    {
+      "productId": "p2039",
+      "productName": "Lotion Exfoliante Perfectrice 2% BHA",
+      "source": "buy-fr",
+      "time": "2026-04-15T00:30:47.886Z"
+    },
+    {
+      "productId": "auto_p_1774827676180_2952",
+      "productName": "Lotion Exfoliante Perfectrice 2% BHA",
+      "source": "buy-fr",
+      "time": "2026-04-12T23:48:30.746Z"
+    },
     {
       "productId": "auto_p_1774826573249_685",
       "productName": "Éclat Royal de Soin Anti-Âge Suprême",

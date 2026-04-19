@@ -1,42 +1,105 @@
-import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import Header from "@/components/layout/Header";
 
 export const metadata = {
-  title: "Terms of Service | Arganor",
-  description: "Terms and conditions of use for Arganor.",
+  title: "Conditions d'utilisation | Arganor",
+  description:
+    "Conditions d'utilisation du site Arganor, de ses contenus editoriaux et de ses liens d'affiliation.",
 };
+
+const sectionStyle = { marginTop: "2rem" };
 
 export default function TermsPage() {
   return (
     <>
       <Header />
-      <main className="container" style={{ padding: "4rem 0", maxWidth: "800px", lineHeight: "1.8" }}>
-        <h1 style={{ marginBottom: "2rem", fontSize: "2.5rem" }}>Terms of Service</h1>
-        <p><strong>Last Updated: {new Date().toLocaleDateString()}</strong></p>
+      <main
+        className="container"
+        style={{ padding: "4rem 0", maxWidth: "800px", lineHeight: "1.8" }}
+      >
+        <h1 style={{ marginBottom: "2rem", fontSize: "2.5rem" }}>
+          Conditions d&apos;utilisation
+        </h1>
+        <p>
+          <strong>Derniere mise a jour: {new Date().toLocaleDateString("fr-FR")}</strong>
+        </p>
 
-        <section style={{ marginTop: "2rem" }}>
-          <h2>1. Agreement to Terms</h2>
-          <p>By accessing or using our website, www.arganor.com, you agree to be bound by these Terms of Service. If you disagree with any part of the terms, you may not access the service.</p>
+        <section style={sectionStyle}>
+          <h2>1. Objet du site</h2>
+          <p>
+            Arganor est un site editorial consacre a la beaute, au soin, aux
+            routines et a la curation de produits. Nous publions des articles,
+            selections, comparatifs, recommandations et liens vers des
+            plateformes tierces, notamment Amazon.
+          </p>
         </section>
 
-        <section style={{ marginTop: "2rem" }}>
-          <h2>2. Intellectual Property</h2>
-          <p>The Service and its original content, features, and functionality are and will remain the exclusive property of Arganor and its licensors. Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of Arganor.</p>
+        <section style={sectionStyle}>
+          <h2>2. Acceptation des conditions</h2>
+          <p>
+            En accedant au site Arganor ou en utilisant ses contenus, vous
+            acceptez les presentes conditions d&apos;utilisation. Si vous n&apos;etes
+            pas d&apos;accord avec tout ou partie de ces conditions, merci de ne pas
+            utiliser le site.
+          </p>
         </section>
 
-        <section style={{ marginTop: "2rem" }}>
-          <h2>3. Products & Services</h2>
-          <p>Certain products or services may be available exclusively online through the website. These products or services may have limited quantities and are subject to return or exchange only according to our Return Policy.</p>
+        <section style={sectionStyle}>
+          <h2>3. Nature des informations publiees</h2>
+          <p>
+            Les contenus publies sur Arganor sont fournis a titre informatif et
+            editorial. Nous cherchons a maintenir des informations utiles,
+            lisibles et coherentes, mais nous ne garantissons pas l&apos;absence
+            totale d&apos;erreur, d&apos;omission, d&apos;indisponibilite ou de decalage de
+            prix, stock, formulation ou visuel chez les marchands tiers.
+          </p>
         </section>
 
-        <section style={{ marginTop: "2rem" }}>
-          <h2>4. Links to Other Web Sites</h2>
-          <p>Our Service may contain affiliate links to third-party web sites or services that are not owned or controlled by Arganor, such as Amazon. Arganor has no control over, and assumes no responsibility for, the content, privacy policies, or practices of any third party web sites or services.</p>
+        <section style={sectionStyle}>
+          <h2>4. Liens d&apos;affiliation et plateformes tierces</h2>
+          <p>
+            Certains liens presents sur Arganor sont des liens d&apos;affiliation.
+            Lorsque vous cliquez sur un lien produit, vous pouvez etre redirige
+            vers un site tiers comme Amazon. Arganor peut percevoir une
+            commission sans surcout pour vous si un achat est realise via ces
+            liens.
+          </p>
+          <p>
+            Les achats, paiements, livraisons, garanties, disponibilites,
+            retours et remboursements sont geres par la plateforme tierce ou le
+            vendeur concerne. Arganor n&apos;est pas le vendeur des produits
+            presentes sur ces pages, sauf mention explicite contraire.
+          </p>
         </section>
 
-        <section style={{ marginTop: "2rem" }}>
-          <h2>5. Contact Information</h2>
-          <p>Questions about the Terms of Service should be sent to us at purorganicoil@gmail.com.</p>
+        <section style={sectionStyle}>
+          <h2>5. Propriete intellectuelle</h2>
+          <p>
+            Les textes, selections, structures de pages, elements visuels,
+            marques de presentation et contenus originaux d&apos;Arganor sont
+            proteges par les regles applicables en matiere de propriete
+            intellectuelle. Toute reproduction ou reutilisation substantielle
+            sans autorisation prealable est interdite.
+          </p>
+        </section>
+
+        <section style={sectionStyle}>
+          <h2>6. Limitation de responsabilite</h2>
+          <p>
+            Arganor ne pourra etre tenu responsable d&apos;une decision d&apos;achat,
+            d&apos;une rupture de stock, d&apos;un changement de prix, d&apos;un retard de
+            livraison, d&apos;une erreur de fiche produit, ni d&apos;un litige lie a une
+            commande passee sur un site tiers.
+          </p>
+        </section>
+
+        <section style={sectionStyle}>
+          <h2>7. Contact</h2>
+          <p>
+            Pour toute question a propos du site ou des presentes conditions,
+            vous pouvez nous contacter a l&apos;adresse suivante:
+            <strong> purorganicoil@gmail.com</strong>.
+          </p>
         </section>
       </main>
       <Footer />

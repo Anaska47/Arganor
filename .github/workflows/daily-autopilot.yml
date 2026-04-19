@@ -2,44 +2,115 @@ name: Arganor Daily SEO Autopilot
 
 on:
   schedule:
-    # Tous les jours à 8h00 du matin
-    - cron: '0 8 * * *'
-  workflow_dispatch: # Permet de le lancer manuellement depuis l'interface GitHub
+    # Tous les jours a 08:00 UTC (10:00 a Paris en heure d'ete, 09:00 en heure d'hiver)
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+    inputs:
+      skip_publish:
+        description: "Run generation and validation without committing or pushing changes"
+        required: false
+        type: boolean
+        default: true
+      target_branch:
+        description: "Branch to push to when skip_publish is false"
+        required: false
+        type: string
+        default: "main"
 
 permissions:
-  contents: write # Important pour laisser GitHub commiter les nouveaux fichiers
+  contents: write
+
+concurrency:
+  group: arganor-daily-autopilot
+  cancel-in-progress: false
 
 jobs:
   autopilot:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      SITE_URL: ${{ vars.SITE_URL }}
+      NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+      TARGET_BRANCH: ${{ inputs.target_branch || github.ref_name || 'main' }}
 
     steps:
-    - name: 📥 Récupération du code source
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.ref_name || 'main' }}
+          fetch-depth: 0
 
-    - name: ⚙️ Configuration de Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'npm'
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "20"
+          cache: "npm"
 
-    - name: 📦 Installation des dépendances
-      run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-    - name: 🤖 Génération du nouveau contenu (Article + Épingle)
-      run: node src/scripts/autopilot-content.js
+      - name: Hydrate repo content from runtime store
+        run: npm run runtime:pull
 
-    - name: 💾 Sauvegarde (Commit & Push) vers Vercel
-      run: |
-        git config --global user.name "Arganor Autopilot"
-        git config --global user.email "bot@arganor.com"
-        git add src/data/posts.json src/data/products.json public/pins/ media/
-        # S'il y a des changements, on commite et on push (ce qui déclenchera Vercel)
-        git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Autopilot: Nouvel Article SEO et Épingle Pinterest générés" && git push)
+      - name: Generate content
+        run: node src/scripts/autopilot-content.js
 
-    - name: 📌 Publication sur Pinterest
-      # Attendez que le déploiement Vercel se fasse, puis déclenchez l'API Pinterest
-      run: |
-        echo "L'article est publié sur le site, Vercel est en cours de build."
-        # Si vous vouliez appeler une API Pinterest après :
-        # curl -X POST "https://arganor.vercel.app/api/pinterest/publish?batch=5" -H "Authorization: Bearer ${{ secrets.ARGANOR_API_KEY }}"
+      - name: Validate content and RSS
+        run: npm run validate:autopilot
+
+      - name: Build safety check
+        run: npm run build
+
+      - name: Persist runtime content store after successful generation
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.skip_publish) }}
+        run: npm run runtime:push
+
+      - name: Write autopilot summary
+        if: always()
+        run: node src/scripts/emit-autopilot-summary.js
+
+      - name: Upload generated content preview
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: autopilot-generated-preview
+          path: |
+            src/data/posts.json
+            src/data/products.json
+            src/data/autopilot-status.json
+          if-no-files-found: warn
+
+      - name: Commit and push generated content
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.skip_publish) }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config --global user.name "Arganor Autopilot"
+          git config --global user.email "bot@arganor.com"
+          echo "Target branch: ${TARGET_BRANCH}"
+          git status --short
+          git add -A -- src/data/posts.json src/data/products.json src/data/autopilot-status.json public/pins media
+          if git diff --cached --quiet; then
+            echo "No generated changes to commit."
+            exit 0
+          fi
+          git commit -m "chore(autopilot): publish generated content"
+          git push origin "HEAD:${TARGET_BRANCH}"
+
+      - name: Pinterest publication note
+        run: |
+          echo "RSS-first mode: Vercel publiera /feed.xml apres le push, puis Pinterest recuperera les nouvelles epingles."
+          echo "The workflow now pushes explicitly to the target branch instead of relying on detached HEAD state."
+          echo "Manual workflow_dispatch runs can stay validation-only with skip_publish=true."
+          # If you later want an explicit Pinterest call:
+          # curl -X POST "https://arganor.vercel.app/api/pinterest/publish?batch=5" -H "Authorization: Bearer ${{ secrets.ARGANOR_API_KEY }}"
+
+      - name: Upload autopilot status artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: autopilot-status
+          path: src/data/autopilot-status.json
+          if-no-files-found: warn

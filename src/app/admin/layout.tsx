@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LayoutDashboard, Package, FileText, Settings, LogOut, Pin } from "lucide-react";
+import { FileText, LayoutDashboard, LogOut, Package, Pin, Settings, Workflow } from "lucide-react";
 
 export const metadata = {
     title: "Admin Dashboard | Arganor",
@@ -14,7 +14,9 @@ export default function AdminLayout({
     return (
         <div className="admin-layout">
             <aside className="admin-sidebar">
-                <div className="admin-logo">ARGANOR <span className="admin-badge">Admin</span></div>
+                <div className="admin-logo">
+                    ARGANOR <span className="admin-badge">Admin</span>
+                </div>
                 <nav className="admin-nav">
                     <Link href="/admin" className="admin-link">
                         <LayoutDashboard size={20} /> Dashboard
@@ -25,8 +27,11 @@ export default function AdminLayout({
                     <Link href="/admin/blog" className="admin-link">
                         <FileText size={20} /> Blog
                     </Link>
-                    <Link href="/admin/pinterest" className="admin-link" style={{ color: '#e60023' }}>
-                        <Pin size={20} /> Pinterest 📌
+                    <Link href="/admin/pinterest" className="admin-link" style={{ color: "#e60023" }}>
+                        <Pin size={20} /> Pinterest
+                    </Link>
+                    <Link href="/admin/growth" className="admin-link">
+                        <Workflow size={20} /> Growth
                     </Link>
                     <Link href="/admin/settings" className="admin-link">
                         <Settings size={20} /> Settings
@@ -38,9 +43,7 @@ export default function AdminLayout({
                     </button>
                 </div>
             </aside>
-            <main className="admin-content">
-                {children}
-            </main>
+            <main className="admin-content">{children}</main>
         </div>
     );
 }

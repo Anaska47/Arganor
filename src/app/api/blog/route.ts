@@ -1,32 +1,28 @@
-import { NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
+import { NextResponse } from "next/server";
 
-const dataFilePath = path.join(process.cwd(), 'src/data/posts.json');
+import { isAuthorizedRequest, unauthorizedJson } from "@/lib/api-auth";
+import { appendRuntimePost, readRuntimePosts } from "@/lib/runtime-content-store";
 
 export async function GET() {
     try {
-        const fileContents = await fs.readFile(dataFilePath, 'utf8');
-        const posts = JSON.parse(fileContents);
+        const posts = await readRuntimePosts<unknown>();
         return NextResponse.json(posts);
     } catch {
-        return NextResponse.json({ error: 'Failed to fetch posts' }, { status: 500 });
+        return NextResponse.json({ error: "Failed to fetch posts" }, { status: 500 });
     }
 }
 
 export async function POST(request: Request) {
+    if (!isAuthorizedRequest(request)) {
+        return unauthorizedJson();
+    }
+
     try {
         const newPost = await request.json();
-        const fileContents = await fs.readFile(dataFilePath, 'utf8');
-        const posts = JSON.parse(fileContents);
+        await appendRuntimePost(newPost, "api:blog");
 
-        // Add new post
-        posts.push(newPost);
-
-        await fs.writeFile(dataFilePath, JSON.stringify(posts, null, 2));
-
-        return NextResponse.json({ message: 'Post created successfully', post: newPost });
+        return NextResponse.json({ message: "Post created successfully", post: newPost });
     } catch {
-        return NextResponse.json({ error: 'Failed to create post' }, { status: 500 });
+        return NextResponse.json({ error: "Failed to create post" }, { status: 500 });
     }
 }

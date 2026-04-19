@@ -4,6 +4,15 @@ import { useState, useEffect } from "react";
 import { Edit, Trash2, Plus } from "lucide-react";
 import Image from "next/image";
 
+function getAdminHeaders(): HeadersInit {
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    const apiKey = window.localStorage.getItem("arganorAdminApiKey");
+    if (apiKey) {
+        headers.Authorization = `Bearer ${apiKey}`;
+    }
+    return headers;
+}
+
 export default function AdminProductsClient() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [products, setProducts] = useState<any[]>([]);
@@ -34,6 +43,7 @@ export default function AdminProductsClient() {
         // For this demo, we'll reload the page to simulate or call the API if ready
         await fetch('/api/products', {
             method: 'POST',
+            headers: getAdminHeaders(),
             body: JSON.stringify({ ...newItem, id: `p${Date.now()}` })
         });
 

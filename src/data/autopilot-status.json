@@ -1,0 +1,13 @@
+{
+  "status": "validated",
+  "lastRunAt": null,
+  "lastSuccessAt": null,
+  "generatedProducts": 0,
+  "generatedPosts": 0,
+  "generatedPins": 0,
+  "feedPins": 58,
+  "message": "Autopilot validation passed with 58 RSS pins.",
+  "errors": [],
+  "warnings": [],
+  "validationAt": "2026-04-18T11:58:59.805Z"
+}

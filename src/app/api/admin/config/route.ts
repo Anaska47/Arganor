@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
+import { getAdminApiKey, requiresApiKey } from "@/lib/api-auth";
 
 export async function GET() {
-    // In production, you would add a session check here (NextAuth/Clerk/Supabase)
-    // For now, we return the key from server-side env to keep it out of the JS bundle files
     return NextResponse.json({
-        apiKey: process.env.ARGANOR_API_KEY || "fallback_key"
+        apiKeyConfigured: !!getAdminApiKey(),
+        requiresApiKey: requiresApiKey(),
+        keyStorageName: "arganorAdminApiKey",
     });
 }

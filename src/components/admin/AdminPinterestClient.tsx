@@ -43,6 +43,8 @@ export default function AdminPinterestClient() {
     const [batchPublishing, setBatchPublishing] = useState(false);
     const [publishLog, setPublishLog] = useState<PublishResult[]>([]);
     const [showLog, setShowLog] = useState(false);
+    const [apiKey, setApiKey] = useState<string>("");
+    const [apiKeyRequired, setApiKeyRequired] = useState(false);
 
     const fetchPins = useCallback(async () => {
         setLoading(true);
@@ -58,14 +60,24 @@ export default function AdminPinterestClient() {
         }
     }, []);
 
-    const [apiKey, setApiKey] = useState<string>("");
-
     useEffect(() => {
-        // Fetch the API key safely from a server config endpoint
+        setApiKey(window.localStorage.getItem("arganorAdminApiKey") || "");
         fetch('/api/admin/config').then(res => res.json()).then(data => {
-            if (data.apiKey) setApiKey(data.apiKey);
+            setApiKeyRequired(!!data.requiresApiKey);
         });
     }, []);
+
+    const saveApiKey = () => {
+        window.localStorage.setItem("arganorAdminApiKey", apiKey.trim());
+    };
+
+    const getPublishHeaders = () => {
+        const headers: Record<string, string> = { "Content-Type": "application/json" };
+        if (apiKey.trim()) {
+            headers.Authorization = `Bearer ${apiKey.trim()}`;
+        }
+        return headers;
+    };
 
     useEffect(() => {
         fetchPins();
@@ -82,14 +94,21 @@ export default function AdminPinterestClient() {
 
     // Publish 1 pin to Make.com
     const publishOne = async (pin: PinData) => {
+        if (apiKeyRequired && !apiKey.trim()) {
+            setPublishLog(prev => [{
+                productName: pin.productName,
+                success: false,
+                makeResponse: "ARGANOR_API_KEY requise pour publier.",
+            }, ...prev].slice(0, 20));
+            setShowLog(true);
+            return;
+        }
+
         setPublishing(pin.productId);
         try {
             const res = await fetch(`/api/pinterest/publish?productId=${pin.productId}`, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${apiKey}`
-                },
+                headers: getPublishHeaders(),
             });
             const data = await res.json();
             setPublishLog(prev => [{
@@ -105,11 +124,21 @@ export default function AdminPinterestClient() {
 
     // Publish top 5 pins to Make.com (daily batch)
     const publishBatch = async (count: number = 5) => {
+        if (apiKeyRequired && !apiKey.trim()) {
+            setPublishLog(prev => [{
+                productName: "Batch Pinterest",
+                success: false,
+                makeResponse: "ARGANOR_API_KEY requise pour publier.",
+            }, ...prev].slice(0, 20));
+            setShowLog(true);
+            return;
+        }
+
         setBatchPublishing(true);
         try {
             const res = await fetch(`/api/pinterest/publish?batch=${count}`, {
                 method: "POST",
-                headers: { "Authorization": "Bearer ZG58DirMq40KBzV7nFmkbI9CpSNvLooOYalyR2gJuTAjch3x1" },
+                headers: getPublishHeaders(),
             });
             const data = await res.json();
             if (data.results) {
@@ -179,6 +208,19 @@ export default function AdminPinterestClient() {
             </div>
 
             {/* ── Publish Log ────────────────────────────────────── */}
+            {apiKeyRequired && (
+                <div className="api-key-box">
+                    <span>ClÃ© admin requise pour publier via Make.com</span>
+                    <input
+                        type="password"
+                        value={apiKey}
+                        onChange={(e) => setApiKey(e.target.value)}
+                        placeholder="ARGANOR_API_KEY"
+                    />
+                    <button className="btn btn-outline" onClick={saveApiKey}>Sauvegarder</button>
+                </div>
+            )}
+
             {publishLog.length > 0 && (
                 <div className="publish-log-box">
                     <div className="publish-log-header" onClick={() => setShowLog(v => !v)}>
@@ -452,6 +494,9 @@ export default function AdminPinterestClient() {
                 .pin-stat-icon { font-size:26px; }
                 .pin-stat-number { font-weight:800;font-size:17px; }
                 .pin-stat-label { font-size:11px;color:#888;margin-top:2px; }
+                .api-key-box { background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:10px; }
+                .api-key-box span { font-size:12px;font-weight:600;color:#9a3412; }
+                .api-key-box input { flex:1;border:1px solid #fdba74;border-radius:6px;padding:8px 10px;font-size:12px; }
 
                 .publish-log-box { background:#fff;border:1px solid #e5e7eb;border-radius:10px;margin-bottom:20px;overflow:hidden; }
                 .publish-log-header { padding:12px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600;background:#f9fafb; }

@@ -1,49 +1,67 @@
-import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import Header from "@/components/layout/Header";
 
 export const metadata = {
-  title: "Return & Refund Policy | Arganor",
-  description: "Arganor return and refund policy information.",
+  title: "Retours et remboursements | Arganor",
+  description:
+    "Informations sur les retours et remboursements des produits consultes via Arganor.",
 };
+
+const sectionStyle = { marginTop: "2rem" };
 
 export default function RefundPage() {
   return (
     <>
       <Header />
-      <main className="container" style={{ padding: "4rem 0", maxWidth: "800px", lineHeight: "1.8" }}>
-        <h1 style={{ marginBottom: "2rem", fontSize: "2.5rem" }}>Return & Refund Policy</h1>
+      <main
+        className="container"
+        style={{ padding: "4rem 0", maxWidth: "800px", lineHeight: "1.8" }}
+      >
+        <h1 style={{ marginBottom: "2rem", fontSize: "2.5rem" }}>
+          Retours et remboursements
+        </h1>
 
-        <section style={{ marginTop: "2rem" }}>
-          <h2>1. Amazon Purchases</h2>
+        <section style={sectionStyle}>
+          <h2>1. Produits achetes via un lien Arganor</h2>
           <p>
-            As an affiliate partner, the majority of our premium products are fulfilled and shipped directly by Amazon. 
-            Therefore, any returns, refunds, or exchanges must be handled through your Amazon account under Amazon&apos;s 
-            standard return policy. Arganor cannot process refunds for items purchased through affiliate links.
+            La plupart des produits presentes sur Arganor sont consultes via des
+            liens d&apos;affiliation menant vers Amazon ou vers d&apos;autres vendeurs
+            tiers. Les retours, remboursements, echanges, litiges et garanties
+            sont donc geres par la plateforme ou le vendeur chez qui la commande
+            a ete effectivement passee.
           </p>
         </section>
 
-        <section style={{ marginTop: "2rem" }}>
-          <h2>2. Direct Purchases</h2>
+        <section style={sectionStyle}>
+          <h2>2. Procedure applicable</h2>
           <p>
-            For any products purchased directly on Arganor.com, we offer a 30-day money-back guarantee. If you are not completely satisfied with your purchase, you may return the item within 30 days of the delivery date for a full refund or exchange.
-          </p>
-          <ul style={{ paddingLeft: "2rem", marginTop: "1rem" }}>
-            <li>Items must be unopened and in their original packaging.</li>
-            <li>Proof of purchase is required.</li>
-            <li>Return shipping costs are the responsibility of the customer unless the product arrived damaged or incorrect.</li>
-          </ul>
-        </section>
-
-        <section style={{ marginTop: "2rem" }}>
-          <h2>3. Damaged or Defective Items</h2>
-          <p>
-            If your direct order arrives damaged, please contact us within 48 hours with photographic evidence at <strong>purorganicoil@gmail.com</strong>, and we will issue a replacement at no extra cost.
+            Si vous souhaitez retourner un article ou demander un remboursement,
+            veuillez vous connecter a votre compte Amazon ou au compte utilise
+            chez le marchand tiers, puis suivre leur procedure officielle de
+            retour. Les conditions peuvent varier selon le type de produit, le
+            vendeur et le pays de livraison.
           </p>
         </section>
 
-        <section style={{ marginTop: "2rem" }}>
-          <h2>4. Contact Us</h2>
-          <p>If you have any questions about our Returns and Refunds Policy, please contact us: purorganicoil@gmail.com.</p>
+        <section style={sectionStyle}>
+          <h2>3. Role d&apos;Arganor</h2>
+          <p>
+            Arganor n&apos;encaisse pas le paiement des produits vendus sur Amazon et
+            n&apos;intervient pas dans la logistique ou le service apres-vente des
+            commandes passees chez un tiers. Nous ne pouvons donc pas valider un
+            remboursement ni emettre une etiquette de retour pour ces achats.
+          </p>
+        </section>
+
+        <section style={sectionStyle}>
+          <h2>4. Nous contacter</h2>
+          <p>
+            Si vous constatez un lien casse, une page produit incoherente ou un
+            contenu editorial a corriger, vous pouvez nous ecrire a
+            <strong> purorganicoil@gmail.com</strong>. Pour toute demande
+            commerciale liee a une commande, merci de contacter directement le
+            vendeur concerne.
+          </p>
         </section>
       </main>
       <Footer />

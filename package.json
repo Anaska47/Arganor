@@ -7,10 +7,18 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "autopilot": "node src/scripts/autopilot-content.js && node src/scripts/pinterest-bot.js"
+    "runtime:pull": "node src/scripts/sync-runtime-content.js pull",
+    "runtime:push": "node src/scripts/sync-runtime-content.js push",
+    "runtime:sync": "node src/scripts/sync-runtime-content.js both",
+    "validate:autopilot": "node src/scripts/validate-autopilot.js",
+    "autopilot": "node src/scripts/autopilot-content.js && node src/scripts/pinterest-bot.js",
+    "autopilot:local": "node src/scripts/run-autopilot-local.js",
+    "autopilot:local:keep": "node src/scripts/run-autopilot-local.js --keep",
+    "autopilot:local:fast": "node src/scripts/run-autopilot-local.js --skip-build"
   },
   "dependencies": {
     "@resvg/resvg-js": "^2.6.2",
+    "@supabase/supabase-js": "^2.103.0",
     "clsx": "^2.1.1",
     "jimp": "^1.6.0",
     "lucide-react": "^0.563.0",

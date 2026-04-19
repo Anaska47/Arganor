@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getProducts, getProductById } from "@/lib/data";
 import { buildPinData, buildMakeWebhookPayload } from "@/lib/pinterest";
+import { isAuthorizedRequest, unauthorizedJson } from "@/lib/api-auth";
+import { getSiteUrl } from "@/lib/site";
 
 // GET /api/pinterest/export?productId=xxx  → single pin data
 // GET /api/pinterest/export                → all products pin data (batch)
@@ -10,7 +12,7 @@ export async function GET(req: NextRequest) {
     const productId = searchParams.get("productId");
     const format = searchParams.get("format") || "json";
     const limit = parseInt(searchParams.get("limit") || "20");
-    const baseUrl = searchParams.get("baseUrl") || `${req.headers.get("x-forwarded-proto") || "https"}://${req.headers.get("host")}`;
+    const baseUrl = searchParams.get("baseUrl") || getSiteUrl();
 
     if (productId) {
         const product = getProductById(productId);
@@ -54,6 +56,10 @@ export async function GET(req: NextRequest) {
 
 // POST /api/pinterest/export → Receive Make.com webhook confirmation
 export async function POST(req: NextRequest) {
+    if (!isAuthorizedRequest(req)) {
+        return unauthorizedJson();
+    }
+
     const body = await req.json();
     // Log the Make.com confirmation (in production: save to DB)
     console.log("📌 Make.com Pin Published:", body);
