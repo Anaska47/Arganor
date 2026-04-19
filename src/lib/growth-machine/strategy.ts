@@ -4,6 +4,7 @@ import { getBlogPosts } from "@/lib/blog";
 import { getProductById, getProductBySlug, getPublicProducts } from "@/lib/data";
 
 import { generateGrowthJson, hasGrowthAiConfig } from "./ai";
+import { buildProductEvidence } from "./product-evidence";
 import { resolvePromptVersion, type ResolvedPromptVersion } from "./prompts";
 import { resolveProductTaxonomy, type ProductTaxonomyResolution } from "./taxonomy";
 import { enqueueContent, listAgentMemory, listContentQueue, type ContentQueueRow } from "./store";
@@ -39,12 +40,26 @@ type StrategyBrief = {
         promptSource: string;
         scoring: {
             baseScore: number;
+            evidenceScore: number;
             businessPriorityBoost: number;
             intentBonus: number;
             contentGapBonus: number;
             recentProductPenalty: number;
             recentClusterPenalty: number;
             finalScore: number;
+        };
+        evidence: {
+            qualityScore: number;
+            qualitySummary: string;
+            qualityFlags: string[];
+            hasGenericImage: boolean;
+            signals: string[];
+            fitProfiles: string[];
+            objectionChecklist: string[];
+            clickReasons: string[];
+            usageGuidance: string;
+            priceLabel: string | null;
+            socialProofLabel: string | null;
         };
         selectionMeta: {
             mode: "ai" | "deterministic";
@@ -95,6 +110,17 @@ type StrategyCandidate = {
     businessPriorityBoost: number;
     intentBonus: number;
     contentGapBonus: number;
+    evidenceScore: number;
+    qualitySummary: string;
+    qualityFlags: string[];
+    hasGenericImage: boolean;
+    signals: string[];
+    fitProfiles: string[];
+    objectionChecklist: string[];
+    clickReasons: string[];
+    usageGuidance: string;
+    priceLabel: string | null;
+    socialProofLabel: string | null;
     baseScore: number;
     recentProductPenalty: number;
     recentClusterPenalty: number;
@@ -446,6 +472,9 @@ function buildDecisionReason(
     relatedPostCount: number,
     reviews: number,
     rating: number,
+    evidenceScore: number,
+    qualitySummary: string,
+    qualityFlags: string[],
     businessThemeLabel: string,
     businessPriorityBoost: number,
     intentBonus: number,
@@ -455,6 +484,7 @@ function buildDecisionReason(
 ): string {
     const reasons = [
         `${productName} combine ${reviews} avis, une note de ${rating.toFixed(1)}/5 et seulement ${relatedPostCount} article(s) relies.`,
+        `Evidence ${evidenceScore}/100: ${qualitySummary}.`,
     ];
 
     if (businessPriorityBoost > 0) {
@@ -475,6 +505,10 @@ function buildDecisionReason(
 
     if (recentClusterPenalty > 0) {
         reasons.push(`Penalty recent_cluster=${recentClusterPenalty} car le cluster a deja recu de l'attention recente.`);
+    }
+
+    if (qualityFlags.length > 0) {
+        reasons.push(`Flags qualite: ${qualityFlags.join(", ")}.`);
     }
 
     return reasons.join(" ");
@@ -528,12 +562,26 @@ function toStrategyBrief(
             promptSource: prompt.source,
             scoring: {
                 baseScore: candidate.baseScore,
+                evidenceScore: candidate.evidenceScore,
                 businessPriorityBoost: candidate.businessPriorityBoost,
                 intentBonus: candidate.intentBonus,
                 contentGapBonus: candidate.contentGapBonus,
                 recentProductPenalty: candidate.recentProductPenalty,
                 recentClusterPenalty: candidate.recentClusterPenalty,
                 finalScore: candidate.score,
+            },
+            evidence: {
+                qualityScore: candidate.evidenceScore,
+                qualitySummary: candidate.qualitySummary,
+                qualityFlags: candidate.qualityFlags,
+                hasGenericImage: candidate.hasGenericImage,
+                signals: candidate.signals,
+                fitProfiles: candidate.fitProfiles,
+                objectionChecklist: candidate.objectionChecklist,
+                clickReasons: candidate.clickReasons,
+                usageGuidance: candidate.usageGuidance,
+                priceLabel: candidate.priceLabel,
+                socialProofLabel: candidate.socialProofLabel,
             },
             selectionMeta,
             businessFocus: {
@@ -747,11 +795,17 @@ export async function generateStrategyBriefs(limit = 3): Promise<{ prompt: Resol
 
             const relatedPostCount = relatedPostCountByProductRef.get(canonicalProductRef) ?? 0;
             const taxonomy = resolveProductTaxonomy(product);
+            const evidence = buildProductEvidence(product, taxonomy);
             const clusterRef = taxonomy.effectiveClusterRef;
             const intent = buildIntent(relatedPostCount);
             const priorityProfile = buildPriorityProfile(product, taxonomy);
             const intentBonus = buildIntentBonus(intent);
             const contentGapBonus = buildContentGapBonus(relatedPostCount);
+
+            if (!evidence.shouldQueue) {
+                return [];
+            }
+
             const baseScore = Math.max(
                 0,
                 Math.round(
@@ -761,11 +815,18 @@ export async function generateStrategyBriefs(limit = 3): Promise<{ prompt: Resol
                         relatedPostCount * 18,
                 ),
             );
-            const recentProductPenalty = recentProductRefs.has(product.slug) ? 35 : 0;
+            const evidenceScore = Math.round((evidence.qualityScore - 60) / 2);
+            const recentProductPenalty = recentProductRefs.has(canonicalProductRef) ? 35 : 0;
             const recentClusterPenalty = recentClusterRefs.has(clusterRef) ? 12 : 0;
             const score = Math.max(
                 0,
-                baseScore + priorityProfile.priorityBoost + intentBonus + contentGapBonus - recentProductPenalty - recentClusterPenalty,
+                baseScore +
+                    evidenceScore +
+                    priorityProfile.priorityBoost +
+                    intentBonus +
+                    contentGapBonus -
+                    recentProductPenalty -
+                    recentClusterPenalty,
             );
 
             return [
@@ -787,6 +848,17 @@ export async function generateStrategyBriefs(limit = 3): Promise<{ prompt: Resol
                     businessPriorityBoost: priorityProfile.priorityBoost,
                     intentBonus,
                     contentGapBonus,
+                    evidenceScore: evidence.qualityScore,
+                    qualitySummary: evidence.qualitySummary,
+                    qualityFlags: evidence.qualityFlags,
+                    hasGenericImage: evidence.hasGenericImage,
+                    signals: evidence.signals,
+                    fitProfiles: evidence.fitProfiles,
+                    objectionChecklist: evidence.objectionChecklist,
+                    clickReasons: evidence.clickReasons,
+                    usageGuidance: evidence.usageGuidance,
+                    priceLabel: evidence.priceLabel,
+                    socialProofLabel: evidence.socialProofLabel,
                     baseScore,
                     recentProductPenalty,
                     recentClusterPenalty,
@@ -796,6 +868,9 @@ export async function generateStrategyBriefs(limit = 3): Promise<{ prompt: Resol
                         relatedPostCount,
                         product.reviews,
                         product.rating,
+                        evidence.qualityScore,
+                        evidence.qualitySummary,
+                        evidence.qualityFlags,
                         priorityProfile.label,
                         priorityProfile.priorityBoost,
                         intentBonus,
