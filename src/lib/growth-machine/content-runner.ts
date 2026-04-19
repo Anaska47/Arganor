@@ -5,6 +5,7 @@ import { getProductBySlug } from "@/lib/data";
 
 import { generateGrowthJson, hasGrowthAiConfig } from "./ai";
 import { resolvePromptVersion, type ResolvedPromptVersion } from "./prompts";
+import { enhanceContentDraftSpecificity } from "./specificity";
 import { resolveProductTaxonomy, type ProductTaxonomyResolution } from "./taxonomy";
 import {
     getContentQueueItem,
@@ -648,6 +649,11 @@ export async function prepareContentDraftForQueueItem(queueItemId: string): Prom
         writerPrompt,
         fallbackContentDraft,
     );
+    const enhancedContentDraft = enhanceContentDraftSpecificity(
+        contentDraft,
+        product,
+        taxonomy.effectiveClusterRef,
+    );
 
     const existingPayload = toQueuePayloadObject(queueItem);
     const nextPayload = {
@@ -663,8 +669,8 @@ export async function prepareContentDraftForQueueItem(queueItemId: string): Prom
             rationale: taxonomy.rationale,
             warnings: taxonomy.warnings,
         },
-        contentDraft,
-        contentDraftGeneratedAt: contentDraft.generatedAt,
+        contentDraft: enhancedContentDraft,
+        contentDraftGeneratedAt: enhancedContentDraft.generatedAt,
         contentDraftPromptRef: {
             module: writerPrompt.module,
             promptKey: writerPrompt.promptKey,
@@ -680,7 +686,7 @@ export async function prepareContentDraftForQueueItem(queueItemId: string): Prom
 
     return {
         queueItem: updatedItem,
-        contentDraft,
+        contentDraft: enhancedContentDraft,
         writerPrompt,
     };
 }

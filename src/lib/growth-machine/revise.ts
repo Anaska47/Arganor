@@ -6,6 +6,7 @@ import { generateGrowthJson, hasGrowthAiConfig } from "./ai";
 import type { ContentDraft } from "./content-runner";
 import { resolvePromptVersion, type ResolvedPromptVersion } from "./prompts";
 import { reviewQueueItem, type DraftReview, type ReviewResult } from "./review";
+import { enhanceContentDraftSpecificity } from "./specificity";
 import { resolveProductTaxonomy } from "./taxonomy";
 import { getContentQueueItem, listContentQueue, updateContentQueue, type ContentQueueRow } from "./store";
 
@@ -36,6 +37,7 @@ type AiRevisionDraft = {
 };
 
 type ProductRecord = NonNullable<ReturnType<typeof getProductBySlug>>;
+const MAX_REVISION_ATTEMPTS = 2;
 
 function toWriterPromptKey(intent: string | null): string {
     if (intent === "routine") {
@@ -423,7 +425,7 @@ export async function reviseQueueItem(queueItemId: string): Promise<RevisionResu
     }
 
     const payload = toQueuePayloadObject(queueItem);
-    if (readRevisionAttempts(payload) >= 1) {
+    if (readRevisionAttempts(payload) >= MAX_REVISION_ATTEMPTS) {
         return null;
     }
 
@@ -441,6 +443,12 @@ export async function reviseQueueItem(queueItemId: string): Promise<RevisionResu
     const revisedDraft =
         (await maybeReviseWithAi(queueItem, contentDraft, review, writerPrompt)) ??
         buildDeterministicRevisionDraft(queueItem, contentDraft, review, product);
+    const finalizedDraft = enhanceContentDraftSpecificity(
+        revisedDraft,
+        product,
+        queueItem.cluster_ref || resolveProductTaxonomy(product).effectiveClusterRef,
+        review.warnings,
+    );
 
     const payloadWithoutReview = { ...payload };
     delete payloadWithoutReview.review;
@@ -456,12 +464,12 @@ export async function reviseQueueItem(queueItemId: string): Promise<RevisionResu
     const updatedAfterRevision = await updateContentQueue(queueItem.id, {
         payload: {
             ...payloadWithoutReview,
-            contentDraft: revisedDraft,
-            contentDraftGeneratedAt: revisedDraft.generatedAt,
+            contentDraft: finalizedDraft,
+            contentDraftGeneratedAt: finalizedDraft.generatedAt,
             reviewHistory: reviewHistory.slice(0, 5),
             revision: {
                 attemptCount: readRevisionAttempts(payload) + 1,
-                lastAttemptAt: revisedDraft.generatedAt,
+                lastAttemptAt: finalizedDraft.generatedAt,
                 previousVerdict: review.verdict,
                 warningsAddressed: review.warnings,
                 promptRef: {
@@ -470,7 +478,7 @@ export async function reviseQueueItem(queueItemId: string): Promise<RevisionResu
                     version: writerPrompt.version,
                     source: writerPrompt.source,
                 },
-                generationMeta: revisedDraft.generationMeta ?? null,
+                generationMeta: finalizedDraft.generationMeta ?? null,
             },
         },
     });
@@ -495,7 +503,7 @@ export async function reviseQueueItem(queueItemId: string): Promise<RevisionResu
 
     return {
         queueItem: finalizedQueueItem,
-        contentDraft: revisedDraft,
+        contentDraft: finalizedDraft,
         writerPrompt,
         reviewResult: {
             ...reviewResult,
@@ -524,7 +532,7 @@ export async function reviseNeedsRevisionDrafts(limit = 3): Promise<RevisionResu
         return (
             Boolean(payload.contentDraft) &&
             (review as { verdict?: string }).verdict === "needs_revision" &&
-            readRevisionAttempts(payload) < 1
+            readRevisionAttempts(payload) < MAX_REVISION_ATTEMPTS
         );
     });
 
