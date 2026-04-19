@@ -197,10 +197,6 @@ function buildSectionBody(
     queueItem: ContentQueueRow,
 ): string {
     const payload = toQueuePayloadObject(queueItem);
-    const relatedPostCount =
-        typeof payload.relatedPostCount === "number" && Number.isFinite(payload.relatedPostCount)
-            ? payload.relatedPostCount
-            : 0;
     const suggestedAngles = Array.isArray(payload.suggestedAngles)
         ? payload.suggestedAngles.filter((item): item is string => typeof item === "string" && item.trim().length > 0)
         : [];
@@ -211,49 +207,75 @@ function buildSectionBody(
         cleanDescription.length > 0 &&
         normalizeForMatch(cleanDescription).includes(normalizeForMatch(product.name));
     const readableCluster = taxonomy.effectiveClusterRef.replace(/_/g, " ");
+    const topSignals = productSignals.slice(0, 3);
+    const signalList = toReadableList(topSignals);
+    const firstBenefit = trimTrailingPunctuation(benefitBullets[0] || "");
+    const secondBenefit = trimTrailingPunctuation(benefitBullets[1] || "");
+    const benefitSentence = [firstBenefit, secondBenefit].filter(Boolean).join(" ");
+    const usageHint =
+        taxonomy.effectiveClusterRef === "soin_des_cheveux"
+            ? "Commence par une utilisation reguliere sur cuir chevelu propre, en observant la tolerance et la sensation apres quelques applications."
+            : taxonomy.effectiveClusterRef === "soin_du_corps"
+              ? "Applique sur peau propre et encore legerement humide pour mieux retenir le confort et limiter la sensation de tiraillement."
+              : "Applique sur peau propre apres les textures les plus fluides et avant une creme plus enveloppante si ta peau a besoin de confort.";
+    const audienceHint =
+        taxonomy.effectiveClusterRef === "soin_des_cheveux"
+            ? "Il convient surtout aux personnes qui cherchent une routine simple pour cuir chevelu, densite ou cheveux qui paraissent plus fatigues."
+            : taxonomy.effectiveClusterRef === "soin_du_corps"
+              ? "Il parle surtout aux peaux qui tirent vite, marquent le manque de confort ou ont besoin d'un geste nourrissant facile a tenir."
+              : "Il convient surtout aux personnes qui cherchent plus de confort, d'eclat ou une routine plus stable sans multiplier les produits.";
 
-    if (section.toLowerCase().includes("cta")) {
-        const benefitFocus =
-            benefitBullets[0] ||
-            (productSignals.length > 0
-                ? `Signal prioritaire: ${toReadableList(productSignals.slice(0, 3))}`
-                : "Promesse simple, usage lisible et benefice central");
+    if (section.toLowerCase().includes("pour qui")) {
+        const lead =
+            benefitSentence ||
+            (signalList
+                ? `${product.name} est surtout interessant si ton besoin tourne autour de ${signalList}.`
+                : `${product.name} vise un besoin simple a comprendre dans une routine ${readableCluster}.`);
 
-        return `${draftPack.article.cta}. Pour convertir proprement, il faut mettre en avant cette promesse: ${trimTrailingPunctuation(benefitFocus)}. Ajoute ensuite un usage facile a comprendre et une raison concrete de cliquer maintenant plutot que plus tard.`;
+        return `${lead} ${audienceHint} Si tu cherches un produit facile a integrer sans transformer toute ta routine, c'est ce type de profil qu'il faut garder en tete avant de cliquer.`;
     }
 
-    if (section.toLowerCase().includes("cluster")) {
-        const anglesLine =
-            suggestedAngles.length > 0
-                ? `Les angles deja identifies pour Arganor sont ${toReadableList(suggestedAngles.slice(0, 3))}.`
-                : "Le prochain contenu doit garder une promesse simple et un angle editorial net.";
-        const signalsLine =
-            productSignals.length > 0
-                ? `Les signaux les plus utiles a capter autour de ce produit sont ${toReadableList(productSignals.slice(0, 4))}.`
-                : `Le produit peut etre rattache a une intention ${taxonomy.effectiveCategory.toLowerCase()} avec un angle premium clair.`;
-
-        return `Dans le cluster ${readableCluster}, ${product.name} a du sens car il relie besoin concret, image premium et intention d'achat. ${signalsLine} ${anglesLine}`;
-    }
-
-    if (section.toLowerCase().includes("ce qu'il faut comprendre")) {
-        const bullets = benefitBullets.length > 0 ? benefitBullets.map((item) => `- ${item}`).join("\n") : "";
+    if (section.toLowerCase().includes("ce que") && section.toLowerCase().includes("fait bien")) {
         const summary =
             descriptionMatchesProduct
                 ? cleanDescription
-                : `${product.name} se positionne comme une offre ${taxonomy.effectiveCategory.toLowerCase()} qui cherche a combiner desir, utilite et resultat visible autour de ${toReadableList(productSignals.slice(0, 3)) || "un benefice central clair"}.`;
+                : `${product.name} se distingue surtout par une promesse lisible autour de ${signalList || "un besoin simple et concret"}.`;
+        const benefits =
+            benefitBullets.length > 0
+                ? `Ses points forts les plus faciles a comprendre sont ${toReadableList(
+                      benefitBullets.slice(0, 3).map((item) => trimTrailingPunctuation(item)),
+                  )}.`
+                : "";
 
-        return bullets ? `${summary}\n\n${bullets}` : summary;
+        return `${summary} ${benefits} C'est ce qui peut justifier un clic qualifie quand on veut verifier la fiche, les avis et la texture en detail.`;
     }
 
-    if (section.toLowerCase().includes("ce qui manque encore")) {
-        if (relatedPostCount === 0) {
-            return `${product.name} ouvre une porte interessante parce qu'Arganor n'a encore aucun article relie sur ce terrain. Il faut donc poser les bases: a qui le produit convient, quels benefices il faut prioriser et quelle promesse Pinterest peut generer un clic qualifie.`;
-        }
-
-        return `Arganor dispose deja de ${relatedPostCount} contenu(s) sur cette zone, mais il manque encore un angle plus proche de la decision d'achat. Ici, on doit completer l'existant avec plus de preuves concretes, un meilleur cadrage d'usage et une promesse plus nette.`;
+    if (section.toLowerCase().includes("quel probleme")) {
+        return `${product.name} peut etre pertinent si le besoin principal tourne autour de ${signalList || readableCluster}. L'important est d'expliquer clairement ce qu'il peut ameliorer, mais aussi de rester lucide: un bon contenu doit montrer dans quels cas le produit aide vraiment et dans quels cas il faut moderer ses attentes.`;
     }
 
-    return `Le sujet gagne a etre traite avec des preuves simples, une promesse sobre et une articulation claire entre desir, utilite et passage a l'action.`;
+    if (section.toLowerCase().includes("comment utiliser")) {
+        return `${usageHint} Si la peau ou le cuir chevelu reagit facilement, commence doucement puis augmente selon le confort ressenti. Le bon angle editorial ici consiste a montrer un ordre simple, une frequence realiste et ce qu'il faut observer avant d'aller plus loin.`;
+    }
+
+    if (section.toLowerCase().includes("les erreurs")) {
+        return `L'erreur la plus courante est d'attendre trop vite un resultat spectaculaire ou d'empiler trop de produits autour de ${product.name}. Mieux vaut une routine courte, reguliere et facile a suivre, avec un vrai point d'attention sur la tolerance, la texture et la frequence d'usage.`;
+    }
+
+    if (section.toLowerCase().includes("les limites")) {
+        return `${product.name} n'est pas une solution magique, et c'est exactement ce qu'il faut dire dans un bon article de conversion. Selon le besoin, la tolerance ou le niveau d'attente, il peut etre utile de rappeler les limites, le temps d'observation necessaire et les cas ou un autre type de produit serait plus adapte.`;
+    }
+
+    if (section.toLowerCase().includes("notre avis") || section.toLowerCase().includes("faut-il cliquer")) {
+        const angleLine =
+            suggestedAngles.length > 0
+                ? `L'angle le plus prometteur ici reste ${suggestedAngles[0]}.`
+                : "L'angle le plus prometteur ici reste un avis simple et concret.";
+
+        return `${draftPack.article.cta}. ${angleLine} Si le produit correspond au besoin que tu veux traiter, le clic vers la fiche doit servir a verifier les avis, la composition, la texture et le prix avant de trancher.`;
+    }
+
+    return `Le sujet doit rester concret, utile et oriente decision: benefices lisibles, limites honnetes et raison claire de cliquer.`;
 }
 
 function buildMarkdownContent(

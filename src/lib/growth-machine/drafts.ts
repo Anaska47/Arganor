@@ -115,36 +115,78 @@ function buildMetaDescription(productName: string, intent: string | null): strin
     return `${productName}: avis, points forts, limites et bonnes raisons d'en faire un vrai contenu d'achat Arganor.`;
 }
 
-function buildSections(productName: string, clusterRef: string, relatedPostCount: number): string[] {
+function buildSections(productName: string, intent: string | null): string[] {
+    if (intent === "routine") {
+        return [
+            `A qui cette routine avec ${productName} convient vraiment`,
+            `Comment utiliser ${productName} dans le bon ordre`,
+            `Les erreurs a eviter avec ${productName}`,
+            `Notre avis avant d'aller voir la fiche produit`,
+        ];
+    }
+
+    if (intent === "problem_solution") {
+        return [
+            `Quel probleme ${productName} peut vraiment aider a corriger`,
+            `Ce que ${productName} fait bien`,
+            `Les limites a connaitre avant de l'essayer`,
+            `Faut-il cliquer pour voir la fiche produit ?`,
+        ];
+    }
+
     return [
-        `Ce qu'il faut comprendre sur ${productName}`,
-        `Ou le produit se place dans le cluster ${clusterRef || "general"}`,
-        `Ce qui manque encore a Arganor (${relatedPostCount} article(s) relies aujourd'hui)`,
-        "CTA et angle Pinterest a privilegier",
+        `Pour qui ${productName} est un bon choix`,
+        `Ce que ${productName} fait bien`,
+        `Les limites a connaitre avant d'acheter`,
+        `Comment l'utiliser sans erreur`,
+        `Notre verdict avant d'aller voir la fiche produit`,
     ];
 }
 
-function buildPinDrafts(productName: string, clusterRef: string | null): DraftPack["pinDrafts"] {
+function buildPinDrafts(productName: string, clusterRef: string | null, intent: string | null): DraftPack["pinDrafts"] {
     const cluster = clusterRef || "general";
+
+    if (intent === "routine") {
+        return [
+            {
+                angle: "routine_simple",
+                hook: `Comment utiliser ${productName} sans surcharger sa routine`,
+                visualDirection: `Routine simple, produit hero, texte clair, cluster ${cluster}`,
+                cta: "Voir les etapes",
+            },
+            {
+                angle: "mistake",
+                hook: `L'erreur qui ruine l'effet de ${productName}`,
+                visualDirection: `Hook erreur courante, contraste net, cluster ${cluster}`,
+                cta: "Eviter l'erreur",
+            },
+            {
+                angle: "result",
+                hook: `A qui ${productName} convient vraiment`,
+                visualDirection: `Promesse claire, benefice visible, cluster ${cluster}`,
+                cta: "Voir si ca vous correspond",
+            },
+        ];
+    }
 
     return [
         {
             angle: "buyer_intent",
-            hook: `${productName} vaut-il vraiment le detour ?`,
-            visualDirection: `Produit hero sur fond clair, focus premium, cluster ${cluster}`,
-            cta: "Voir le guide",
+            hook: `${productName} vaut-il vraiment le coup ?`,
+            visualDirection: `Produit hero sur fond clair, promesse d'achat claire, cluster ${cluster}`,
+            cta: "Voir notre avis",
         },
         {
-            angle: "problem_solution",
-            hook: `Le point sur ${productName} pour une routine plus nette`,
-            visualDirection: `Avant/apres editorial, benefice concret, cluster ${cluster}`,
-            cta: "Lire l'analyse",
+            angle: "mistake",
+            hook: `Ce qu'il faut savoir avant d'acheter ${productName}`,
+            visualDirection: `Texte fort, objection utile, cluster ${cluster}`,
+            cta: "Voir les points a verifier",
         },
         {
-            angle: "curiosity",
-            hook: `L'erreur la plus courante avec ${productName}`,
-            visualDirection: `Titre fort, contraste propre, promesse simple, cluster ${cluster}`,
-            cta: "Voir la routine",
+            angle: "result",
+            hook: `Pour qui ${productName} est un bon choix`,
+            visualDirection: `Benefice concret, cadrage premium, cluster ${cluster}`,
+            cta: "Voir si c'est pour vous",
         },
     ];
 }
@@ -187,10 +229,10 @@ function buildDeterministicDraftPack(
             title: buildArticleTitle(product.name, queueItem.intent),
             excerpt: buildExcerpt(product.name, queueItem.intent),
             metaDescription: buildMetaDescription(product.name, queueItem.intent),
-            sections: buildSections(product.name, taxonomy.effectiveClusterRef, relatedPostCount),
+            sections: buildSections(product.name, queueItem.intent),
             cta: `Voir la fiche ${product.name}`,
         },
-        pinDrafts: buildPinDrafts(product.name, taxonomy.effectiveClusterRef),
+        pinDrafts: buildPinDrafts(product.name, taxonomy.effectiveClusterRef, queueItem.intent),
         promptRefs: {
             writer: {
                 module: writerPrompt.module,
