@@ -192,6 +192,22 @@ function buildFitSentence(product: Product, clusterRef: string, signals: string[
     return `${product.name} merite le clic surtout si le besoin principal correspond aux signaux produit les plus visibles: ${keySignal || "usage simple et ciblé"}.`;
 }
 
+function buildShortFitLine(product: Product, clusterRef: string, signals: string[]): string {
+    if (clusterRef === "soin_du_visage") {
+        return `${product.name}: bon choix si pores, brillance et imperfections reviennent souvent.`;
+    }
+
+    if (clusterRef === "soin_des_cheveux") {
+        return `${product.name}: pertinent si le besoin vise surtout le cuir chevelu, une routine croissance simple ou des longueurs fragilisees.`;
+    }
+
+    if (clusterRef === "soin_du_corps") {
+        return `${product.name}: utile si la peau manque surtout de confort, de souplesse ou d'un geste nourrissant regulier.`;
+    }
+
+    return `${product.name}: utile si le besoin colle vraiment a ${signals.slice(0, 2).join(", ") || "un usage cible"}.`;
+}
+
 function buildAvoidSentence(product: Product, clusterRef: string): string {
     if (clusterRef === "soin_du_visage") {
         return `Si la peau est deja irritee, deshydratee ou surchargee en exfoliants, ${product.name} n'est pas forcement le premier achat a faire. Il faut aussi lever le pied en cas de picotements persistants, rougeurs qui durent ou tiraillements qui s'installent apres plusieurs utilisations.`;
@@ -263,6 +279,58 @@ function buildReviewFocus(reviewWarnings: string[], clusterRef: string): string 
     return focus.length > 0 ? focus.join(", ") : "les points utiles avant achat";
 }
 
+function buildShortProofLine(signals: string[], socialProof: string | null, price: string | null): string {
+    return mergeCopyParts(
+        [
+            signals.length > 0 ? `focus ${signals.slice(0, 2).join(", ")}` : null,
+            socialProof ? `repere social ${socialProof}` : null,
+            price ? `prix repere ${price}` : null,
+        ],
+        150,
+    );
+}
+
+function buildShortExcerpt(product: Product, clusterRef: string, socialProof: string | null): string {
+    if (clusterRef === "soin_du_visage") {
+        return mergeCopyParts(
+            [`${product.name}: a qui il convient vraiment pour pores, brillance et imperfections`, socialProof],
+            180,
+        );
+    }
+
+    if (clusterRef === "soin_des_cheveux") {
+        return mergeCopyParts(
+            [`${product.name}: pour qui cette huile a du sens dans une routine cuir chevelu ou pousse cheveux`, socialProof],
+            180,
+        );
+    }
+
+    if (clusterRef === "soin_du_corps") {
+        return mergeCopyParts(
+            [`${product.name}: comment savoir si ce baume merite une place dans une routine peau seche`, socialProof],
+            180,
+        );
+    }
+
+    return mergeCopyParts([`${product.name}: vrai fit produit et points a verifier`, socialProof], 180);
+}
+
+function buildShortMetaDescription(product: Product, clusterRef: string): string {
+    if (clusterRef === "soin_du_visage") {
+        return clampText(`${product.name} : points forts, limites, tolerance et vrai fit produit avant achat.`, 160);
+    }
+
+    if (clusterRef === "soin_des_cheveux") {
+        return clampText(`${product.name} : avis utile, limites, frequence d'usage et bon profil avant achat.`, 160);
+    }
+
+    if (clusterRef === "soin_du_corps") {
+        return clampText(`${product.name} : routine utile, limites, confort et bon profil avant achat.`, 160);
+    }
+
+    return clampText(`${product.name} : points utiles, limites et bon fit avant achat.`, 160);
+}
+
 export function enhanceContentDraftSpecificity(
     draft: SpecificityDraft,
     product: Product,
@@ -294,12 +362,9 @@ export function enhanceContentDraftSpecificity(
     nextContent = appendSectionIfMissing(nextContent, "A quel rythme juger les resultats", buildTimelineSentence(product, clusterRef));
     const reviewFocus = buildReviewFocus(reviewWarnings, clusterRef);
     const pricingSentence = price ? `prix repere autour de ${price}` : null;
-    const proofSummary = mergeCopyParts([proofSentence], 190);
-    const postExcerpt = mergeCopyParts([draft.post.excerpt, proofSentence], 220);
-    const postMetaDescription = mergeCopyParts(
-        [draft.post.metaDescription, "Verifier aussi les ingredients, les avis et le vrai fit produit avant achat"],
-        165,
-    );
+    const shortProofLine = buildShortProofLine(signals, socialProof, price);
+    const postExcerpt = buildShortExcerpt(product, clusterRef, socialProof);
+    const postMetaDescription = buildShortMetaDescription(product, clusterRef);
 
     return {
         ...draft,
@@ -316,11 +381,11 @@ export function enhanceContentDraftSpecificity(
                     title: `${product.brand || product.name} : verifier avant achat`,
                     description: mergeCopyParts(
                         [
-                            `${product.name}: ${signals.slice(0, 3).join(", ") || "des signaux produit clairs"}`,
+                            `${product.name}: ${signals.slice(0, 2).join(", ") || "des signaux produit clairs"}`,
                             socialProof ? `repere social ${socialProof}` : null,
-                            pricingSentence,
+                            pricingSentence ? `prix repere ${price}` : null,
                         ],
-                        220,
+                        170,
                     ),
                     imagePrompt: buildVisualBrief(product, signals),
                     cta: "Verifier fiche + avis",
@@ -331,8 +396,8 @@ export function enhanceContentDraftSpecificity(
                 return {
                     ...pin,
                     description: mergeCopyParts(
-                        [`${product.name}: verifier ${reviewFocus} avant achat`, proofSummary],
-                        220,
+                        [`${product.name}: verifier ${reviewFocus} avant achat`, shortProofLine],
+                        180,
                     ),
                     imagePrompt: `${buildVisualBrief(product, signals)} avec angle checklist avant achat`,
                     cta: "Voir les points a verifier",
@@ -341,7 +406,7 @@ export function enhanceContentDraftSpecificity(
 
             return {
                 ...pin,
-                description: mergeCopyParts([buildFitSentence(product, clusterRef, signals)], 220),
+                description: mergeCopyParts([buildShortFitLine(product, clusterRef, signals)], 180),
                 imagePrompt: `${buildVisualBrief(product, signals)} avec angle comparaison et fit produit`,
                 cta: "Voir si le produit vous convient",
             };
