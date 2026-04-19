@@ -1,7 +1,7 @@
 import "server-only";
 
 import { getBlogPosts } from "@/lib/blog";
-import { getProducts } from "@/lib/data";
+import { getProductById, getProductBySlug, getPublicProducts } from "@/lib/data";
 
 import { generateGrowthJson, hasGrowthAiConfig } from "./ai";
 import { resolvePromptVersion, type ResolvedPromptVersion } from "./prompts";
@@ -10,7 +10,7 @@ import { enqueueContent, listAgentMemory, listContentQueue, type ContentQueueRow
 
 type StrategyIntent = "buyer_intent" | "routine" | "problem_solution";
 type BusinessTheme = "imperfections" | "hair_growth" | "hydration" | "anti_age" | "body_care" | "general";
-type StrategyProduct = ReturnType<typeof getProducts>[number];
+type StrategyProduct = ReturnType<typeof getPublicProducts>[number];
 
 type StrategyBrief = {
     title: string;
@@ -123,6 +123,15 @@ function normalizeText(value: string): string {
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .toLowerCase();
+}
+
+function toCanonicalProductRef(value: string | null | undefined): string | null {
+    if (!value) {
+        return null;
+    }
+
+    const product = getProductBySlug(value);
+    return product?.slug || value;
 }
 
 function containsAnyPattern(value: string, patterns: RegExp[]): boolean {
@@ -669,20 +678,30 @@ async function maybeSelectBriefsWithAi(
 }
 
 export async function generateStrategyBriefs(limit = 3): Promise<{ prompt: ResolvedPromptVersion; briefs: StrategyBrief[] }> {
-    const products = getProducts();
+    const products = getPublicProducts();
     const posts = getBlogPosts();
     const prompt = await resolvePromptVersion("strategist", "daily-opportunity-selection");
     const [queueItems, memoryItems] = await Promise.all([listContentQueue({ limit: 100 }), listAgentMemory({ limit: 150 })]);
 
-    const relatedPostCountByProductId = new Map<string, number>();
+    const relatedPostCountByProductRef = new Map<string, number>();
     for (const post of posts) {
         if (!post.relatedProductId) {
             continue;
         }
 
-        relatedPostCountByProductId.set(
-            post.relatedProductId,
-            (relatedPostCountByProductId.get(post.relatedProductId) ?? 0) + 1,
+        const relatedProduct = getProductById(post.relatedProductId);
+        if (!relatedProduct) {
+            continue;
+        }
+
+        const canonicalProductRef = toCanonicalProductRef(relatedProduct.slug);
+        if (!canonicalProductRef) {
+            continue;
+        }
+
+        relatedPostCountByProductRef.set(
+            canonicalProductRef,
+            (relatedPostCountByProductRef.get(canonicalProductRef) ?? 0) + 1,
         );
     }
 
@@ -690,7 +709,8 @@ export async function generateStrategyBriefs(limit = 3): Promise<{ prompt: Resol
     const openProductRefs = new Set(
         queueItems
             .filter((item) => openStatuses.has(String(item.status)) && item.product_ref)
-            .map((item) => item.product_ref as string),
+            .map((item) => toCanonicalProductRef(item.product_ref as string))
+            .filter((value): value is string => Boolean(value)),
     );
 
     const recentProductRefs = new Set<string>();
@@ -706,7 +726,10 @@ export async function generateStrategyBriefs(limit = 3): Promise<{ prompt: Resol
         }
 
         if (item.product_ref) {
-            recentProductRefs.add(item.product_ref);
+            const canonicalProductRef = toCanonicalProductRef(item.product_ref);
+            if (canonicalProductRef) {
+                recentProductRefs.add(canonicalProductRef);
+            }
         }
 
         if (item.cluster_ref) {
@@ -716,11 +739,13 @@ export async function generateStrategyBriefs(limit = 3): Promise<{ prompt: Resol
 
     const candidates = products
         .flatMap((product) => {
-            if (openProductRefs.has(product.slug)) {
+            const canonicalProductRef = toCanonicalProductRef(product.slug) || product.slug;
+
+            if (openProductRefs.has(canonicalProductRef)) {
                 return [];
             }
 
-            const relatedPostCount = relatedPostCountByProductId.get(product.id) ?? 0;
+            const relatedPostCount = relatedPostCountByProductRef.get(canonicalProductRef) ?? 0;
             const taxonomy = resolveProductTaxonomy(product);
             const clusterRef = taxonomy.effectiveClusterRef;
             const intent = buildIntent(relatedPostCount);
@@ -746,7 +771,7 @@ export async function generateStrategyBriefs(limit = 3): Promise<{ prompt: Resol
             return [
                 {
                     productId: product.id,
-                    productRef: product.slug,
+                    productRef: canonicalProductRef,
                     productName: product.name,
                     brand: product.brand ?? null,
                     category: taxonomy.effectiveCategory,
