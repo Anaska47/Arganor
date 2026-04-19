@@ -9,6 +9,8 @@ import { resolveProductTaxonomy, type ProductTaxonomyResolution } from "./taxono
 import { enqueueContent, listAgentMemory, listContentQueue, type ContentQueueRow } from "./store";
 
 type StrategyIntent = "buyer_intent" | "routine" | "problem_solution";
+type BusinessTheme = "imperfections" | "hair_growth" | "hydration" | "anti_age" | "body_care" | "general";
+type StrategyProduct = ReturnType<typeof getProducts>[number];
 
 type StrategyBrief = {
     title: string;
@@ -37,6 +39,9 @@ type StrategyBrief = {
         promptSource: string;
         scoring: {
             baseScore: number;
+            businessPriorityBoost: number;
+            intentBonus: number;
+            contentGapBonus: number;
             recentProductPenalty: number;
             recentClusterPenalty: number;
             finalScore: number;
@@ -45,6 +50,12 @@ type StrategyBrief = {
             mode: "ai" | "deterministic";
             provider?: string;
             model?: string;
+        };
+        businessFocus: {
+            theme: BusinessTheme;
+            label: string;
+            priorityBoost: number;
+            angleHints: string[];
         };
         taxonomy: {
             sourceCategory: string;
@@ -79,6 +90,11 @@ type StrategyCandidate = {
     intent: StrategyIntent;
     topic: string;
     suggestedAngles: string[];
+    businessTheme: BusinessTheme;
+    businessThemeLabel: string;
+    businessPriorityBoost: number;
+    intentBonus: number;
+    contentGapBonus: number;
     baseScore: number;
     recentProductPenalty: number;
     recentClusterPenalty: number;
@@ -95,17 +111,22 @@ type StrategySelection = {
     decisionReason?: string;
 };
 
-function slugifySegment(value: string): string {
+type BusinessPriorityProfile = {
+    theme: BusinessTheme;
+    label: string;
+    priorityBoost: number;
+    angleHints: string[];
+};
+
+function normalizeText(value: string): string {
     return value
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "_")
-        .replace(/^_+|_+$/g, "");
+        .toLowerCase();
 }
 
-function toClusterRef(category: string): string {
-    return slugifySegment(category || "general") || "general";
+function containsAnyPattern(value: string, patterns: RegExp[]): boolean {
+    return patterns.some((pattern) => pattern.test(value));
 }
 
 function sanitizeAngles(value: unknown, fallback: string[]): string[] {
@@ -129,18 +150,188 @@ function toIntent(value: string | null | undefined, fallback: StrategyIntent): S
     return fallback;
 }
 
-function buildSuggestedAngles(category: string, relatedPostCount: number): string[] {
-    const clusterRef = toClusterRef(category);
+function buildPriorityProfile(product: StrategyProduct, taxonomy: ProductTaxonomyResolution): BusinessPriorityProfile {
+    const corpus = normalizeText(
+        [
+            product.name,
+            product.category,
+            ...(Array.isArray(product.features) ? product.features : []),
+            ...(Array.isArray(product.seoTags) ? product.seoTags : []),
+            ...taxonomy.signals.map((signal) => signal.label),
+        ]
+            .filter(Boolean)
+            .join(" "),
+    );
+
+    if (
+        containsAnyPattern(corpus, [
+            /\bniacinamide\b/,
+            /\bbha\b/,
+            /\bimperfections?\b/,
+            /\bboutons?\b/,
+            /\bpores?\b/,
+            /\bpeau grasse\b/,
+            /\bsebum\b/,
+        ])
+    ) {
+        return {
+            theme: "imperfections",
+            label: "imperfections / peau grasse",
+            priorityBoost: 18,
+            angleHints: [
+                "meilleur serum niacinamide pour peau grasse",
+                "bha ou niacinamide contre les imperfections",
+                "routine simple anti-boutons",
+            ],
+        };
+    }
+
+    if (
+        containsAnyPattern(corpus, [
+            /\bromarin\b/,
+            /\bricin\b/,
+            /\bcheveux\b/,
+            /\bcuir chevelu\b/,
+            /\brepousse\b/,
+            /\bcroissance\b/,
+            /\bclairsemes?\b/,
+            /\bfortifiant\b/,
+            /\bshampooing\b/,
+        ])
+    ) {
+        return {
+            theme: "hair_growth",
+            label: "pousse cheveux / cuir chevelu",
+            priorityBoost: 16,
+            angleHints: [
+                "huile de romarin pour la pousse des cheveux",
+                "ricin ou romarin pour cheveux clairsemes",
+                "routine cuir chevelu simple",
+            ],
+        };
+    }
+
+    if (
+        containsAnyPattern(corpus, [
+            /\bhydratation\b/,
+            /\bpeau seche\b/,
+            /\bacide hyaluronique\b/,
+            /\bsnail\b/,
+            /\bmucin\b/,
+            /\bglow\b/,
+            /\bbarriere cutanee\b/,
+            /\bceramide\b/,
+            /\bargan\b/,
+        ])
+    ) {
+        return {
+            theme: "hydration",
+            label: "hydratation / peau seche / glow",
+            priorityBoost: 14,
+            angleHints: [
+                "routine peau seche acide hyaluronique",
+                "snail mucin avant ou apres",
+                "quelle creme pour peau tres seche",
+            ],
+        };
+    }
+
+    if (containsAnyPattern(corpus, [/\bretinol\b/, /\banti[ -]?age\b/, /\brides?\b/, /\bfermete\b/])) {
+        return {
+            theme: "anti_age",
+            label: "anti-age premium",
+            priorityBoost: 8,
+            angleHints: ["retinol pour debutant", "routine anti-age simple", "erreurs a eviter avec le retinol"],
+        };
+    }
+
+    if (taxonomy.effectiveClusterRef === "soin_du_corps") {
+        return {
+            theme: "body_care",
+            label: "soin du corps",
+            priorityBoost: 5,
+            angleHints: ["routine corps nourrissante", "peau seche corps", "lait corps ou huile"],
+        };
+    }
+
+    return {
+        theme: "general",
+        label: taxonomy.effectiveCategory.toLowerCase(),
+        priorityBoost: 0,
+        angleHints: [
+            `guide d'achat ${taxonomy.effectiveClusterRef.replace(/_/g, " ")}`,
+            `routine ${taxonomy.effectiveClusterRef.replace(/_/g, " ")}`,
+            `erreurs a eviter ${taxonomy.effectiveClusterRef.replace(/_/g, " ")}`,
+        ],
+    };
+}
+
+function buildSuggestedAngles(productName: string, profile: BusinessPriorityProfile, relatedPostCount: number): string[] {
+    const productLead = productName.trim();
+
+    if (profile.theme === "imperfections") {
+        if (relatedPostCount === 0) {
+            return [
+                `${productLead} pour peau grasse et imperfections`,
+                "bha ou niacinamide lequel choisir",
+                "routine anti-imperfections simple",
+            ];
+        }
+
+        return [
+            `comment utiliser ${productLead} sans irriter`,
+            "routine peau grasse matin et soir",
+            "erreurs qui aggravent les imperfections",
+        ];
+    }
+
+    if (profile.theme === "hair_growth") {
+        if (relatedPostCount === 0) {
+            return [
+                `${productLead} pour la pousse des cheveux`,
+                "huile de romarin ou huile de ricin",
+                "routine cuir chevelu et repousse",
+            ];
+        }
+
+        return [
+            `comment integrer ${productLead} dans une routine cheveux`,
+            "cuir chevelu irrite ou cheveux clairsemes",
+            "erreurs qui freinent la pousse",
+        ];
+    }
+
+    if (profile.theme === "hydration") {
+        if (relatedPostCount === 0) {
+            return [
+                `${productLead} pour hydrater une peau seche`,
+                "acide hyaluronique dans quel ordre",
+                "routine glow sans surcharger la peau",
+            ];
+        }
+
+        return [
+            `comment utiliser ${productLead} pour une peau qui tiraille`,
+            "routine hydratation matin ou soir",
+            "erreurs qui empechent la peau de rester souple",
+        ];
+    }
 
     if (relatedPostCount === 0) {
-        return [`guide d'achat ${clusterRef}`, `avis expert ${clusterRef}`, `meilleur produit ${clusterRef}`];
+        return profile.angleHints;
     }
 
     if (relatedPostCount === 1) {
-        return [`routine ${clusterRef}`, `comparatif ${clusterRef}`, `erreurs a eviter ${clusterRef}`];
+        return [
+            ...profile.angleHints.slice(0, 2),
+            `comparatif autour de ${productLead}`,
+        ];
     }
 
-    return [`probleme-solution ${clusterRef}`, `angle saisonnier ${clusterRef}`, `hook pinterest ${clusterRef}`];
+    return [
+        ...profile.angleHints.slice(0, 2),
+        `hook Pinterest pour ${productLead}`,
+    ];
 }
 
 function buildIntent(relatedPostCount: number): StrategyIntent {
@@ -155,7 +346,67 @@ function buildIntent(relatedPostCount: number): StrategyIntent {
     return "problem_solution";
 }
 
-function buildTopic(productName: string, intent: StrategyIntent): string {
+function buildIntentBonus(intent: StrategyIntent): number {
+    if (intent === "buyer_intent") {
+        return 10;
+    }
+
+    if (intent === "routine") {
+        return 6;
+    }
+
+    return 2;
+}
+
+function buildContentGapBonus(relatedPostCount: number): number {
+    if (relatedPostCount === 0) {
+        return 10;
+    }
+
+    if (relatedPostCount === 1) {
+        return 6;
+    }
+
+    return 0;
+}
+
+function buildTopic(productName: string, intent: StrategyIntent, profile: BusinessPriorityProfile): string {
+    if (profile.theme === "imperfections") {
+        if (intent === "buyer_intent") {
+            return `${productName} vaut-il le coup pour les imperfections et la peau grasse ?`;
+        }
+
+        if (intent === "routine") {
+            return `Comment integrer ${productName} dans une routine peau grasse sans surcharger la peau`;
+        }
+
+        return `${productName} peut-il aider quand boutons, pores et brillance s'installent ?`;
+    }
+
+    if (profile.theme === "hair_growth") {
+        if (intent === "buyer_intent") {
+            return `Mon avis sur ${productName} pour la pousse des cheveux et le cuir chevelu`;
+        }
+
+        if (intent === "routine") {
+            return `Routine simple avec ${productName} pour stimuler la pousse et le cuir chevelu`;
+        }
+
+        return `${productName} peut-il aider quand les cheveux paraissent plus clairsemes ?`;
+    }
+
+    if (profile.theme === "hydration") {
+        if (intent === "buyer_intent") {
+            return `${productName} est-il un bon choix pour hydrater une peau seche ?`;
+        }
+
+        if (intent === "routine") {
+            return `Routine hydratation avec ${productName} pour peau seche ou terne`;
+        }
+
+        return `${productName} peut-il soulager une peau seche qui tiraille vraiment ?`;
+    }
+
     if (intent === "buyer_intent") {
         return `Pourquoi ${productName} merite un guide d'achat Arganor`;
     }
@@ -186,12 +437,28 @@ function buildDecisionReason(
     relatedPostCount: number,
     reviews: number,
     rating: number,
+    businessThemeLabel: string,
+    businessPriorityBoost: number,
+    intentBonus: number,
+    contentGapBonus: number,
     recentProductPenalty: number,
     recentClusterPenalty: number,
 ): string {
     const reasons = [
         `${productName} combine ${reviews} avis, une note de ${rating.toFixed(1)}/5 et seulement ${relatedPostCount} article(s) relies.`,
     ];
+
+    if (businessPriorityBoost > 0) {
+        reasons.push(`Priorite business ${businessThemeLabel} (+${businessPriorityBoost}).`);
+    }
+
+    if (intentBonus > 0) {
+        reasons.push(`Intent bonus +${intentBonus}.`);
+    }
+
+    if (contentGapBonus > 0) {
+        reasons.push(`Content gap bonus +${contentGapBonus}.`);
+    }
 
     if (recentProductPenalty > 0) {
         reasons.push(`Penalty recent_product=${recentProductPenalty} car ce produit a deja ete travaille recemment.`);
@@ -214,7 +481,12 @@ function toStrategyBrief(
     const nextTopic =
         typeof overrides?.topic === "string" && overrides.topic.trim()
             ? overrides.topic.trim()
-            : buildTopic(candidate.productName, nextIntent);
+            : buildTopic(candidate.productName, nextIntent, {
+                  theme: candidate.businessTheme,
+                  label: candidate.businessThemeLabel,
+                  priorityBoost: candidate.businessPriorityBoost,
+                  angleHints: candidate.suggestedAngles,
+              });
     const nextDecisionReason =
         typeof overrides?.decisionReason === "string" && overrides.decisionReason.trim()
             ? overrides.decisionReason.trim()
@@ -247,11 +519,20 @@ function toStrategyBrief(
             promptSource: prompt.source,
             scoring: {
                 baseScore: candidate.baseScore,
+                businessPriorityBoost: candidate.businessPriorityBoost,
+                intentBonus: candidate.intentBonus,
+                contentGapBonus: candidate.contentGapBonus,
                 recentProductPenalty: candidate.recentProductPenalty,
                 recentClusterPenalty: candidate.recentClusterPenalty,
                 finalScore: candidate.score,
             },
             selectionMeta,
+            businessFocus: {
+                theme: candidate.businessTheme,
+                label: candidate.businessThemeLabel,
+                priorityBoost: candidate.businessPriorityBoost,
+                angleHints: candidate.suggestedAngles,
+            },
             taxonomy: {
                 sourceCategory: candidate.taxonomy.sourceCategory,
                 sourceClusterRef: candidate.taxonomy.sourceClusterRef,
@@ -318,6 +599,9 @@ async function maybeSelectBriefsWithAi(
                         reviews: candidate.reviews,
                         rating: candidate.rating,
                         suggestedAngles: candidate.suggestedAngles,
+                        businessTheme: candidate.businessTheme,
+                        businessThemeLabel: candidate.businessThemeLabel,
+                        businessPriorityBoost: candidate.businessPriorityBoost,
                         score: candidate.score,
                         decisionReason: candidate.decisionReason,
                     })),
@@ -440,6 +724,9 @@ export async function generateStrategyBriefs(limit = 3): Promise<{ prompt: Resol
             const taxonomy = resolveProductTaxonomy(product);
             const clusterRef = taxonomy.effectiveClusterRef;
             const intent = buildIntent(relatedPostCount);
+            const priorityProfile = buildPriorityProfile(product, taxonomy);
+            const intentBonus = buildIntentBonus(intent);
+            const contentGapBonus = buildContentGapBonus(relatedPostCount);
             const baseScore = Math.max(
                 0,
                 Math.round(
@@ -451,7 +738,10 @@ export async function generateStrategyBriefs(limit = 3): Promise<{ prompt: Resol
             );
             const recentProductPenalty = recentProductRefs.has(product.slug) ? 35 : 0;
             const recentClusterPenalty = recentClusterRefs.has(clusterRef) ? 12 : 0;
-            const score = Math.max(0, baseScore - recentProductPenalty - recentClusterPenalty);
+            const score = Math.max(
+                0,
+                baseScore + priorityProfile.priorityBoost + intentBonus + contentGapBonus - recentProductPenalty - recentClusterPenalty,
+            );
 
             return [
                 {
@@ -465,8 +755,13 @@ export async function generateStrategyBriefs(limit = 3): Promise<{ prompt: Resol
                     rating: product.rating,
                     relatedPostCount,
                     intent,
-                    topic: buildTopic(product.name, intent),
-                    suggestedAngles: buildSuggestedAngles(taxonomy.effectiveCategory, relatedPostCount),
+                    topic: buildTopic(product.name, intent, priorityProfile),
+                    suggestedAngles: buildSuggestedAngles(product.name, priorityProfile, relatedPostCount),
+                    businessTheme: priorityProfile.theme,
+                    businessThemeLabel: priorityProfile.label,
+                    businessPriorityBoost: priorityProfile.priorityBoost,
+                    intentBonus,
+                    contentGapBonus,
                     baseScore,
                     recentProductPenalty,
                     recentClusterPenalty,
@@ -476,6 +771,10 @@ export async function generateStrategyBriefs(limit = 3): Promise<{ prompt: Resol
                         relatedPostCount,
                         product.reviews,
                         product.rating,
+                        priorityProfile.label,
+                        priorityProfile.priorityBoost,
+                        intentBonus,
+                        contentGapBonus,
                         recentProductPenalty,
                         recentClusterPenalty,
                     ),
