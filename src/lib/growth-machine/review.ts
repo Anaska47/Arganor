@@ -1,7 +1,7 @@
 import "server-only";
 
 import type { BlogPost } from "@/lib/blog";
-import type { Product } from "@/lib/data";
+import { getProductBySlug as getCatalogProductBySlug, type Product } from "@/lib/data";
 import { readRuntimePosts, readRuntimeProducts } from "@/lib/runtime-content-store";
 
 import { generateGrowthJson, hasGrowthAiConfig } from "./ai";
@@ -68,7 +68,11 @@ function normalizeSlug(value: string): string {
 
 function findProductBySlug(products: Product[], slug: string): Product | null {
     const normalizedSlug = normalizeSlug(slug);
-    return products.find((product) => normalizeSlug(product.slug) === normalizedSlug) ?? null;
+    return (
+        products.find((product) => normalizeSlug(product.slug) === normalizedSlug) ??
+        getCatalogProductBySlug(slug) ??
+        null
+    );
 }
 
 function toQueuePayloadObject(queueItem: ContentQueueRow): Record<string, unknown> {
