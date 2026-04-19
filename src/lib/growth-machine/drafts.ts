@@ -106,7 +106,7 @@ function buildArticleTitle(productName: string, clusterRef: string, intent: stri
     }
 
     if (clusterRef === "soin_des_cheveux") {
-        return `${productName}: pour qui, comment l'appliquer et quoi verifier avant achat`;
+        return `${productName}: bon choix pour le cuir chevelu ou achat a filtrer ?`;
     }
 
     if (clusterRef === "soin_du_visage") {
