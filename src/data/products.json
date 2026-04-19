@@ -1,5 +1,62 @@
 [
   {
+    "id": "auto_p_1776558854086_9873",
+    "asin": "B00949CTQQ",
+    "name": "Lotion Exfoliante Perfectrice 2% BHA",
+    "slug": "lotion-exfoliante-perfectrice-2-bha-9873",
+    "description": "L'exfoliant liquide n°1 avec 2% de BHA (acide salicylique) qui élimine les cellules mortes, désobstrue les pores et lisse visiblement les rides.",
+    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "price": 39,
+    "category": "Soin du Visage",
+    "brand": "Paula's Choice",
+    "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
+    "rating": 4.8,
+    "reviews": 275,
+    "features": [
+      "exfoliant BHA",
+      "pores dilatés",
+      "Incontournable",
+      "Best-Seller"
+    ],
+    "seoTags": [
+      "exfoliant BHA",
+      "pores dilatés",
+      "points noirs",
+      "acide salicylique",
+      "beauté",
+      "tendance"
+    ]
+  },
+  {
+    "id": "auto_p_1776558840108_870",
+    "asin": "B00AE6WNY8",
+    "name": "Huile Prodigieuse Multi-Fonctions",
+    "slug": "huile-prodigieuse-multi-fonctions-870",
+    "description": "L'iconique huile sèche nourrissante pour visage, corps et cheveux au parfum d'été mythique.",
+    "benefits": "### Transformez votre routine\n- **Efficacité Prouvée**: Conçu pour des résultats visibles.\n- **Action Rapide**: Changez la donne dès la première semaine.\n- **Testé & Approuvé**: Un incontournable.",
+    "price": 26.9,
+    "category": "Soin du Corps",
+    "brand": "NUXE",
+    "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
+    "rating": 4.8,
+    "reviews": 427,
+    "features": [
+      "huile sèche",
+      "hydratation corps",
+      "Incontournable",
+      "Best-Seller"
+    ],
+    "seoTags": [
+      "huile sèche",
+      "hydratation corps",
+      "nuxe",
+      "huile prodigieuse",
+      "éclat naturel",
+      "beauté",
+      "tendance"
+    ]
+  },
+  {
     "id": "auto_p_1776512817932_1955",
     "asin": "B00DEXA0LY",
     "name": "Sérum Expert Réparateur de Nuit",
