@@ -4,6 +4,7 @@ import { getBlogPosts } from "@/lib/blog";
 import { getProductBySlug } from "@/lib/data";
 
 import { generateGrowthJson, hasGrowthAiConfig } from "./ai";
+import { buildProductEvidence } from "./product-evidence";
 import { resolvePromptVersion, type ResolvedPromptVersion } from "./prompts";
 import { enhanceContentDraftSpecificity } from "./specificity";
 import { resolveProductTaxonomy, type ProductTaxonomyResolution } from "./taxonomy";
@@ -347,11 +348,12 @@ function buildSectionBody(
 ): string {
     const parsedSection = parseDraftSection(section);
     const payload = toQueuePayloadObject(queueItem);
+    const evidence = buildProductEvidence(product, taxonomy);
     const suggestedAngles = Array.isArray(payload.suggestedAngles)
         ? payload.suggestedAngles.filter((item): item is string => typeof item === "string" && item.trim().length > 0)
         : [];
     const benefitBullets = extractBenefitBullets(product);
-    const productSignals = extractSignals(product, taxonomy);
+    const productSignals = evidence.signals;
     const cleanDescription = stripMarkdown(product.description);
     const descriptionMatchesProduct =
         cleanDescription.length > 0 &&
@@ -362,18 +364,14 @@ function buildSectionBody(
     const firstBenefit = trimTrailingPunctuation(benefitBullets[0] || "");
     const secondBenefit = trimTrailingPunctuation(benefitBullets[1] || "");
     const benefitSentence = [firstBenefit, secondBenefit].filter(Boolean).join(" ");
-    const usageHint =
-        taxonomy.effectiveClusterRef === "soin_des_cheveux"
-            ? "Commence par une utilisation reguliere sur cuir chevelu propre, en observant la tolerance et la sensation apres quelques applications."
-            : taxonomy.effectiveClusterRef === "soin_du_corps"
-              ? "Applique sur peau propre et encore legerement humide pour mieux retenir le confort et limiter la sensation de tiraillement."
-              : "Applique sur peau propre apres les textures les plus fluides et avant une creme plus enveloppante si ta peau a besoin de confort.";
     const audienceHint =
-        taxonomy.effectiveClusterRef === "soin_des_cheveux"
-            ? "Il convient surtout aux personnes qui cherchent une routine simple pour cuir chevelu, densite ou cheveux qui paraissent plus fatigues."
-            : taxonomy.effectiveClusterRef === "soin_du_corps"
-              ? "Il parle surtout aux peaux qui tirent vite, marquent le manque de confort ou ont besoin d'un geste nourrissant facile a tenir."
-              : "Il convient surtout aux personnes qui cherchent plus de confort, d'eclat ou une routine plus stable sans multiplier les produits.";
+        evidence.fitProfiles.length > 0
+            ? `Le meilleur fit reste ${toReadableList(evidence.fitProfiles.slice(0, 3))}.`
+            : taxonomy.effectiveClusterRef === "soin_des_cheveux"
+              ? "Il convient surtout aux personnes qui cherchent une routine simple pour cuir chevelu, densite ou cheveux qui paraissent plus fatigues."
+              : taxonomy.effectiveClusterRef === "soin_du_corps"
+                ? "Il parle surtout aux peaux qui tirent vite, marquent le manque de confort ou ont besoin d'un geste nourrissant facile a tenir."
+                : "Il convient surtout aux personnes qui cherchent plus de confort, d'eclat ou une routine plus stable sans multiplier les produits.";
     const seededBody = parsedSection.body ? parsedSection.body.replace(/\s+/g, " ").trim() : "";
     const normalizedSectionKey = normalizeForDedup(parsedSection.title);
 
@@ -390,7 +388,7 @@ function buildSectionBody(
         }
 
         if (normalizedSectionKey.includes("routine") || normalizedSectionKey.includes("comment")) {
-            return mergeCopyParts([seededBody, usageHint], 700);
+            return mergeCopyParts([seededBody, evidence.usageGuidance], 700);
         }
 
         if (
@@ -441,11 +439,16 @@ function buildSectionBody(
         normalizedSectionKey.includes("comment l utiliser") ||
         normalizedSectionKey.includes("utiliser sans erreur")
     ) {
-        return `${usageHint} Si la peau ou le cuir chevelu reagit facilement, commence doucement puis augmente selon le confort ressenti. Le bon angle editorial ici consiste a montrer un ordre simple, une frequence realiste et ce qu'il faut observer avant d'aller plus loin.`;
+        return `${evidence.usageGuidance} Si la peau ou le cuir chevelu reagit facilement, commence doucement puis augmente selon le confort ressenti. Le bon angle editorial ici consiste a montrer un ordre simple, une frequence realiste et ce qu'il faut observer avant d'aller plus loin.`;
     }
 
     if (normalizedSectionKey.includes("les erreurs")) {
-        return `L'erreur la plus courante est d'attendre trop vite un resultat spectaculaire ou d'empiler trop de produits autour de ${product.name}. Mieux vaut une routine courte, reguliere et facile a suivre, avec un vrai point d'attention sur la tolerance, la texture et la frequence d'usage.`;
+        const objections =
+            evidence.objectionChecklist.length > 0
+                ? `Les vrais points a verifier sont ${toReadableList(evidence.objectionChecklist.slice(0, 3))}.`
+                : "Le vrai point d'attention reste la tolerance, la texture et la frequence d'usage.";
+
+        return `L'erreur la plus courante est d'attendre trop vite un resultat spectaculaire ou d'empiler trop de produits autour de ${product.name}. ${objections} Mieux vaut une routine courte, reguliere et facile a suivre.`;
     }
 
     if (normalizedSectionKey.includes("les limites")) {
@@ -462,8 +465,12 @@ function buildSectionBody(
             suggestedAngles.length > 0
                 ? `L'angle le plus prometteur ici reste ${suggestedAngles[0]}.`
                 : "L'angle le plus prometteur ici reste un avis simple et concret.";
+        const clickLine =
+            evidence.clickReasons.length > 0
+                ? `Le clic doit surtout servir a ${toReadableList(evidence.clickReasons.slice(0, 2))}.`
+                : "Le clic doit surtout servir a verifier les avis, la composition, la texture et le prix.";
 
-        return `${draftPack.article.cta}. ${angleLine} Si le produit correspond au besoin que tu veux traiter, le clic vers la fiche doit servir a verifier les avis, la composition, la texture et le prix avant de trancher.`;
+        return `${draftPack.article.cta}. ${angleLine} ${clickLine} Si le produit correspond au besoin que tu veux traiter, c'est cette verification concrete qui justifie le passage vers la fiche Amazon.`;
     }
 
     return `${product.name} doit rester relie a un besoin concret, des limites honnetes et une vraie raison de cliquer.`;
@@ -501,33 +508,36 @@ function buildPinDescription(
     taxonomy: ProductTaxonomyResolution,
     pin: DraftPack["pinDrafts"][number],
 ): string {
-    const signals = extractSignals(product, taxonomy);
-    const signalSummary = signals.slice(0, 3).join(", ");
+    const evidence = buildProductEvidence(product, taxonomy);
+    const signalSummary = evidence.signals.slice(0, 2).join(", ");
+    const fitSummary = evidence.fitProfiles[0] || "un besoin concret";
+    const objectionSummary = evidence.objectionChecklist.slice(0, 2).join(" et ");
+    const clickReason = evidence.clickReasons[0] || "verifier la fiche avant achat";
 
     if (pin.angle.includes("mistake") || pin.angle.includes("erreur")) {
         return mergeCopyParts(
-            [`${product.name}: verifier tolerance, frequence et bon profil avant achat`, signalSummary ? `focus ${signalSummary}` : null],
-            220,
+            [`${product.name}: verifier ${objectionSummary || "la tolerance et la frequence"} avant achat`, signalSummary ? `focus ${signalSummary}` : null],
+            170,
         );
     }
 
     if (pin.angle.includes("result")) {
         return mergeCopyParts(
-            [`${product.name}: utile si le besoin colle vraiment a ${signalSummary || "un besoin concret"}`, pin.cta],
-            220,
+            [`${product.name}: utile si le besoin colle a ${fitSummary}`, clickReason],
+            170,
         );
     }
 
     if (pin.angle.includes("routine")) {
         return mergeCopyParts(
-            [`${product.name}: routine simple autour de ${signalSummary || taxonomy.effectiveClusterRef.replace(/_/g, " ")}`, pin.cta],
-            220,
+            [`${product.name}: routine simple autour de ${signalSummary || taxonomy.effectiveClusterRef.replace(/_/g, " ")}`, evidence.usageGuidance],
+            170,
         );
     }
 
     return mergeCopyParts(
-        [`${product.name}: ${signalSummary || "points utiles"} a verifier avant achat`, pin.cta],
-        220,
+        [`${product.name}: ${signalSummary || "points utiles"} a verifier avant achat`, clickReason],
+        170,
     );
 }
 
