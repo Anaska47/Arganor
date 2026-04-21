@@ -36,6 +36,7 @@ type DraftPack = {
         mode: "ai" | "deterministic";
         provider?: string;
         model?: string;
+        fallbackReason?: string;
     };
 };
 
@@ -64,6 +65,7 @@ type ContentDraft = {
         mode: "ai" | "deterministic";
         provider?: string;
         model?: string;
+        fallbackReason?: string;
     };
 };
 
@@ -693,6 +695,11 @@ function toNonEmptyString(value: unknown, fallback: string): string {
     return typeof value === "string" && value.trim() ? value.trim() : fallback;
 }
 
+function toFallbackReason(error: unknown): string {
+    const message = error instanceof Error ? error.message : String(error);
+    return message.replace(/\s+/g, " ").trim().slice(0, 280);
+}
+
 function sanitizePinContentDrafts(
     value: unknown,
     fallback: ContentDraft["pins"],
@@ -912,7 +919,14 @@ async function maybeGenerateContentDraftWithAi(
         };
     } catch (error) {
         console.warn("[growth-machine] AI content draft generation failed, using deterministic fallback:", error);
-        return fallback;
+        return {
+            ...fallback,
+            generatedAt: new Date().toISOString(),
+            generationMeta: {
+                mode: "deterministic",
+                fallbackReason: toFallbackReason(error),
+            },
+        };
     }
 }
 

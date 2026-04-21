@@ -48,6 +48,7 @@ type DraftPack = {
         mode: "ai" | "deterministic";
         provider?: string;
         model?: string;
+        fallbackReason?: string;
     };
 };
 
@@ -433,6 +434,11 @@ function sanitizePinDrafts(value: unknown, fallback: DraftPack["pinDrafts"]): Dr
     return items.length > 0 ? items : fallback;
 }
 
+function toFallbackReason(error: unknown): string {
+    const message = error instanceof Error ? error.message : String(error);
+    return message.replace(/\s+/g, " ").trim().slice(0, 280);
+}
+
 async function maybeGenerateDraftPackWithAi(
     queueItem: ContentQueueRow,
     product: NonNullable<ReturnType<typeof getProductBySlug>>,
@@ -586,7 +592,14 @@ async function maybeGenerateDraftPackWithAi(
         };
     } catch (error) {
         console.warn("[growth-machine] AI draft pack generation failed, using deterministic fallback:", error);
-        return fallback;
+        return {
+            ...fallback,
+            generatedAt: new Date().toISOString(),
+            generationMeta: {
+                mode: "deterministic",
+                fallbackReason: toFallbackReason(error),
+            },
+        };
     }
 }
 

@@ -44,8 +44,13 @@ type AiRevisionDraft = {
     }>;
 };
 
+type AiRevisionAttempt = {
+    draft: ContentDraft | null;
+    failureReason?: string;
+};
+
 type ProductRecord = NonNullable<ReturnType<typeof getProductBySlug>>;
-const MAX_REVISION_ATTEMPTS = 5;
+const MAX_REVISION_ATTEMPTS = 6;
 
 function toWriterPromptKey(intent: string | null): string {
     if (intent === "routine") {
@@ -98,6 +103,11 @@ function readRevisionAttempts(payload: Record<string, unknown>): number {
 
 function toNonEmptyString(value: unknown, fallback: string): string {
     return typeof value === "string" && value.trim() ? value.trim() : fallback;
+}
+
+function toFallbackReason(error: unknown): string {
+    const message = error instanceof Error ? error.message : String(error);
+    return message.replace(/\s+/g, " ").trim().slice(0, 280);
 }
 
 function uniqueStrings(items: string[]): string[] {
@@ -439,14 +449,18 @@ async function maybeReviseWithAi(
     contentDraft: ContentDraft,
     review: DraftReview,
     writerPrompt: ResolvedPromptVersion,
-): Promise<ContentDraft | null> {
+): Promise<AiRevisionAttempt> {
     if (!hasGrowthAiConfig()) {
-        return null;
+        return {
+            draft: null,
+        };
     }
 
     const product = queueItem.product_ref ? getProductBySlug(queueItem.product_ref) : null;
     if (!product) {
-        return null;
+        return {
+            draft: null,
+        };
     }
 
     const taxonomy = resolveProductTaxonomy(product);
@@ -632,27 +646,32 @@ async function maybeReviseWithAi(
         });
 
         return {
-            post: {
-                slug: safeSlug,
-                title,
-                excerpt: toNonEmptyString(aiPost.excerpt, contentDraft.post.excerpt),
-                metaDescription: toNonEmptyString(aiPost.metaDescription, contentDraft.post.metaDescription),
-                content,
-                category: contentDraft.post.category,
-                relatedProductId: contentDraft.post.relatedProductId,
-                image: postImage,
-            },
-            pins: sanitizePins(result.data.pins, contentDraft.pins, safeSlug),
-            generatedAt: new Date().toISOString(),
-            generationMeta: {
-                mode: "ai",
-                provider: result.provider,
-                model: result.model,
+            draft: {
+                post: {
+                    slug: safeSlug,
+                    title,
+                    excerpt: toNonEmptyString(aiPost.excerpt, contentDraft.post.excerpt),
+                    metaDescription: toNonEmptyString(aiPost.metaDescription, contentDraft.post.metaDescription),
+                    content,
+                    category: contentDraft.post.category,
+                    relatedProductId: contentDraft.post.relatedProductId,
+                    image: postImage,
+                },
+                pins: sanitizePins(result.data.pins, contentDraft.pins, safeSlug),
+                generatedAt: new Date().toISOString(),
+                generationMeta: {
+                    mode: "ai",
+                    provider: result.provider,
+                    model: result.model,
+                },
             },
         };
     } catch (error) {
         console.warn("[growth-machine] AI revision failed, keeping current draft:", error);
-        return null;
+        return {
+            draft: null,
+            failureReason: toFallbackReason(error),
+        };
     }
 }
 
@@ -683,9 +702,8 @@ export async function reviseQueueItem(queueItemId: string): Promise<RevisionResu
         return null;
     }
     const writerPrompt = await resolvePromptVersion("writer", toWriterPromptKey(queueItem.intent));
-    const revisedDraft =
-        (await maybeReviseWithAi(queueItem, contentDraft, review, writerPrompt)) ??
-        buildDeterministicRevisionDraft(queueItem, contentDraft, review, product);
+    const aiRevision = await maybeReviseWithAi(queueItem, contentDraft, review, writerPrompt);
+    const revisedDraft = aiRevision.draft ?? buildDeterministicRevisionDraft(queueItem, contentDraft, review, product);
     const finalizedDraft = enhanceContentDraftSpecificity(
         revisedDraft,
         product,
@@ -703,6 +721,13 @@ export async function reviseQueueItem(queueItemId: string): Promise<RevisionResu
         blockingIssues: review.blockingIssues,
         warnings: review.warnings,
     });
+    const revisionGenerationMeta = finalizedDraft.generationMeta
+        ? { ...finalizedDraft.generationMeta }
+        : { mode: "deterministic" as const };
+
+    if (aiRevision.failureReason) {
+        revisionGenerationMeta.fallbackReason = aiRevision.failureReason;
+    }
 
     const updatedAfterRevision = await updateContentQueue(queueItem.id, {
         payload: {
@@ -721,7 +746,7 @@ export async function reviseQueueItem(queueItemId: string): Promise<RevisionResu
                     version: writerPrompt.version,
                     source: writerPrompt.source,
                 },
-                generationMeta: finalizedDraft.generationMeta ?? null,
+                generationMeta: revisionGenerationMeta,
             },
         },
     });

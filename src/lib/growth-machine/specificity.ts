@@ -27,6 +27,7 @@ type SpecificityDraft = {
         mode: "ai" | "deterministic";
         provider?: string;
         model?: string;
+        fallbackReason?: string;
     };
 };
 
