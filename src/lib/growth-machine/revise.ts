@@ -3,6 +3,7 @@ import "server-only";
 import { getProductBySlug } from "@/lib/data";
 
 import { generateGrowthJson, hasGrowthAiConfig } from "./ai";
+import { getClusterGuardrails } from "./cluster-guardrails";
 import type { ContentDraft } from "./content-runner";
 import { resolveDraftPostImage } from "./post-image";
 import { buildProductEvidence } from "./product-evidence";
@@ -116,6 +117,69 @@ function toWriterPromptKey(intent: string | null): string {
     }
 
     return "buyer-intent-article";
+}
+
+function buildFallbackRevisionCautionSection(product: ProductRecord, clusterRef: string): string {
+    if (clusterRef === "soin_du_visage") {
+        return `${product.name} demande de ralentir si la peau est deja irritee, si plusieurs actifs sont deja en rotation ou si l'inconfort augmente apres application. Le bon reflexe est de simplifier la routine et de verifier la tolerance avant d'insister.`;
+    }
+
+    if (clusterRef === "soin_des_cheveux") {
+        return `${product.name} demande de ralentir si le cuir chevelu est deja reactif, si les racines graissent vite ou si la routine est deja surchargee.`;
+    }
+
+    if (clusterRef === "soin_du_corps") {
+        return `${product.name} demande de ralentir si la peau reste inconfortable, si la texture semble trop riche ou si la routine corps devient trop lourde a tenir.`;
+    }
+
+    return `${product.name} demande de ralentir si l'usage devient inconfortable ou si le besoin principal n'est plus le bon.`;
+}
+
+function buildFallbackRevisionTimingSection(product: ProductRecord, clusterRef: string): string {
+    if (clusterRef === "soin_du_visage") {
+        return `Le bon repere avec ${product.name}, c'est d'observer la peau sur plusieurs applications, puis de juger d'abord le confort, ensuite la regularite, avant d'attendre un vrai resultat visible.`;
+    }
+
+    if (clusterRef === "soin_des_cheveux") {
+        return `Le bon repere reste la regularite et le confort d'usage sur plusieurs semaines, pas une promesse de resultat immediate.`;
+    }
+
+    return `Le bon repere reste la regularite et le confort d'usage sur plusieurs applications, pas une promesse de resultat immediate.`;
+}
+
+function buildFallbackRevisionClickSection(
+    product: ProductRecord,
+    clusterRef: string,
+    evidence: ReturnType<typeof buildProductEvidence>,
+): string {
+    if (clusterRef === "soin_du_visage" && evidence.clickReasons.length > 0) {
+        return evidence.clickReasons
+            .slice(0, 2)
+            .map((reason, index) =>
+                index === 0 ? `Le clic sert d'abord a ${reason}.` : `Il sert aussi a ${reason}.`,
+            )
+            .join(" ");
+    }
+
+    return `${product.name} vaut surtout le clic pour verifier les avis recents, le bon profil d'usage, le prix et la compatibilite avec la routine.`;
+}
+
+function buildFallbackRevisionCta(
+    product: ProductRecord,
+    clusterRef: string,
+    evidence: ReturnType<typeof buildProductEvidence>,
+): string {
+    if (clusterRef === "soin_du_visage") {
+        return `Voir la fiche ${product.name} pour verifier la tolerance, l'ordre d'application, les avis recents et le vrai fit avec votre routine visage avant achat.`;
+    }
+
+    if (clusterRef === "soin_des_cheveux") {
+        return `Voir la fiche ${product.name} pour verifier le vrai fit produit, les avis recents et le bon rythme d'utilisation avant achat.`;
+    }
+
+    return evidence.clickReasons[0]
+        ? `Voir la fiche ${product.name} pour ${evidence.clickReasons[0]} avant achat.`
+        : `Voir la fiche ${product.name} pour verifier le vrai fit produit avant achat.`;
 }
 
 function toQueuePayloadObject(queueItem: ContentQueueRow): Record<string, unknown> {
@@ -522,6 +586,7 @@ async function maybeReviseWithAi(
     }
 
     const taxonomy = resolveProductTaxonomy(product);
+    const clusterGuardrails = getClusterGuardrails(taxonomy.effectiveClusterRef);
     const evidence = buildProductEvidence(product, taxonomy);
     const payload = toQueuePayloadObject(queueItem);
     const draftPack =
@@ -559,6 +624,8 @@ async function maybeReviseWithAi(
                 "Return short structured section bodies that can be assembled into the article.",
                 "The revised draft must feel more product-specific, more useful, less repetitive, and more conversion-aware.",
                 "Address warnings by adding concrete proof, clearer fit, clearer limits, stronger CTA, and better buyer guidance.",
+                clusterGuardrails.instruction,
+                "Each section must add net new information. Do not repeat the same proof point, social proof, price cue, or CTA logic across multiple sections unless the decision angle clearly changes.",
                 "If the product is in the hair cluster, naturally include semantic variants such as cuir chevelu, pousse cheveux, huile romarin menthe, fortifiant capillaire, massage du cuir chevelu, et routine capillaire when they fit the facts provided.",
                 "Make the article more concrete on application rhythm, fit profiles, and what to verify before clicking.",
                 "Make the three Pinterest pins clearly distinct: one proof angle, one objection angle, one fit angle.",
@@ -571,7 +638,7 @@ async function maybeReviseWithAi(
                         title: queueItem.title,
                         topic: queueItem.topic,
                         intent: queueItem.intent,
-                        clusterRef: queueItem.cluster_ref,
+                        clusterRef: taxonomy.effectiveClusterRef,
                     },
                     product: {
                         id: product.id,
@@ -593,6 +660,10 @@ async function maybeReviseWithAi(
                         effectiveClusterRef: taxonomy.effectiveClusterRef,
                         confidence: taxonomy.confidence,
                         rationale: taxonomy.rationale,
+                    },
+                    clusterGuardrails: {
+                        focusTerms: clusterGuardrails.focusTerms,
+                        avoidTerms: clusterGuardrails.avoidTerms,
                     },
                     evidence: {
                         signals: evidence.signals,
@@ -687,11 +758,11 @@ async function maybeReviseWithAi(
             ),
             cautionSection: toNonEmptyString(
                 aiPost.cautionSection,
-                `${product.name} demande de ralentir si le cuir chevelu est deja reactif, si les racines graissent vite ou si la routine est deja surchargee.`,
+                buildFallbackRevisionCautionSection(product, taxonomy.effectiveClusterRef),
             ),
             timingSection: toNonEmptyString(
                 aiPost.timingSection,
-                `Le bon repere reste la regularite et le confort d'usage sur plusieurs semaines, pas une promesse de resultat immediate.`,
+                buildFallbackRevisionTimingSection(product, taxonomy.effectiveClusterRef),
             ),
             usageSection: toNonEmptyString(
                 aiPost.usageSection,
@@ -699,11 +770,11 @@ async function maybeReviseWithAi(
             ),
             clickSection: toNonEmptyString(
                 aiPost.clickSection,
-                `${product.name} vaut surtout le clic pour verifier les avis recents, le bon profil d'usage, le prix et la compatibilite avec la routine.`,
+                buildFallbackRevisionClickSection(product, taxonomy.effectiveClusterRef, evidence),
             ),
             cta: toNonEmptyString(
                 aiPost.cta,
-                `Voir la fiche ${product.name} pour verifier le vrai fit produit, les avis recents et le bon rythme d'utilisation avant achat.`,
+                buildFallbackRevisionCta(product, taxonomy.effectiveClusterRef, evidence),
             ),
         });
 

@@ -5,6 +5,7 @@ import { getProductBySlug as getCatalogProductBySlug, type Product } from "@/lib
 import { readRuntimePosts, readRuntimeProducts } from "@/lib/runtime-content-store";
 
 import { generateGrowthJson, hasGrowthAiConfig } from "./ai";
+import { findForeignClusterTerms } from "./cluster-guardrails";
 import { resolvePromptVersion, type ResolvedPromptVersion } from "./prompts";
 import { resolveProductTaxonomy, shouldWarnForTaxonomyResolution } from "./taxonomy";
 import { getContentQueueItem, listContentQueue, updateContentQueue, type ContentQueueRow } from "./store";
@@ -129,6 +130,13 @@ function buildRuleBasedReview(
 ): DraftReview {
     const blockingIssues: string[] = [];
     const warnings: string[] = [];
+    const reviewCorpus = [
+        contentDraft.post.title,
+        contentDraft.post.excerpt,
+        contentDraft.post.metaDescription,
+        contentDraft.post.content,
+        ...contentDraft.pins.flatMap((pin) => [pin.hook, pin.title, pin.description, pin.cta]),
+    ].join(" ");
 
     if (contentDraft.post.title.trim().length < 20) {
         blockingIssues.push("Le titre du brouillon est trop court.");
@@ -168,6 +176,13 @@ function buildRuleBasedReview(
         if (taxonomy.confidence !== "low" && contentDraft.post.category !== taxonomy.effectiveCategory) {
             blockingIssues.push(
                 `Le brouillon utilise la categorie "${contentDraft.post.category}" alors que la taxonomie resolue attend "${taxonomy.effectiveCategory}". Regenerer le draft avant promotion.`,
+            );
+        }
+
+        const foreignClusterTerms = findForeignClusterTerms(reviewCorpus, taxonomy.effectiveClusterRef).slice(0, 4);
+        if (foreignClusterTerms.length > 0) {
+            blockingIssues.push(
+                `Le brouillon emploie un vocabulaire hors cluster (${foreignClusterTerms.join(", ")}), ce qui casse la credibilite editoriale et doit etre corrige avant promotion.`,
             );
         }
 

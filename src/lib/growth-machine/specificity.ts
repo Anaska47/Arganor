@@ -141,10 +141,27 @@ function formatPrice(price: number): string | null {
     return `${price.toFixed(2)} EUR`;
 }
 
+function signalsMatchAny(signals: string[], patterns: RegExp[]): boolean {
+    const corpus = normalizeForDedup(signals.join(" "));
+    return patterns.some((pattern) => pattern.test(corpus));
+}
+
+function isFaceHydrationSignal(signals: string[]): boolean {
+    return signalsMatchAny(signals, [/\bmucin\b/, /\bhydrat/, /\bbarriere\b/, /\bceramide\b/, /\bpeau seche\b/, /\bglow\b/]);
+}
+
+function isFaceImperfectionSignal(signals: string[]): boolean {
+    return signalsMatchAny(signals, [/\bniacinamide\b/, /\bbha\b/, /\baha\b/, /\bpores?\b/, /\bbrillance\b/, /\bimperfections?\b/, /\bsebum\b/]);
+}
+
 function buildFitSentence(product: Product, clusterRef: string, signals: string[]): string {
     const keySignal = signals.slice(0, 3).join(", ");
 
     if (clusterRef === "soin_du_visage") {
+        if (isFaceHydrationSignal(signals) && !isFaceImperfectionSignal(signals)) {
+            return `${product.name} merite surtout le clic si la peau manque d'hydratation, de confort ou de soutien de barriere cutanee. Le produit devient plus pertinent quand le besoin principal colle vraiment a ${keySignal || "une routine hydratation simple"} plutot qu'a la recherche d'un effet spectaculaire des la premiere application.`;
+        }
+
         return `${product.name} merite surtout le clic si la peau cumule pores visibles, brillance, grain irregulier ou petites imperfections recurrentes. Le produit devient plus pertinent quand le besoin principal colle vraiment a ${keySignal || "un usage exfoliant ou regulateur"} plutot qu'a une recherche d'apaisement pur.`;
     }
 
@@ -161,6 +178,10 @@ function buildFitSentence(product: Product, clusterRef: string, signals: string[
 
 function buildShortFitLine(product: Product, clusterRef: string, signals: string[]): string {
     if (clusterRef === "soin_du_visage") {
+        if (isFaceHydrationSignal(signals) && !isFaceImperfectionSignal(signals)) {
+            return `${product.name}: utile si la peau manque surtout d'hydratation, de confort ou d'un soutien de barriere cutanee.`;
+        }
+
         return `${product.name}: bon choix si pores, brillance et imperfections reviennent souvent.`;
     }
 
@@ -248,6 +269,14 @@ function buildReviewFocus(reviewWarnings: string[], clusterRef: string): string 
 
 function buildShortExcerpt(product: Product, clusterRef: string, socialProof: string | null): string {
     if (clusterRef === "soin_du_visage") {
+        const signals = buildProductEvidence(product).signals;
+        if (isFaceHydrationSignal(signals) && !isFaceImperfectionSignal(signals)) {
+            return mergeCopyParts(
+                [`${product.name}: hydratation, tolerance et vrai fit pour peau seche, terne ou inconfortable`, socialProof],
+                180,
+            );
+        }
+
         return mergeCopyParts(
             [`${product.name}: a qui il convient vraiment pour pores, brillance et imperfections`, socialProof],
             180,
@@ -293,7 +322,7 @@ function buildClusterSpecificCta(product: Product, clusterRef: string): string {
     }
 
     if (clusterRef === "soin_du_visage") {
-        return `Voir la fiche ${product.name} pour verifier la tolerance, la frequence d'usage et le vrai fit avec votre type de peau avant achat.`;
+        return `Voir la fiche ${product.name} pour verifier la tolerance, l'ordre d'application et le vrai fit avec votre type de peau avant achat.`;
     }
 
     return `Voir la fiche ${product.name} pour verifier les ingredients, la frequence d'usage, les avis recents et la compatibilite avec votre routine.`;
@@ -382,7 +411,7 @@ export function enhanceContentDraftSpecificity(
         .replace(/\s+/g, " ")
         .trim();
     const strongerCta = buildClusterSpecificCta(product, clusterRef);
-    const shouldAppendDetailedSections = draft.generationMeta?.mode !== "ai" || reviewWarnings.length > 0;
+    const shouldAppendDetailedSections = draft.generationMeta?.mode !== "ai";
 
     let nextContent = replaceFinalCta(draft.post.content, strongerCta);
 

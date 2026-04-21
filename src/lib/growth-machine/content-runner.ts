@@ -4,6 +4,7 @@ import { getBlogPosts } from "@/lib/blog";
 import { getProductBySlug } from "@/lib/data";
 
 import { generateGrowthJson, hasGrowthAiConfig } from "./ai";
+import { getClusterGuardrails } from "./cluster-guardrails";
 import { buildProductEvidence } from "./product-evidence";
 import { resolveDraftPostImage } from "./post-image";
 import { resolvePromptVersion, type ResolvedPromptVersion } from "./prompts";
@@ -835,6 +836,7 @@ async function maybeGenerateContentDraftWithAi(
         const productProofPoints = buildProductProofPoints(product, taxonomy);
         const buyerObjections = buildBuyerObjections(product, taxonomy);
         const postImage = resolveDraftPostImage(product);
+        const clusterGuardrails = getClusterGuardrails(taxonomy.effectiveClusterRef);
 
         const result = await generateGrowthJson<AiContentDraft>({
             systemPrompt: [
@@ -849,6 +851,8 @@ async function maybeGenerateContentDraftWithAi(
                 "Use only the provided product facts. Never invent ingredients, percentages, lab results, or personal experience.",
                 "The article must feel specific to the product: cite proof points, buyer objections, realistic limits, usage cues, and a real reason to click.",
                 "Include at least one comparison or decision framing so the reader understands when this product is a good fit and when it is not.",
+                clusterGuardrails.instruction,
+                "Each section body must add new decision value. Do not repeat the same proof point, price cue, or social proof across the intro, section bodies, and CTA.",
                 "The CTA must create qualified click intent, not vague curiosity.",
                 "Do not mention internal systems, AI, or placeholders.",
             ].join("\n\n"),
@@ -883,6 +887,10 @@ async function maybeGenerateContentDraftWithAi(
                         effectiveClusterRef: taxonomy.effectiveClusterRef,
                         confidence: taxonomy.confidence,
                         rationale: taxonomy.rationale,
+                    },
+                    clusterGuardrails: {
+                        focusTerms: clusterGuardrails.focusTerms,
+                        avoidTerms: clusterGuardrails.avoidTerms,
                     },
                     productProofPoints,
                     buyerObjections,
