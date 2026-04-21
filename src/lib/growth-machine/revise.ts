@@ -4,6 +4,7 @@ import { getProductBySlug } from "@/lib/data";
 
 import { generateGrowthJson, hasGrowthAiConfig } from "./ai";
 import type { ContentDraft } from "./content-runner";
+import { resolveDraftPostImage } from "./post-image";
 import { resolvePromptVersion, type ResolvedPromptVersion } from "./prompts";
 import { reviewQueueItem, type DraftReview, type ReviewResult } from "./review";
 import { enhanceContentDraftSpecificity } from "./specificity";
@@ -382,6 +383,7 @@ async function maybeReviseWithAi(
         : [];
 
     try {
+        const postImage = resolveDraftPostImage(product);
         const result = await generateGrowthJson<AiRevisionDraft>({
             systemPrompt: [
                 "You are the Arganor senior conversion editor.",
@@ -413,7 +415,7 @@ async function maybeReviseWithAi(
                         price: product.price,
                         rating: product.rating,
                         reviews: product.reviews,
-                        image: product.image,
+                        image: postImage,
                     },
                     taxonomy: {
                         effectiveCategory: taxonomy.effectiveCategory,
@@ -476,7 +478,7 @@ async function maybeReviseWithAi(
                 content: toNonEmptyString(aiPost.content, contentDraft.post.content),
                 category: toNonEmptyString(aiPost.category, contentDraft.post.category),
                 relatedProductId: contentDraft.post.relatedProductId,
-                image: contentDraft.post.image,
+                image: postImage,
             },
             pins: sanitizePins(result.data.pins, contentDraft.pins, safeSlug),
             generatedAt: new Date().toISOString(),
