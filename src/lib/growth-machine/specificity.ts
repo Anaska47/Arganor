@@ -91,11 +91,21 @@ function mergeCopyParts(parts: Array<string | null | undefined>, maxLength: numb
             continue;
         }
 
+        const sentence = `${cleaned}.`;
+        const candidate = values.length > 0 ? `${values.join(" ")} ${sentence}` : sentence;
+        if (candidate.length > maxLength) {
+            if (values.length === 0) {
+                return clampText(sentence, maxLength);
+            }
+
+            break;
+        }
+
         seen.add(normalized);
-        values.push(cleaned);
+        values.push(sentence);
     }
 
-    return clampText(`${values.join(". ")}.`, maxLength);
+    return values.join(" ");
 }
 
 function appendSectionIfMissing(content: string, heading: string, body: string): string {

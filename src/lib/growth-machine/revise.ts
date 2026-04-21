@@ -39,7 +39,7 @@ type AiRevisionDraft = {
 };
 
 type ProductRecord = NonNullable<ReturnType<typeof getProductBySlug>>;
-const MAX_REVISION_ATTEMPTS = 3;
+const MAX_REVISION_ATTEMPTS = 4;
 
 function toWriterPromptKey(intent: string | null): string {
     if (intent === "routine") {
@@ -155,11 +155,21 @@ function mergeCopyParts(parts: Array<string | null | undefined>, maxLength: numb
             continue;
         }
 
+        const sentence = `${cleaned}.`;
+        const candidate = values.length > 0 ? `${values.join(" ")} ${sentence}` : sentence;
+        if (candidate.length > maxLength) {
+            if (values.length === 0) {
+                return clampText(sentence, maxLength);
+            }
+
+            break;
+        }
+
         seen.add(normalized);
-        values.push(cleaned);
+        values.push(sentence);
     }
 
-    return clampText(`${values.join(". ")}.`, maxLength);
+    return values.join(" ");
 }
 
 function buildMarkdownBulletList(items: string[]): string {
