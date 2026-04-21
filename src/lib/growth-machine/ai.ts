@@ -25,6 +25,8 @@ type GenerateGrowthJsonResult<T> = {
     model: string;
 };
 
+type JsonSchemaDefinition = NonNullable<GenerateGrowthJsonOptions["jsonSchema"]>;
+
 const OPENAI_API_KEY_ENV_CANDIDATES = ["OPENAI_API_KEY", "ARGANOR_OPENAI_API_KEY"];
 const OPENAI_MODEL_ENV_CANDIDATES = ["ARGANOR_OPENAI_MODEL", "OPENAI_MODEL"];
 const OPENAI_BASE_URL_ENV = "OPENAI_BASE_URL";
@@ -91,30 +93,28 @@ function extractJsonObject(raw: string): string {
     throw new Error("[growth-ai] Model response did not contain a JSON object.");
 }
 
-export function getGrowthAiStatus(): GrowthAiStatus {
-    const apiKey = getOpenAiApiKey();
-    const explicitToggle = parseBooleanEnv(process.env[ARGANOR_ENABLE_AI_ENV]);
-    const enabled = explicitToggle === false ? false : Boolean(apiKey);
+function buildResponseFormat(jsonSchema?: JsonSchemaDefinition) {
+    if (jsonSchema) {
+        return {
+            type: "json_schema" as const,
+            json_schema: {
+                name: jsonSchema.name,
+                strict: true,
+                schema: jsonSchema.schema,
+            },
+        };
+    }
 
     return {
-        enabled,
-        provider: "openai",
-        model: getOpenAiModel(),
+        type: "json_object" as const,
     };
 }
 
-export function hasGrowthAiConfig(): boolean {
-    return getGrowthAiStatus().enabled;
-}
-
-export async function generateGrowthJson<T>(options: GenerateGrowthJsonOptions): Promise<GenerateGrowthJsonResult<T>> {
-    const apiKey = getOpenAiApiKey();
-    const status = getGrowthAiStatus();
-
-    if (!status.enabled || !apiKey) {
-        throw new Error("[growth-ai] AI generation is disabled or missing OPENAI_API_KEY.");
-    }
-
+async function requestGrowthJsonText(
+    apiKey: string,
+    status: GrowthAiStatus,
+    options: GenerateGrowthJsonOptions,
+): Promise<string> {
     const response = await fetch(`${getOpenAiBaseUrl()}/chat/completions`, {
         method: "POST",
         headers: {
@@ -125,18 +125,7 @@ export async function generateGrowthJson<T>(options: GenerateGrowthJsonOptions):
             model: status.model,
             temperature: options.temperature ?? 0.4,
             max_completion_tokens: options.maxOutputTokens ?? 1600,
-            response_format: options.jsonSchema
-                ? {
-                      type: "json_schema",
-                      json_schema: {
-                          name: options.jsonSchema.name,
-                          strict: true,
-                          schema: options.jsonSchema.schema,
-                      },
-                  }
-                : {
-                      type: "json_object",
-                  },
+            response_format: buildResponseFormat(options.jsonSchema),
             messages: [
                 {
                     role: "system",
@@ -178,7 +167,73 @@ export async function generateGrowthJson<T>(options: GenerateGrowthJsonOptions):
         throw new Error("[growth-ai] OpenAI returned an empty completion.");
     }
 
-    const data = JSON.parse(extractJsonObject(text)) as T;
+    return text;
+}
+
+async function repairJsonWithModel(
+    apiKey: string,
+    status: GrowthAiStatus,
+    invalidJson: string,
+    jsonSchema: JsonSchemaDefinition,
+): Promise<string> {
+    return requestGrowthJsonText(apiKey, status, {
+        systemPrompt: [
+            "You repair malformed JSON.",
+            "Return valid JSON only.",
+            "Do not add commentary.",
+            "Do not change the meaning beyond syntax repair and strict schema alignment.",
+        ].join("\n\n"),
+        userPrompt: JSON.stringify(
+            {
+                invalidJson,
+                expectedSchema: jsonSchema.schema,
+            },
+            null,
+            2,
+        ),
+        temperature: 0,
+        maxOutputTokens: 1800,
+        jsonSchema,
+    });
+}
+
+export function getGrowthAiStatus(): GrowthAiStatus {
+    const apiKey = getOpenAiApiKey();
+    const explicitToggle = parseBooleanEnv(process.env[ARGANOR_ENABLE_AI_ENV]);
+    const enabled = explicitToggle === false ? false : Boolean(apiKey);
+
+    return {
+        enabled,
+        provider: "openai",
+        model: getOpenAiModel(),
+    };
+}
+
+export function hasGrowthAiConfig(): boolean {
+    return getGrowthAiStatus().enabled;
+}
+
+export async function generateGrowthJson<T>(options: GenerateGrowthJsonOptions): Promise<GenerateGrowthJsonResult<T>> {
+    const apiKey = getOpenAiApiKey();
+    const status = getGrowthAiStatus();
+
+    if (!status.enabled || !apiKey) {
+        throw new Error("[growth-ai] AI generation is disabled or missing OPENAI_API_KEY.");
+    }
+
+    const text = await requestGrowthJsonText(apiKey, status, options);
+
+    let data: T;
+    try {
+        data = JSON.parse(extractJsonObject(text)) as T;
+    } catch (error) {
+        if (!options.jsonSchema) {
+            throw error;
+        }
+
+        const repairedText = await repairJsonWithModel(apiKey, status, text, options.jsonSchema);
+        data = JSON.parse(extractJsonObject(repairedText)) as T;
+    }
 
     return {
         data,
