@@ -302,7 +302,15 @@ function buildShortExcerpt(product: Product, clusterRef: string, socialProof: st
 
 function buildShortMetaDescription(product: Product, clusterRef: string): string {
     if (clusterRef === "soin_du_visage") {
-        return clampText(`${product.name} : points forts, limites, tolerance et vrai fit produit avant achat.`, 160);
+        const signals = buildProductEvidence(product).signals;
+        if (isFaceHydrationSignal(signals) && !isFaceImperfectionSignal(signals)) {
+            return clampText(
+                `${product.name} : verifier tolerance, texture legere, ordre d'application et vrai fit avant d'ajouter cette essence a votre routine visage.`,
+                160,
+            );
+        }
+
+        return clampText(`${product.name} : verifier tolerance, texture, limites et vrai fit produit avant achat.`, 160);
     }
 
     if (clusterRef === "soin_des_cheveux") {
@@ -318,14 +326,14 @@ function buildShortMetaDescription(product: Product, clusterRef: string): string
 
 function buildClusterSpecificCta(product: Product, clusterRef: string): string {
     if (clusterRef === "soin_des_cheveux") {
-        return `Voir la fiche ${product.name} pour verifier si cette huile romarin menthe convient a votre type de cuir chevelu, a votre frequence de lavage et a votre routine pousse cheveux.`;
+        return `Ouvrir la fiche ${product.name} pour confirmer rapidement si la frequence d'usage, les avis et le vrai besoin cuir chevelu justifient une place dans votre routine.`;
     }
 
     if (clusterRef === "soin_du_visage") {
-        return `Voir la fiche ${product.name} pour verifier la tolerance, l'ordre d'application et le vrai fit avec votre type de peau avant achat.`;
+        return `Ouvrir la fiche ${product.name} pour confirmer rapidement si la texture, les avis et le prix justifient vraiment une place dans votre routine visage.`;
     }
 
-    return `Voir la fiche ${product.name} pour verifier les ingredients, la frequence d'usage, les avis recents et la compatibilite avec votre routine.`;
+    return `Ouvrir la fiche ${product.name} pour confirmer rapidement si la texture, les avis recents et le vrai besoin justifient une place dans votre routine.`;
 }
 
 function buildUsageGuidanceSection(product: Product, clusterRef: string, evidence: ReturnType<typeof buildProductEvidence>): string {
@@ -469,7 +477,7 @@ export function enhanceContentDraftSpecificity(
                         180,
                     ),
                     imagePrompt: buildVisualBrief(product, signals),
-                    cta: "Verifier fiche + avis",
+                    cta: "Comparer fiche + avis",
                 };
             }
 
@@ -486,7 +494,7 @@ export function enhanceContentDraftSpecificity(
                         180,
                     ),
                     imagePrompt: `${buildVisualBrief(product, signals)} avec angle checklist avant achat`,
-                    cta: "Voir les points a verifier",
+                    cta: "Verifier tolerance + routine",
                 };
             }
 
@@ -502,7 +510,7 @@ export function enhanceContentDraftSpecificity(
                     180,
                 ),
                 imagePrompt: `${buildVisualBrief(product, signals)} avec angle comparaison et fit produit`,
-                cta: "Voir si le produit vous convient",
+                cta: "Confirmer le bon profil",
             };
         }),
     };

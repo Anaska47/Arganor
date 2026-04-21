@@ -408,7 +408,7 @@ export async function reviewQueueItem(queueItemId: string): Promise<ReviewResult
         reviewedAt: review.reviewedAt,
     };
 
-    const nextStatus = review.verdict === "rejected" ? "failed" : queueItem.status;
+    const nextStatus = review.verdict === "rejected" ? "failed" : "draft";
 
     const updatedItem = await updateContentQueue(queueItem.id, {
         status: nextStatus,
