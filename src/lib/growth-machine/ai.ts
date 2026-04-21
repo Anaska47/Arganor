@@ -13,6 +13,10 @@ type GenerateGrowthJsonOptions = {
     userPrompt: string;
     temperature?: number;
     maxOutputTokens?: number;
+    jsonSchema?: {
+        name: string;
+        schema: Record<string, unknown>;
+    };
 };
 
 type GenerateGrowthJsonResult<T> = {
@@ -121,9 +125,18 @@ export async function generateGrowthJson<T>(options: GenerateGrowthJsonOptions):
             model: status.model,
             temperature: options.temperature ?? 0.4,
             max_completion_tokens: options.maxOutputTokens ?? 1600,
-            response_format: {
-                type: "json_object",
-            },
+            response_format: options.jsonSchema
+                ? {
+                      type: "json_schema",
+                      json_schema: {
+                          name: options.jsonSchema.name,
+                          strict: true,
+                          schema: options.jsonSchema.schema,
+                      },
+                  }
+                : {
+                      type: "json_object",
+                  },
             messages: [
                 {
                     role: "system",

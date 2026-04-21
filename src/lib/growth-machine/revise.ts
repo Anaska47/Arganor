@@ -52,6 +52,64 @@ type AiRevisionAttempt = {
 type ProductRecord = NonNullable<ReturnType<typeof getProductBySlug>>;
 const MAX_REVISION_ATTEMPTS = 6;
 
+const AI_REVISION_SCHEMA: Record<string, unknown> = {
+    type: "object",
+    additionalProperties: false,
+    required: ["post", "pins"],
+    properties: {
+        post: {
+            type: "object",
+            additionalProperties: false,
+            required: [
+                "slug",
+                "title",
+                "excerpt",
+                "metaDescription",
+                "intro",
+                "verificationLead",
+                "fitSection",
+                "cautionSection",
+                "timingSection",
+                "usageSection",
+                "clickSection",
+                "cta",
+            ],
+            properties: {
+                slug: { type: "string" },
+                title: { type: "string" },
+                excerpt: { type: "string" },
+                metaDescription: { type: "string" },
+                intro: { type: "string" },
+                verificationLead: { type: "string" },
+                fitSection: { type: "string" },
+                cautionSection: { type: "string" },
+                timingSection: { type: "string" },
+                usageSection: { type: "string" },
+                clickSection: { type: "string" },
+                cta: { type: "string" },
+            },
+        },
+        pins: {
+            type: "array",
+            minItems: 3,
+            maxItems: 5,
+            items: {
+                type: "object",
+                additionalProperties: false,
+                required: ["angle", "hook", "title", "description", "imagePrompt", "cta"],
+                properties: {
+                    angle: { type: "string" },
+                    hook: { type: "string" },
+                    title: { type: "string" },
+                    description: { type: "string" },
+                    imagePrompt: { type: "string" },
+                    cta: { type: "string" },
+                },
+            },
+        },
+    },
+};
+
 function toWriterPromptKey(intent: string | null): string {
     if (intent === "routine") {
         return "routine-article";
@@ -595,6 +653,10 @@ async function maybeReviseWithAi(
             ),
             temperature: 0.3,
             maxOutputTokens: 1400,
+            jsonSchema: {
+                name: "arganor_revision_draft",
+                schema: AI_REVISION_SCHEMA,
+            },
         });
 
         const aiPost = result.data.post || {};

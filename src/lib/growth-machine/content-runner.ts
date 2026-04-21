@@ -75,6 +75,60 @@ type PreparedContentDraftResult = {
     writerPrompt: ResolvedPromptVersion;
 };
 
+const AI_CONTENT_DRAFT_SCHEMA: Record<string, unknown> = {
+    type: "object",
+    additionalProperties: false,
+    required: ["post", "sectionBodies", "pins"],
+    properties: {
+        post: {
+            type: "object",
+            additionalProperties: false,
+            required: ["slug", "title", "excerpt", "metaDescription", "intro", "category", "finalCta"],
+            properties: {
+                slug: { type: "string" },
+                title: { type: "string" },
+                excerpt: { type: "string" },
+                metaDescription: { type: "string" },
+                intro: { type: "string" },
+                category: { type: "string" },
+                finalCta: { type: "string" },
+            },
+        },
+        sectionBodies: {
+            type: "array",
+            minItems: 3,
+            maxItems: 6,
+            items: {
+                type: "object",
+                additionalProperties: false,
+                required: ["title", "body"],
+                properties: {
+                    title: { type: "string" },
+                    body: { type: "string" },
+                },
+            },
+        },
+        pins: {
+            type: "array",
+            minItems: 3,
+            maxItems: 5,
+            items: {
+                type: "object",
+                additionalProperties: false,
+                required: ["angle", "hook", "title", "description", "imagePrompt", "cta"],
+                properties: {
+                    angle: { type: "string" },
+                    hook: { type: "string" },
+                    title: { type: "string" },
+                    description: { type: "string" },
+                    imagePrompt: { type: "string" },
+                    cta: { type: "string" },
+                },
+            },
+        },
+    },
+};
+
 function slugify(value: string): string {
     return value
         .normalize("NFD")
@@ -875,6 +929,10 @@ async function maybeGenerateContentDraftWithAi(
             ),
             temperature: 0.35,
             maxOutputTokens: 1800,
+            jsonSchema: {
+                name: "arganor_content_draft",
+                schema: AI_CONTENT_DRAFT_SCHEMA,
+            },
         });
 
         const aiPost = result.data.post || {};

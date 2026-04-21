@@ -36,6 +36,29 @@ type ReviewResult = {
     qaPrompt: ResolvedPromptVersion;
 };
 
+const AI_REVIEW_SCHEMA: Record<string, unknown> = {
+    type: "object",
+    additionalProperties: false,
+    required: ["verdict", "rationale", "blockingIssues", "warnings"],
+    properties: {
+        verdict: {
+            type: "string",
+            enum: ["approved", "needs_revision", "rejected"],
+        },
+        rationale: {
+            type: "string",
+        },
+        blockingIssues: {
+            type: "array",
+            items: { type: "string" },
+        },
+        warnings: {
+            type: "array",
+            items: { type: "string" },
+        },
+    },
+};
+
 type ContentDraft = {
     post: {
         slug: string;
@@ -265,6 +288,10 @@ async function maybeGenerateAiReview(
             ),
             temperature: 0.2,
             maxOutputTokens: 1200,
+            jsonSchema: {
+                name: "arganor_review_result",
+                schema: AI_REVIEW_SCHEMA,
+            },
         });
 
         return {

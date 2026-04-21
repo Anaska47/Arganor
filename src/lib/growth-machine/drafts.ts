@@ -59,6 +59,50 @@ type PreparedDraftResult = {
     draftPack: DraftPack;
 };
 
+const AI_DRAFT_PACK_SCHEMA: Record<string, unknown> = {
+    type: "object",
+    additionalProperties: false,
+    required: ["recommendedPostRef", "article", "pinDrafts"],
+    properties: {
+        recommendedPostRef: {
+            type: "string",
+        },
+        article: {
+            type: "object",
+            additionalProperties: false,
+            required: ["title", "excerpt", "metaDescription", "sections", "cta"],
+            properties: {
+                title: { type: "string" },
+                excerpt: { type: "string" },
+                metaDescription: { type: "string" },
+                sections: {
+                    type: "array",
+                    minItems: 3,
+                    maxItems: 6,
+                    items: { type: "string" },
+                },
+                cta: { type: "string" },
+            },
+        },
+        pinDrafts: {
+            type: "array",
+            minItems: 3,
+            maxItems: 5,
+            items: {
+                type: "object",
+                additionalProperties: false,
+                required: ["angle", "hook", "visualDirection", "cta"],
+                properties: {
+                    angle: { type: "string" },
+                    hook: { type: "string" },
+                    visualDirection: { type: "string" },
+                    cta: { type: "string" },
+                },
+            },
+        },
+    },
+};
+
 function slugifySegment(value: string): string {
     return value
         .normalize("NFD")
@@ -553,6 +597,10 @@ async function maybeGenerateDraftPackWithAi(
             ),
             temperature: 0.7,
             maxOutputTokens: 1400,
+            jsonSchema: {
+                name: "arganor_draft_pack",
+                schema: AI_DRAFT_PACK_SCHEMA,
+            },
         });
 
         const aiArticle = result.data.article || {};
