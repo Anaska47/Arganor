@@ -5,6 +5,7 @@ import { getProductBySlug } from "@/lib/data";
 import { generateGrowthJson, hasGrowthAiConfig } from "./ai";
 import type { ContentDraft } from "./content-runner";
 import { resolveDraftPostImage } from "./post-image";
+import { buildProductEvidence } from "./product-evidence";
 import { resolvePromptVersion, type ResolvedPromptVersion } from "./prompts";
 import { reviewQueueItem, type DraftReview, type ReviewResult } from "./review";
 import { enhanceContentDraftSpecificity } from "./specificity";
@@ -373,6 +374,7 @@ async function maybeReviseWithAi(
     }
 
     const taxonomy = resolveProductTaxonomy(product);
+    const evidence = buildProductEvidence(product, taxonomy);
     const payload = toQueuePayloadObject(queueItem);
     const draftPack =
         payload.draftPack && typeof payload.draftPack === "object" && !Array.isArray(payload.draftPack)
@@ -392,6 +394,10 @@ async function maybeReviseWithAi(
                 "Return JSON only.",
                 "The revised draft must feel more product-specific, more useful, less repetitive, and more conversion-aware.",
                 "Address warnings by adding concrete proof, clearer fit, clearer limits, stronger CTA, and better buyer guidance.",
+                "If the product is in the hair cluster, naturally include semantic variants such as cuir chevelu, pousse cheveux, huile romarin menthe, fortifiant capillaire, massage du cuir chevelu, et routine capillaire when they fit the facts provided.",
+                "Make the article more concrete on application rhythm, fit profiles, and what to verify before clicking.",
+                "Make the three Pinterest pins clearly distinct: one proof angle, one objection angle, one fit angle.",
+                "The final CTA must explain the immediate benefit of the click.",
                 "Keep the tone premium, honest, and practical. Do not mention review comments, internal workflow, or AI.",
             ].join("\n\n"),
             userPrompt: JSON.stringify(
@@ -423,6 +429,16 @@ async function maybeReviseWithAi(
                         confidence: taxonomy.confidence,
                         rationale: taxonomy.rationale,
                     },
+                    evidence: {
+                        signals: evidence.signals,
+                        fitProfiles: evidence.fitProfiles,
+                        clickReasons: evidence.clickReasons,
+                        objectionChecklist: evidence.objectionChecklist,
+                        usageGuidance: evidence.usageGuidance,
+                        socialProofLabel: evidence.socialProofLabel,
+                        priceLabel: evidence.priceLabel,
+                        qualitySummary: evidence.qualitySummary,
+                    },
                     draftPack,
                     suggestedAngles,
                     currentDraft: contentDraft,
@@ -437,6 +453,8 @@ async function maybeReviseWithAi(
                         fixWarnings: true,
                         strengthenClickIntent: true,
                         increaseSpecificity: true,
+                        distinctPinAngles: true,
+                        includeConcreteUsage: true,
                     },
                     expectedShape: {
                         post: {
