@@ -179,6 +179,22 @@ function trimTrailingPunctuation(value: string): string {
     return value.trim().replace(/[.!?\s]+$/g, "");
 }
 
+function trimDanglingWords(value: string): string {
+    const stopWords = new Set(["a", "au", "aux", "de", "des", "du", "et", "la", "le", "les", "ou", "si", "un", "une"]);
+    const words = value.trim().split(/\s+/).filter(Boolean);
+
+    while (words.length > 1) {
+        const lastWord = words[words.length - 1]?.toLowerCase();
+        if (!lastWord || (!stopWords.has(lastWord) && lastWord.length > 2)) {
+            break;
+        }
+
+        words.pop();
+    }
+
+    return words.join(" ");
+}
+
 function clampText(value: string, maxLength: number): string {
     if (value.length <= maxLength) {
         return value;
@@ -187,8 +203,9 @@ function clampText(value: string, maxLength: number): string {
     const trimmed = value.slice(0, Math.max(0, maxLength - 1));
     const safeBreak = Math.max(trimmed.lastIndexOf(" "), trimmed.lastIndexOf(","));
     const candidate = safeBreak > 80 ? trimmed.slice(0, safeBreak) : trimmed;
+    const cleaned = trimDanglingWords(candidate.trim().replace(/[,:;\s]+$/g, ""));
 
-    return `${candidate.trim().replace(/[,:;\s]+$/g, "")}.`;
+    return `${cleaned}.`;
 }
 
 function mergeCopyParts(parts: Array<string | null | undefined>, maxLength: number): string {
@@ -206,11 +223,21 @@ function mergeCopyParts(parts: Array<string | null | undefined>, maxLength: numb
             continue;
         }
 
+        const sentence = `${cleaned}.`;
+        const candidate = values.length > 0 ? `${values.join(" ")} ${sentence}` : sentence;
+        if (candidate.length > maxLength) {
+            if (values.length === 0) {
+                return clampText(sentence, maxLength);
+            }
+
+            break;
+        }
+
         seen.add(normalized);
-        values.push(cleaned);
+        values.push(sentence);
     }
 
-    return clampText(`${values.join(". ")}.`, maxLength);
+    return values.join(" ");
 }
 
 function extractBenefitBullets(product: ProductRecord): string[] {
@@ -556,6 +583,24 @@ function buildMarkdownContent(
     return `# ${draftPack.article.title}\n\n${intro}\n\n${sections}\n\n---\n\nCTA final: ${draftPack.article.cta}. Le bon reflexe maintenant est de ${finalVerification}.`;
 }
 
+function buildMarkdownContentFromSections(
+    title: string,
+    intro: string,
+    sections: Array<{ title: string; body: string }>,
+    finalCta: string,
+): string {
+    const normalizedSections = sections
+        .map((section) => ({
+            title: trimTrailingPunctuation(section.title),
+            body: section.body.replace(/\s+/g, " ").trim(),
+        }))
+        .filter((section) => section.title && section.body);
+
+    const sectionMarkdown = normalizedSections.map((section) => `## ${section.title}\n\n${section.body}`).join("\n\n");
+
+    return `# ${title}\n\n${intro}\n\n${sectionMarkdown}\n\n---\n\nCTA final: ${finalCta}`;
+}
+
 function buildPinTitle(productName: string, hook: string): string {
     const normalizedHook = hook.replace(/\s+/g, " ").trim();
     if (normalizedHook.length > 0 && normalizedHook.length <= 100) {
@@ -703,9 +748,14 @@ async function maybeGenerateContentDraftWithAi(
             title?: string;
             excerpt?: string;
             metaDescription?: string;
-            content?: string;
+            intro?: string;
             category?: string;
+            finalCta?: string;
         };
+        sectionBodies?: Array<{
+            title?: string;
+            body?: string;
+        }>;
         pins?: Array<{
             angle?: string;
             hook?: string;
@@ -731,6 +781,8 @@ async function maybeGenerateContentDraftWithAi(
                 writerPrompt.promptBody,
                 "Expand the planning draft into a strong structured SEO draft and Pinterest click-oriented variants.",
                 "Return JSON only.",
+                "Do not return a full markdown article.",
+                "Return a concise intro, one body per planned section, and a final CTA.",
                 "The article should be useful, premium, concrete, and ready for editorial review.",
                 "Write like a senior beauty affiliate editor, not like a planner or generic SEO bot.",
                 "Use only the provided product facts. Never invent ingredients, percentages, lab results, or personal experience.",
@@ -789,9 +841,16 @@ async function maybeGenerateContentDraftWithAi(
                             title: "string",
                             excerpt: "string",
                             metaDescription: "string",
-                            content: "markdown string",
+                            intro: "string",
                             category: "string",
+                            finalCta: "string",
                         },
+                        sectionBodies: [
+                            {
+                                title: "string",
+                                body: "string",
+                            },
+                        ],
                         pins: [
                             {
                                 angle: "string",
@@ -807,20 +866,38 @@ async function maybeGenerateContentDraftWithAi(
                 null,
                 2,
             ),
-            temperature: 0.6,
-            maxOutputTokens: 2600,
+            temperature: 0.35,
+            maxOutputTokens: 1800,
         });
 
         const aiPost = result.data.post || {};
         const safeSlug = ensureUniqueSlug(slugify(toNonEmptyString(aiPost.slug, fallback.post.slug)));
+        const postTitle = toNonEmptyString(aiPost.title, fallback.post.title);
+        const postIntro = toNonEmptyString(aiPost.intro, fallback.post.excerpt);
+        const finalCta = toNonEmptyString(aiPost.finalCta, draftPack.article.cta);
+        const sectionBodies = draftPack.article.sections.map((section, index) => {
+            const parsedSection = parseDraftSection(section);
+            const aiSection = Array.isArray(result.data.sectionBodies) ? result.data.sectionBodies[index] : null;
+
+            return {
+                title:
+                    aiSection && typeof aiSection.title === "string" && aiSection.title.trim()
+                        ? trimTrailingPunctuation(aiSection.title.trim())
+                        : parsedSection.title,
+                body:
+                    aiSection && typeof aiSection.body === "string" && aiSection.body.trim()
+                        ? aiSection.body.replace(/\s+/g, " ").trim()
+                        : buildSectionBody(section, product, taxonomy, draftPack, queueItem),
+            };
+        });
 
         return {
             post: {
                 slug: safeSlug,
-                title: toNonEmptyString(aiPost.title, fallback.post.title),
+                title: postTitle,
                 excerpt: toNonEmptyString(aiPost.excerpt, fallback.post.excerpt),
                 metaDescription: toNonEmptyString(aiPost.metaDescription, fallback.post.metaDescription),
-                content: toNonEmptyString(aiPost.content, fallback.post.content),
+                content: buildMarkdownContentFromSections(postTitle, postIntro, sectionBodies, finalCta),
                 category: toNonEmptyString(aiPost.category, fallback.post.category),
                 relatedProductId: product.id,
                 image: postImage,

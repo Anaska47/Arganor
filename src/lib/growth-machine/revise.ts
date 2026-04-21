@@ -25,8 +25,14 @@ type AiRevisionDraft = {
         title?: string;
         excerpt?: string;
         metaDescription?: string;
-        content?: string;
-        category?: string;
+        intro?: string;
+        verificationLead?: string;
+        fitSection?: string;
+        cautionSection?: string;
+        timingSection?: string;
+        usageSection?: string;
+        clickSection?: string;
+        cta?: string;
     };
     pins?: Array<{
         angle?: string;
@@ -39,7 +45,7 @@ type AiRevisionDraft = {
 };
 
 type ProductRecord = NonNullable<ReturnType<typeof getProductBySlug>>;
-const MAX_REVISION_ATTEMPTS = 4;
+const MAX_REVISION_ATTEMPTS = 5;
 
 function toWriterPromptKey(intent: string | null): string {
     if (intent === "routine") {
@@ -174,6 +180,49 @@ function mergeCopyParts(parts: Array<string | null | undefined>, maxLength: numb
 
 function buildMarkdownBulletList(items: string[]): string {
     return items.map((item) => `- ${trimTrailingPunctuation(item)}`).join("\n");
+}
+
+function buildRevisionMarkdownContent({
+    title,
+    intro,
+    verificationLead,
+    verificationBullets,
+    fitSection,
+    cautionSection,
+    timingSection,
+    usageSection,
+    clickSection,
+    cta,
+}: {
+    title: string;
+    intro: string;
+    verificationLead: string;
+    verificationBullets: string[];
+    fitSection: string;
+    cautionSection: string;
+    timingSection: string;
+    usageSection: string;
+    clickSection: string;
+    cta: string;
+}): string {
+    return [
+        `# ${title}`,
+        intro,
+        "## Ce qu'on verifie vraiment sur la fiche",
+        verificationLead,
+        buildMarkdownBulletList(verificationBullets),
+        "## Pour quel profil le clic est pertinent",
+        fitSection,
+        "## Quand ralentir ou passer son tour",
+        cautionSection,
+        "## A quel rythme juger les resultats",
+        timingSection,
+        "## Routine et frequence d'usage",
+        usageSection,
+        "## Pourquoi le clic peut valoir le coup",
+        clickSection,
+        `**CTA :** ${cta}`,
+    ].join("\n\n");
 }
 
 function extractBenefitBullets(product: ProductRecord): string[] {
@@ -410,6 +459,21 @@ async function maybeReviseWithAi(
     const suggestedAngles = Array.isArray(payload.suggestedAngles)
         ? payload.suggestedAngles.filter((item): item is string => typeof item === "string" && item.trim().length > 0)
         : [];
+    const compactDraft = {
+        post: {
+            title: contentDraft.post.title,
+            excerpt: contentDraft.post.excerpt,
+            metaDescription: contentDraft.post.metaDescription,
+            contentPreview: contentDraft.post.content.slice(0, 2200),
+        },
+        pins: contentDraft.pins.map((pin) => ({
+            angle: pin.angle,
+            hook: pin.hook,
+            title: pin.title,
+            description: pin.description,
+            cta: pin.cta,
+        })),
+    };
 
     try {
         const postImage = resolveDraftPostImage(product);
@@ -419,6 +483,8 @@ async function maybeReviseWithAi(
                 writerPrompt.promptBody,
                 "Rewrite the draft to fix the review warnings without inventing new facts.",
                 "Return JSON only.",
+                "Do not return a full markdown article.",
+                "Return short structured section bodies that can be assembled into the article.",
                 "The revised draft must feel more product-specific, more useful, less repetitive, and more conversion-aware.",
                 "Address warnings by adding concrete proof, clearer fit, clearer limits, stronger CTA, and better buyer guidance.",
                 "If the product is in the hair cluster, naturally include semantic variants such as cuir chevelu, pousse cheveux, huile romarin menthe, fortifiant capillaire, massage du cuir chevelu, et routine capillaire when they fit the facts provided.",
@@ -468,7 +534,7 @@ async function maybeReviseWithAi(
                     },
                     draftPack,
                     suggestedAngles,
-                    currentDraft: contentDraft,
+                    currentDraft: compactDraft,
                     review: {
                         verdict: review.verdict,
                         rationale: review.rationale,
@@ -489,8 +555,14 @@ async function maybeReviseWithAi(
                             title: "string",
                             excerpt: "string",
                             metaDescription: "string",
-                            content: "markdown string",
-                            category: "string",
+                            intro: "string",
+                            verificationLead: "string",
+                            fitSection: "string",
+                            cautionSection: "string",
+                            timingSection: "string",
+                            usageSection: "string",
+                            clickSection: "string",
+                            cta: "string",
                         },
                         pins: [
                             {
@@ -507,21 +579,66 @@ async function maybeReviseWithAi(
                 null,
                 2,
             ),
-            temperature: 0.45,
-            maxOutputTokens: 2400,
+            temperature: 0.3,
+            maxOutputTokens: 1400,
         });
 
         const aiPost = result.data.post || {};
         const safeSlug = toNonEmptyString(aiPost.slug, contentDraft.post.slug);
+        const title = toNonEmptyString(aiPost.title, contentDraft.post.title);
+        const verificationBullets = uniqueStrings(
+            [
+                evidence.signals[0] ? `Verifier que la promesse produit repose bien sur ${evidence.signals[0]}` : "",
+                evidence.signals[1] ? `Comparer le besoin principal avec ${evidence.signals[1]}` : "",
+                evidence.socialProofLabel ? `Regarder les avis: ${evidence.socialProofLabel}` : "",
+                evidence.priceLabel ? `Valider le prix repere autour de ${evidence.priceLabel}` : "",
+                evidence.objectionChecklist[0]
+                    ? `Verifier surtout ${trimTrailingPunctuation(evidence.objectionChecklist[0])}`
+                    : "Verifier la frequence d'usage et le bon moment dans la routine",
+            ].filter(Boolean),
+        ).slice(0, 5);
+        const content = buildRevisionMarkdownContent({
+            title,
+            intro: toNonEmptyString(aiPost.intro, contentDraft.post.excerpt),
+            verificationLead: toNonEmptyString(
+                aiPost.verificationLead,
+                `${product.name} merite surtout le clic quand les preuves produit, le bon profil d'usage et les limites reelles vont dans le meme sens.`,
+            ),
+            verificationBullets,
+            fitSection: toNonEmptyString(
+                aiPost.fitSection,
+                `${product.name} merite surtout le clic si le besoin colle au produit et a la routine actuelle, pas si l'on cherche une promesse universelle.`,
+            ),
+            cautionSection: toNonEmptyString(
+                aiPost.cautionSection,
+                `${product.name} demande de ralentir si le cuir chevelu est deja reactif, si les racines graissent vite ou si la routine est deja surchargee.`,
+            ),
+            timingSection: toNonEmptyString(
+                aiPost.timingSection,
+                `Le bon repere reste la regularite et le confort d'usage sur plusieurs semaines, pas une promesse de resultat immediate.`,
+            ),
+            usageSection: toNonEmptyString(
+                aiPost.usageSection,
+                evidence.usageGuidance || `Le bon usage reste simple, cible et facile a tenir dans la vraie routine.`,
+            ),
+            clickSection: toNonEmptyString(
+                aiPost.clickSection,
+                `${product.name} vaut surtout le clic pour verifier les avis recents, le bon profil d'usage, le prix et la compatibilite avec la routine.`,
+            ),
+            cta: toNonEmptyString(
+                aiPost.cta,
+                `Voir la fiche ${product.name} pour verifier le vrai fit produit, les avis recents et le bon rythme d'utilisation avant achat.`,
+            ),
+        });
 
         return {
             post: {
                 slug: safeSlug,
-                title: toNonEmptyString(aiPost.title, contentDraft.post.title),
+                title,
                 excerpt: toNonEmptyString(aiPost.excerpt, contentDraft.post.excerpt),
                 metaDescription: toNonEmptyString(aiPost.metaDescription, contentDraft.post.metaDescription),
-                content: toNonEmptyString(aiPost.content, contentDraft.post.content),
-                category: toNonEmptyString(aiPost.category, contentDraft.post.category),
+                content,
+                category: contentDraft.post.category,
                 relatedProductId: contentDraft.post.relatedProductId,
                 image: postImage,
             },
