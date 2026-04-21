@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { getBlogPosts } from "@/lib/blog";
 import { getSiteUrl, toAbsoluteUrl } from "@/lib/site";
 
+export const dynamic = "force-dynamic";
+
 function escapeXml(value: string) {
     return value
         .replace(/&/g, "&amp;")
@@ -63,7 +65,7 @@ export async function GET() {
     return new NextResponse(rssFeed, {
         headers: {
             "Content-Type": "application/rss+xml; charset=utf-8",
-            "Cache-Control": "s-maxage=3600, stale-while-revalidate",
+            "Cache-Control": "public, max-age=0, s-maxage=60, stale-while-revalidate=300",
         },
     });
 }
