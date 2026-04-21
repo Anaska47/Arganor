@@ -340,18 +340,18 @@ function buildRevisionMarkdownContent({
     return [
         `# ${title}`,
         intro,
-        "## Ce qu'on verifie vraiment sur la fiche",
+        "## Les reperes utiles avant d'acheter",
         verificationLead,
         buildMarkdownBulletList(verificationBullets),
-        "## Pour quel profil le clic est pertinent",
+        "## Pour qui cette essence a le plus de sens",
         fitSection,
-        "## Quand ralentir ou passer son tour",
+        "## Quand il vaut mieux ralentir ou passer",
         cautionSection,
-        "## A quel rythme juger les resultats",
+        "## En combien de temps juger si elle vous convient",
         timingSection,
-        "## Routine et frequence d'usage",
+        "## Comment l'integrer sans surcharger la routine",
         usageSection,
-        "## Pourquoi le clic peut valoir le coup",
+        "## Ce que la fiche permet de confirmer",
         clickSection,
         `**CTA :** ${cta}`,
     ].join("\n\n");
@@ -626,6 +626,7 @@ async function maybeReviseWithAi(
                 "Address warnings by adding concrete proof, clearer fit, clearer limits, stronger CTA, and better buyer guidance.",
                 clusterGuardrails.instruction,
                 "Each section must add net new information. Do not repeat the same proof point, social proof, price cue, or CTA logic across multiple sections unless the decision angle clearly changes.",
+                "Avoid headings or bullets that sound like an internal checklist. The final article must read like publication-ready editorial copy, not like a template.",
                 "If the product is in the hair cluster, naturally include semantic variants such as cuir chevelu, pousse cheveux, huile romarin menthe, fortifiant capillaire, massage du cuir chevelu, et routine capillaire when they fit the facts provided.",
                 "Make the article more concrete on application rhythm, fit profiles, and what to verify before clicking.",
                 "Make the three Pinterest pins clearly distinct: one proof angle, one objection angle, one fit angle.",
@@ -735,13 +736,13 @@ async function maybeReviseWithAi(
         const title = toNonEmptyString(aiPost.title, contentDraft.post.title);
         const verificationBullets = uniqueStrings(
             [
-                evidence.signals[0] ? `Verifier que la promesse produit repose bien sur ${evidence.signals[0]}` : "",
-                evidence.signals[1] ? `Comparer le besoin principal avec ${evidence.signals[1]}` : "",
-                evidence.socialProofLabel ? `Regarder les avis: ${evidence.socialProofLabel}` : "",
-                evidence.priceLabel ? `Valider le prix repere autour de ${evidence.priceLabel}` : "",
+                evidence.signals[0] ? `Signal cle: ${evidence.signals[0]}` : "",
+                evidence.signals[1] ? `Format utile: ${evidence.signals[1]}` : "",
+                evidence.socialProofLabel ? `Preuve sociale: ${evidence.socialProofLabel}` : "",
+                evidence.priceLabel ? `Prix repere: ${evidence.priceLabel}` : "",
                 evidence.objectionChecklist[0]
-                    ? `Verifier surtout ${trimTrailingPunctuation(evidence.objectionChecklist[0])}`
-                    : "Verifier la frequence d'usage et le bon moment dans la routine",
+                    ? `Point d'attention: ${trimTrailingPunctuation(evidence.objectionChecklist[0])}`
+                    : "Point d'attention: frequence d'usage et bon moment dans la routine",
             ].filter(Boolean),
         ).slice(0, 5);
         const content = buildRevisionMarkdownContent({
