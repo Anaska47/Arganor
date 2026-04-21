@@ -89,6 +89,10 @@ function appendSectionIfMissing(content: string, heading: string, body: string):
     return `${content.trim()}\n\n## ${heading}\n\n${body}`;
 }
 
+function contentMentions(content: string, value: string): boolean {
+    return normalizeForDedup(content).includes(normalizeForDedup(value));
+}
+
 function replaceFinalCta(content: string, nextCta: string): string {
     if (/\*\*CTA\s*:\*\*/i.test(content)) {
         return content.replace(/\*\*CTA\s*:\*\*[\s\S]*$/i, `**CTA :** ${nextCta}`);
@@ -255,6 +259,80 @@ function buildShortMetaDescription(product: Product, clusterRef: string): string
     return clampText(`${product.name} : points utiles, limites et bon fit avant achat.`, 160);
 }
 
+function buildClusterSpecificCta(product: Product, clusterRef: string): string {
+    if (clusterRef === "soin_des_cheveux") {
+        return `Voir la fiche ${product.name} pour verifier si cette huile romarin menthe convient a votre type de cuir chevelu, a votre frequence de lavage et a votre routine pousse cheveux.`;
+    }
+
+    if (clusterRef === "soin_du_visage") {
+        return `Voir la fiche ${product.name} pour verifier la tolerance, la frequence d'usage et le vrai fit avec votre type de peau avant achat.`;
+    }
+
+    return `Voir la fiche ${product.name} pour verifier les ingredients, la frequence d'usage, les avis recents et la compatibilite avec votre routine.`;
+}
+
+function buildUsageGuidanceSection(product: Product, clusterRef: string, evidence: ReturnType<typeof buildProductEvidence>): string {
+    if (clusterRef === "soin_des_cheveux") {
+        return mergeCopyParts(
+            [
+                `${product.name} s'inscrit surtout dans une routine capillaire simple: massage du cuir chevelu, petite quantite, puis observation du confort entre deux lavages.`,
+                evidence.usageGuidance,
+                evidence.fitProfiles[0]
+                    ? `Le profil le plus logique reste ${evidence.fitProfiles[0]}.`
+                    : null,
+                evidence.objectionChecklist[0]
+                    ? `Le premier point a verifier reste ${evidence.objectionChecklist[0]}.`
+                    : null,
+            ],
+            420,
+        );
+    }
+
+    if (clusterRef === "soin_du_visage") {
+        return mergeCopyParts(
+            [
+                evidence.usageGuidance,
+                `${product.name} gagne a etre teste dans une routine simple, avec une frequence prudente et un vrai suivi de tolerance.`,
+                evidence.fitProfiles[0] ? `Le bon profil de depart reste ${evidence.fitProfiles[0]}.` : null,
+            ],
+            420,
+        );
+    }
+
+    return mergeCopyParts(
+        [
+            evidence.usageGuidance,
+            `${product.name} a surtout du sens si l'usage reste simple, regulier et facile a tenir dans la vraie vie.`,
+        ],
+        360,
+    );
+}
+
+function buildClickVerificationSection(product: Product, evidence: ReturnType<typeof buildProductEvidence>): string {
+    return mergeCopyParts(
+        [
+            evidence.clickReasons[0] ? `Premier reflexe: ${evidence.clickReasons[0]}.` : null,
+            evidence.clickReasons[1] ? `Deuxieme verification: ${evidence.clickReasons[1]}.` : null,
+            evidence.clickReasons[2] ? `Troisieme verification: ${evidence.clickReasons[2]}.` : null,
+            evidence.clickReasons[3] ? `Dernier point avant achat: ${evidence.clickReasons[3]}.` : null,
+            `${product.name} merite le clic surtout si ces verifications confirment le bon fit produit, pas juste parce que le nom du produit est populaire.`,
+        ],
+        420,
+    );
+}
+
+function buildHairSemanticSupport(product: Product, evidence: ReturnType<typeof buildProductEvidence>): string {
+    return mergeCopyParts(
+        [
+            `${product.name} doit etre lu comme une huile romarin menthe orientee cuir chevelu, pas comme un soin capillaire universel.`,
+            `Si la recherche tourne autour de pousse cheveux, huile fortifiante capillaire, massage du cuir chevelu ou routine capillaire simple, ce sont ces mots-la qu'il faut aligner avec le besoin reel.`,
+            evidence.fitProfiles[1] ? `Le bon scenario d'usage ressemble plutot a ${evidence.fitProfiles[1]}.` : null,
+            evidence.objectionChecklist[1] ? `Le point de friction a surveiller reste ${evidence.objectionChecklist[1]}.` : null,
+        ],
+        460,
+    );
+}
+
 export function enhanceContentDraftSpecificity(
     draft: SpecificityDraft,
     product: Product,
@@ -275,8 +353,8 @@ export function enhanceContentDraftSpecificity(
         .join(" ")
         .replace(/\s+/g, " ")
         .trim();
-    const strongerCta = `Voir la fiche ${product.name} pour verifier les ingredients, la frequence d'usage, les avis recents et la compatibilite avec votre routine.`;
-    const shouldAppendDetailedSections = draft.generationMeta?.mode !== "ai";
+    const strongerCta = buildClusterSpecificCta(product, clusterRef);
+    const shouldAppendDetailedSections = draft.generationMeta?.mode !== "ai" || reviewWarnings.length > 0;
 
     let nextContent = replaceFinalCta(draft.post.content, strongerCta);
 
@@ -289,6 +367,20 @@ export function enhanceContentDraftSpecificity(
         nextContent = appendSectionIfMissing(nextContent, "Pour quel profil le clic est pertinent", buildFitSentence(product, clusterRef, signals));
         nextContent = appendSectionIfMissing(nextContent, "Quand ralentir ou passer son tour", buildAvoidSentence(product, clusterRef));
         nextContent = appendSectionIfMissing(nextContent, "A quel rythme juger les resultats", buildTimelineSentence(product, clusterRef));
+        nextContent = appendSectionIfMissing(
+            nextContent,
+            clusterRef === "soin_des_cheveux" ? "Routine capillaire simple et frequence d'usage" : "Frequence d'usage et routine simple",
+            buildUsageGuidanceSection(product, clusterRef, evidence),
+        );
+        nextContent = appendSectionIfMissing(
+            nextContent,
+            "Ce qu'il faut verifier avant de cliquer",
+            buildClickVerificationSection(product, evidence),
+        );
+    }
+
+    if (clusterRef === "soin_des_cheveux" && !contentMentions(nextContent, "huile fortifiante capillaire")) {
+        nextContent = appendSectionIfMissing(nextContent, "Huile romarin menthe: le vrai fit produit", buildHairSemanticSupport(product, evidence));
     }
 
     const reviewFocus = buildReviewFocus(reviewWarnings, clusterRef);
@@ -311,11 +403,13 @@ export function enhanceContentDraftSpecificity(
                     title: `${product.brand || product.name} : verifier avant achat`,
                     description: mergeCopyParts(
                         [
-                            `${product.name}: ${signals.slice(0, 2).join(", ") || "des signaux produit clairs"}`,
+                            clusterRef === "soin_des_cheveux"
+                                ? `${product.name}: huile romarin menthe, cuir chevelu, pousse cheveux`
+                                : `${product.name}: ${signals.slice(0, 2).join(", ") || "des signaux produit clairs"}`,
                             socialProof ? `repere social ${socialProof}` : null,
                             pricingSentence ? `prix repere ${price}` : null,
                         ],
-                        165,
+                        180,
                     ),
                     imagePrompt: buildVisualBrief(product, signals),
                     cta: "Verifier fiche + avis",
@@ -327,10 +421,12 @@ export function enhanceContentDraftSpecificity(
                     ...pin,
                     description: mergeCopyParts(
                         [
-                            `${product.name}: verifier ${reviewFocus} avant achat`,
+                            clusterRef === "soin_des_cheveux"
+                                ? `${product.name}: verifier ${reviewFocus}, racines qui regraissent vite et routine capillaire avant achat`
+                                : `${product.name}: verifier ${reviewFocus} avant achat`,
                             evidence.clickReasons[0] || `focus ${signals.slice(0, 2).join(", ")}`,
                         ],
-                        160,
+                        180,
                     ),
                     imagePrompt: `${buildVisualBrief(product, signals)} avec angle checklist avant achat`,
                     cta: "Voir les points a verifier",
@@ -340,8 +436,13 @@ export function enhanceContentDraftSpecificity(
             return {
                 ...pin,
                 description: mergeCopyParts(
-                    [buildShortFitLine(product, clusterRef, signals), evidence.clickReasons[0]],
-                    160,
+                    [
+                        buildShortFitLine(product, clusterRef, signals),
+                        clusterRef === "soin_des_cheveux"
+                            ? "utile si la routine pousse cheveux reste simple et supporte bien le massage du cuir chevelu"
+                            : evidence.clickReasons[0],
+                    ],
+                    180,
                 ),
                 imagePrompt: `${buildVisualBrief(product, signals)} avec angle comparaison et fit produit`,
                 cta: "Voir si le produit vous convient",
