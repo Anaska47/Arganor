@@ -1,5 +1,65 @@
 [
   {
+    "id": "auto_p_1776850036699_8533",
+    "asin": "B00PBX3L7K",
+    "name": "Essence Advanced Snail 96 Mucin Power",
+    "slug": "essence-advanced-snail-96-mucin-power-8533",
+    "description": "Une essence legere riche en mucine pour soutenir l'hydratation, apaiser la peau et renforcer la barriere cutanee au quotidien.",
+    "benefits": "### Points forts\n- **Besoin cible**: mucine.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: COSRX reste une reference connue sur ce besoin.",
+    "price": 24.5,
+    "category": "Soin du Visage",
+    "brand": "COSRX",
+    "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.7,
+    "reviews": 533,
+    "features": [
+      "mucine",
+      "hydratation",
+      "barriere cutanee",
+      "COSRX",
+      "Routine ciblee"
+    ],
+    "seoTags": [
+      "mucine",
+      "hydratation",
+      "barriere cutanee",
+      "glass skin",
+      "cosrx",
+      "beaute",
+      "routine"
+    ]
+  },
+  {
+    "id": "auto_p_1776850022566_8378",
+    "asin": "B01N33X44C",
+    "name": "Serum Anti-Imperfections Niacinamide 10% + Zinc 1%",
+    "slug": "serum-anti-imperfections-niacinamide-10-zinc-1-8378",
+    "description": "Un serum concentre en niacinamide et zinc pour aider a reguler l'exces de sebum, affiner visuellement les pores et calmer les imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: niacinamide.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: The Ordinary reste une reference connue sur ce besoin.",
+    "price": 10.9,
+    "category": "Soin du Visage",
+    "brand": "The Ordinary",
+    "image": "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.8,
+    "reviews": 232,
+    "features": [
+      "niacinamide",
+      "imperfections",
+      "pores",
+      "The Ordinary",
+      "Routine ciblee"
+    ],
+    "seoTags": [
+      "niacinamide",
+      "imperfections",
+      "pores",
+      "peau grasse",
+      "the ordinary",
+      "beaute",
+      "routine"
+    ]
+  },
+  {
     "id": "auto_p_1776589239876_5470",
     "asin": "B00AE6WNY8",
     "name": "Huile Prodigieuse Multi-Fonctions",
