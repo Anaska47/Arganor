@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SiteAnalytics from "@/components/analytics/SiteAnalytics";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <body suppressHydrationWarning>
+        <SiteAnalytics />
         {children}
       </body>
     </html>

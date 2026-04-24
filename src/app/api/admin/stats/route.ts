@@ -56,6 +56,24 @@ type FeedHealth = {
     memoryKey: string | null;
 };
 
+type FunnelSource = {
+    source: string;
+    channel: string;
+    pageVisits: number;
+    affiliateClicks: number;
+    conversionRate: number;
+    lastSeenAt: string | null;
+    topCampaigns: string[];
+};
+
+type FunnelSummary = {
+    totalPageVisits: number;
+    totalAffiliateClicks: number;
+    socialPageVisits: number;
+    socialAffiliateClicks: number;
+    topSources: FunnelSource[];
+};
+
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || "https://arganor.vercel.app").replace(/\/+$/, "");
 const FEED_URL = `${SITE_URL}/feed.xml`;
 const DATA_ROOT = path.join(process.cwd(), "src", "data");
@@ -202,6 +220,43 @@ export async function GET() {
     const clicksData = await readClicksDataAsync();
     const realClicks = clicksData.totalClicks || 0;
     const recentClickActivities = clicksData.recentClicks || [];
+    const totalPageVisits = clicksData.totalPageVisits || 0;
+    const sourceStats = clicksData.sourceStats || {};
+    const funnelSources: FunnelSource[] = Object.entries(sourceStats)
+        .map(([source, stats]) => {
+            const sortedCampaigns = Object.entries(stats.campaigns || {})
+                .sort((left, right) => right[1] - left[1])
+                .slice(0, 3)
+                .map(([campaign]) => campaign);
+
+            return {
+                source,
+                channel: stats.channel || "direct",
+                pageVisits: stats.pageVisits || 0,
+                affiliateClicks: stats.affiliateClicks || 0,
+                conversionRate:
+                    stats.pageVisits > 0
+                        ? Math.round((stats.affiliateClicks / stats.pageVisits) * 1000) / 10
+                        : 0,
+                lastSeenAt: stats.lastSeenAt || null,
+                topCampaigns: sortedCampaigns,
+            };
+        })
+        .sort((left, right) => right.affiliateClicks - left.affiliateClicks || right.pageVisits - left.pageVisits)
+        .slice(0, 6);
+    const socialPageVisits = funnelSources
+        .filter((item) => ["pinterest", "instagram", "facebook", "social"].includes(item.channel))
+        .reduce((sum, item) => sum + item.pageVisits, 0);
+    const socialAffiliateClicks = funnelSources
+        .filter((item) => ["pinterest", "instagram", "facebook", "social"].includes(item.channel))
+        .reduce((sum, item) => sum + item.affiliateClicks, 0);
+    const funnel: FunnelSummary = {
+        totalPageVisits,
+        totalAffiliateClicks: realClicks,
+        socialPageVisits,
+        socialAffiliateClicks,
+        topSources: funnelSources,
+    };
 
     const blogPosts = Array.isArray(posts) ? posts.length : 0;
     const rssPins = Array.isArray(posts) ? countFeedPins(posts) : 0;
@@ -377,7 +432,7 @@ export async function GET() {
     const clickActivities: Activity[] = recentClickActivities.map((click, index) => ({
         id: index,
         type: "sale",
-        text: `Clic sur ${click.productName} (${click.source})`,
+        text: `Clic affilié sur ${click.productName} (${click.source}${click.placement ? ` / ${click.placement}` : ""})`,
         time: formatTime(click.time),
         status: "info",
     }));
@@ -410,6 +465,8 @@ export async function GET() {
         avgRating,
         revenue,
         clicks: realClicks,
+        pageVisits: totalPageVisits,
+        funnel,
         apiKeyConfigured: !!getAdminApiKey(),
         autopilot,
         feedHealth,

@@ -41,6 +41,24 @@ type FeedHealth = {
     memoryKey: string | null;
 };
 
+type FunnelSource = {
+    source: string;
+    channel: string;
+    pageVisits: number;
+    affiliateClicks: number;
+    conversionRate: number;
+    lastSeenAt: string | null;
+    topCampaigns: string[];
+};
+
+type FunnelSummary = {
+    totalPageVisits: number;
+    totalAffiliateClicks: number;
+    socialPageVisits: number;
+    socialAffiliateClicks: number;
+    topSources: FunnelSource[];
+};
+
 type StatsResponse = {
     totalProducts: number;
     blogPosts: number;
@@ -50,6 +68,8 @@ type StatsResponse = {
     avgRating: string;
     revenue: string;
     clicks: number;
+    pageVisits: number;
+    funnel: FunnelSummary;
     apiKeyConfigured: boolean;
     autopilot: AutopilotStats;
     feedHealth: FeedHealth;
@@ -251,7 +271,8 @@ export default function AdminDashboardClient() {
                 <MetricCard labelText="Produits" value={stats.totalProducts} note={`${stats.totalReviews} avis cumules`} />
                 <MetricCard labelText="Articles" value={stats.blogPosts} note={`Dernier: ${formatDate(stats.latestPostDate)}`} />
                 <MetricCard labelText="Pins feed" value={stats.feedHealth.feedPins} note={`${stats.feedHealth.status} / ${stats.feedHealth.warningCount} warning(s)`} />
-                <MetricCard labelText="Clics" value={stats.clicks} note={`CA estime: ${stats.revenue} EUR`} />
+                <MetricCard labelText="Visites trackees" value={stats.pageVisits} note={`${stats.funnel.socialPageVisits} depuis social`} />
+                <MetricCard labelText="Clics affilies" value={stats.clicks} note={`CA estime: ${stats.revenue} EUR`} />
                 <MetricCard labelText="Note moyenne" value={stats.avgRating} note={stats.isLive ? "Site en ligne" : "Site non confirme"} />
             </section>
 
@@ -315,6 +336,48 @@ export default function AdminDashboardClient() {
                                 <div style={{ display: "flex", gap: 8, alignItems: "center" }}><AlertTriangle size={16} />Growth overview non charge.</div>
                                 <div style={muted}>{growthError || "Ajoute la cle admin si la route est protegee."}</div>
                             </div>
+                        )}
+                    </div>
+
+                    <div style={panel}>
+                        <div style={label}>Traffic funnel</div>
+                        <h2 style={{ margin: "8px 0 0", fontSize: 22 }}>Source → site → affilié</h2>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 14 }}>
+                            <div><strong>{stats.funnel.totalPageVisits}</strong><div style={muted}>visites trackees</div></div>
+                            <div><strong>{stats.funnel.totalAffiliateClicks}</strong><div style={muted}>clics affilies</div></div>
+                            <div><strong>{stats.funnel.socialPageVisits}</strong><div style={muted}>visites sociales</div></div>
+                            <div><strong>{stats.funnel.socialAffiliateClicks}</strong><div style={muted}>clics sociaux</div></div>
+                        </div>
+                        {stats.funnel.topSources.length > 0 ? (
+                            <div style={{ display: "grid", gap: 10, marginTop: 14 }}>
+                                {stats.funnel.topSources.map((item) => (
+                                    <div key={`${item.source}-${item.channel}`} style={{ border: "1px solid #ececec", borderRadius: 8, padding: 12, background: "#fafafa" }}>
+                                        <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center" }}>
+                                            <strong>{item.source}</strong>
+                                            <span style={{ ...statusChip(item.channel), borderRadius: 999, padding: "4px 8px", fontSize: 11, fontWeight: 700 }}>{item.channel}</span>
+                                        </div>
+                                        <div style={{ ...muted, marginTop: 8 }}>
+                                            {item.pageVisits} visite(s) → {item.affiliateClicks} clic(s) affilié(s) · conv. {item.conversionRate}%
+                                        </div>
+                                        <div style={{ ...muted, marginTop: 6 }}>
+                                            Dernier signal: {formatDate(item.lastSeenAt)}
+                                        </div>
+                                        {item.topCampaigns.length > 0 ? (
+                                            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 8 }}>
+                                                {item.topCampaigns.map((campaign) => (
+                                                    <span key={campaign} style={{ background: "#fff", borderRadius: 999, padding: "4px 8px", fontSize: 11, color: "#374151", border: "1px solid #e5e7eb" }}>
+                                                        {campaign}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        ) : null}
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p style={{ ...muted, marginTop: 14 }}>
+                                Le funnel vient d’être branché. Dès que Pinterest, Instagram ou Facebook renvoient du trafic, on verra ici les sources, campagnes et conversions vers l’affiliation.
+                            </p>
                         )}
                     </div>
 

@@ -21,7 +21,11 @@ const HASHTAGS_BY_CATEGORY: Record<string, string[]> = {
 const DEFAULT_HASHTAGS = ["#BeauteNaturelle", "#SoinNaturel", "#HuileArgan", "#BeauteBio", "#Arganor"];
 
 export function buildPinData(product: Product, baseUrl: string = getSiteUrl()): PinData {
-    const productUrl = `${baseUrl}/products/${product.slug}`;
+    const productUrl = new URL(`${baseUrl}/products/${product.slug}`);
+    productUrl.searchParams.set("utm_source", "pinterest");
+    productUrl.searchParams.set("utm_medium", "organic");
+    productUrl.searchParams.set("utm_campaign", "catalog-pins");
+    productUrl.searchParams.set("utm_content", product.id);
     const cleanName = product.name.replace(/\s+\d+(ml|g|oz)\s*/gi, "").trim();
     const title = `${cleanName} | ${product.brand} | Soin naturel recommande`.slice(0, 100);
     const description = [
@@ -43,7 +47,7 @@ export function buildPinData(product: Product, baseUrl: string = getSiteUrl()): 
         imageUrl: productImg,
         title,
         description,
-        link: productUrl,
+        link: productUrl.toString(),
         hashtags,
         productId: product.id,
         productName: product.name,
