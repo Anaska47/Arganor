@@ -1,5 +1,65 @@
 [
   {
+    "id": "auto_p_1777194492328_9137",
+    "asin": "B00PBX3L7K",
+    "name": "Essence Advanced Snail 96 Mucin Power",
+    "slug": "essence-advanced-snail-96-mucin-power-9137",
+    "description": "Une essence legere riche en mucine pour soutenir l'hydratation, apaiser la peau et renforcer la barriere cutanee au quotidien.",
+    "benefits": "### Points forts\n- **Besoin cible**: mucine.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: COSRX reste une reference connue sur ce besoin.",
+    "price": 24.5,
+    "category": "Soin du Visage",
+    "brand": "COSRX",
+    "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
+    "rating": 5,
+    "reviews": 735,
+    "features": [
+      "mucine",
+      "hydratation",
+      "barriere cutanee",
+      "COSRX",
+      "Routine ciblee"
+    ],
+    "seoTags": [
+      "mucine",
+      "hydratation",
+      "barriere cutanee",
+      "glass skin",
+      "cosrx",
+      "beaute",
+      "routine"
+    ]
+  },
+  {
+    "id": "auto_p_1777194479416_322",
+    "asin": "B00IMJ0HDU",
+    "name": "Gel Moussant Purifiant Peaux Grasses Effaclar",
+    "slug": "gel-moussant-purifiant-peaux-grasses-effaclar-322",
+    "description": "Un nettoyant visage purifiant pour aider a limiter l'exces de sebum et nettoyer la peau grasse sans l'agresser.",
+    "benefits": "### Points forts\n- **Besoin cible**: nettoyant visage.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: La Roche-Posay reste une reference connue sur ce besoin.",
+    "price": 15.9,
+    "category": "Soin du Visage",
+    "brand": "La Roche-Posay",
+    "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.8,
+    "reviews": 447,
+    "features": [
+      "nettoyant visage",
+      "effaclar",
+      "peau grasse",
+      "La Roche-Posay",
+      "Routine ciblee"
+    ],
+    "seoTags": [
+      "nettoyant visage",
+      "effaclar",
+      "peau grasse",
+      "acne",
+      "la roche-posay",
+      "beaute",
+      "routine"
+    ]
+  },
+  {
     "id": "auto_p_1776937798980_8850",
     "asin": "B01N33X44C",
     "name": "Serum Anti-Imperfections Niacinamide 10% + Zinc 1%",
