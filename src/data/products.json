@@ -1,5 +1,65 @@
 [
   {
+    "id": "auto_p_1777543907151_4490",
+    "asin": "B0822ZTNJC",
+    "name": "Huile de Soin Capillaire No. 7 Bonding Oil",
+    "slug": "huile-de-soin-capillaire-no-7-bonding-oil-4490",
+    "description": "Une huile capillaire reparatrice pour lisser la fibre, apporter de la brillance et proteger les longueurs des agressions quotidiennes.",
+    "benefits": "### Points forts\n- **Besoin cible**: huile cheveux.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin des cheveux.\n- **Repere clair**: Olaplex reste une reference connue sur ce besoin.",
+    "price": 29.5,
+    "category": "Soin des Cheveux",
+    "brand": "Olaplex",
+    "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
+    "rating": 4.8,
+    "reviews": 642,
+    "features": [
+      "huile cheveux",
+      "reparation",
+      "brillance",
+      "Olaplex",
+      "Routine ciblee"
+    ],
+    "seoTags": [
+      "huile cheveux",
+      "reparation",
+      "brillance",
+      "thermoprotecteur",
+      "olaplex",
+      "beaute",
+      "routine"
+    ]
+  },
+  {
+    "id": "auto_p_1777543891009_2389",
+    "asin": "B07C5VJGDF",
+    "name": "Baume Hydratant Visage et Corps Peaux Seches",
+    "slug": "baume-hydratant-visage-et-corps-peaux-seches-2389",
+    "description": "Un baume riche aux ceramides pour nourrir durablement la peau seche et soutenir une barriere cutanee plus confortable.",
+    "benefits": "### Points forts\n- **Besoin cible**: ceramides.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du corps.\n- **Repere clair**: CeraVe reste une reference connue sur ce besoin.",
+    "price": 16.5,
+    "category": "Soin du Corps",
+    "brand": "CeraVe",
+    "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.9,
+    "reviews": 923,
+    "features": [
+      "ceramides",
+      "peau seche",
+      "hydratation",
+      "CeraVe",
+      "Routine ciblee"
+    ],
+    "seoTags": [
+      "ceramides",
+      "peau seche",
+      "hydratation",
+      "baume",
+      "cerave",
+      "beaute",
+      "routine"
+    ]
+  },
+  {
     "id": "auto_p_1777194492328_9137",
     "asin": "B00PBX3L7K",
     "name": "Essence Advanced Snail 96 Mucin Power",
