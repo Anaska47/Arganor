@@ -1,5 +1,65 @@
 [
   {
+    "id": "auto_p_1778406175175_6894",
+    "asin": "B00IMJ0HDU",
+    "name": "Gel Moussant Purifiant Peaux Grasses Effaclar",
+    "slug": "gel-moussant-purifiant-peaux-grasses-effaclar-6894",
+    "description": "Un nettoyant visage purifiant pour aider a limiter l'exces de sebum et nettoyer la peau grasse sans l'agresser.",
+    "benefits": "### Points forts\n- **Besoin cible**: nettoyant visage.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: La Roche-Posay reste une reference connue sur ce besoin.",
+    "price": 15.9,
+    "category": "Soin du Visage",
+    "brand": "La Roche-Posay",
+    "image": "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.7,
+    "reviews": 594,
+    "features": [
+      "nettoyant visage",
+      "effaclar",
+      "peau grasse",
+      "La Roche-Posay",
+      "Routine ciblee"
+    ],
+    "seoTags": [
+      "nettoyant visage",
+      "effaclar",
+      "peau grasse",
+      "acne",
+      "la roche-posay",
+      "beaute",
+      "routine"
+    ]
+  },
+  {
+    "id": "auto_p_1778406163405_7894",
+    "asin": "B00949CTQQ",
+    "name": "Lotion Exfoliante Perfectrice 2% BHA",
+    "slug": "lotion-exfoliante-perfectrice-2-bha-7894",
+    "description": "Un exfoliant liquide au BHA qui aide a desobstruer les pores, lisser le grain de peau et limiter l'apparition des imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: exfoliant bha.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: Paula's Choice reste une reference connue sur ce besoin.",
+    "price": 39,
+    "category": "Soin du Visage",
+    "brand": "Paula's Choice",
+    "image": "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1974&auto=format&fit=crop",
+    "rating": 5,
+    "reviews": 522,
+    "features": [
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "Paula's Choice",
+      "Routine ciblee"
+    ],
+    "seoTags": [
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "acide salicylique",
+      "paula's choice",
+      "beaute",
+      "routine"
+    ]
+  },
+  {
     "id": "auto_p_1777543907151_4490",
     "asin": "B0822ZTNJC",
     "name": "Huile de Soin Capillaire No. 7 Bonding Oil",
