@@ -1,5 +1,65 @@
 [
   {
+    "id": "auto_p_1779447362723_1856",
+    "asin": "B00AE6WNY8",
+    "name": "Huile Prodigieuse Multi-Fonctions",
+    "slug": "huile-prodigieuse-multi-fonctions-1856",
+    "description": "Une huile seche multi-usage pour nourrir la peau et les cheveux tout en laissant un fini satine facile a porter au quotidien.",
+    "benefits": "### Points forts\n- **Besoin cible**: huile seche.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du corps.\n- **Repere clair**: NUXE reste une reference connue sur ce besoin.",
+    "price": 26.9,
+    "category": "Soin du Corps",
+    "brand": "NUXE",
+    "image": "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.8,
+    "reviews": 612,
+    "features": [
+      "huile seche",
+      "corps",
+      "cheveux",
+      "NUXE",
+      "Routine ciblee"
+    ],
+    "seoTags": [
+      "huile seche",
+      "corps",
+      "cheveux",
+      "eclat",
+      "nuxe",
+      "beaute",
+      "routine"
+    ]
+  },
+  {
+    "id": "auto_p_1779447354065_3569",
+    "asin": "B00IMJ0HDU",
+    "name": "Gel Moussant Purifiant Peaux Grasses Effaclar",
+    "slug": "gel-moussant-purifiant-peaux-grasses-effaclar-3569",
+    "description": "Un nettoyant visage purifiant pour aider a limiter l'exces de sebum et nettoyer la peau grasse sans l'agresser.",
+    "benefits": "### Points forts\n- **Besoin cible**: nettoyant visage.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: La Roche-Posay reste une reference connue sur ce besoin.",
+    "price": 15.9,
+    "category": "Soin du Visage",
+    "brand": "La Roche-Posay",
+    "image": "https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1974&auto=format&fit=crop",
+    "rating": 4.6,
+    "reviews": 738,
+    "features": [
+      "nettoyant visage",
+      "effaclar",
+      "peau grasse",
+      "La Roche-Posay",
+      "Routine ciblee"
+    ],
+    "seoTags": [
+      "nettoyant visage",
+      "effaclar",
+      "peau grasse",
+      "acne",
+      "la roche-posay",
+      "beaute",
+      "routine"
+    ]
+  },
+  {
     "id": "auto_p_1779363091165_2784",
     "asin": "B0822ZTNJC",
     "name": "Huile de Soin Capillaire No. 7 Bonding Oil",
