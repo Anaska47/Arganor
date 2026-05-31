@@ -1,16 +1,16 @@
 {
   "status": "validated",
-  "lastRunAt": "2026-05-22T10:55:54.062Z",
-  "lastSuccessAt": "2026-05-22T10:56:14.719Z",
+  "lastRunAt": "2026-05-31T10:20:18.206Z",
+  "lastSuccessAt": "2026-05-31T10:20:38.254Z",
   "generatedProducts": 2,
   "generatedPosts": 2,
   "generatedPins": 10,
-  "feedPins": 146,
-  "message": "Autopilot validation passed with 146 RSS pins.",
+  "feedPins": 154,
+  "message": "Autopilot validation passed with 154 RSS pins.",
   "errors": [],
   "warnings": [],
-  "validationAt": "2026-05-22T10:56:14.904Z",
+  "validationAt": "2026-05-31T10:20:38.435Z",
   "supabaseRunId": null,
   "triggerSource": "github_actions",
-  "workflowRunUrl": "https://github.com/Anaska47/Arganor/actions/runs/26283708833"
+  "workflowRunUrl": "https://github.com/Anaska47/Arganor/actions/runs/26709939705"
 }
