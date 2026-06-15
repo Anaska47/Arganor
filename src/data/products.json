@@ -1,5 +1,65 @@
 [
   {
+    "id": "auto_p_1781533749222_6801",
+    "asin": "B00949CTQQ",
+    "name": "Lotion Exfoliante Perfectrice 2% BHA",
+    "slug": "lotion-exfoliante-perfectrice-2-bha-6801",
+    "description": "Un exfoliant liquide au BHA qui aide a desobstruer les pores, lisser le grain de peau et limiter l'apparition des imperfections.",
+    "benefits": "### Points forts\n- **Besoin cible**: exfoliant bha.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: Paula's Choice reste une reference connue sur ce besoin.",
+    "price": 39,
+    "category": "Soin du Visage",
+    "brand": "Paula's Choice",
+    "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
+    "rating": 4.6,
+    "reviews": 400,
+    "features": [
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "Paula's Choice",
+      "Routine ciblee"
+    ],
+    "seoTags": [
+      "exfoliant bha",
+      "pores",
+      "points noirs",
+      "acide salicylique",
+      "paula's choice",
+      "beaute",
+      "routine"
+    ]
+  },
+  {
+    "id": "auto_p_1781533740391_6088",
+    "asin": "B00DEXA0LY",
+    "name": "Serum Expert Reparateur de Nuit",
+    "slug": "serum-expert-reparateur-de-nuit-6088",
+    "description": "Un serum de nuit pense pour soutenir la regeneration cutanee, lisser la peau au reveil et renforcer le confort d'une routine du soir.",
+    "benefits": "### Points forts\n- **Besoin cible**: serum nuit.\n- **Usage simple**: une formule pensee pour integrer facilement une routine soin du visage.\n- **Repere clair**: Soin Expert Nuit reste une reference connue sur ce besoin.",
+    "price": 28.9,
+    "category": "Soin du Visage",
+    "brand": "Soin Expert Nuit",
+    "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
+    "rating": 5,
+    "reviews": 491,
+    "features": [
+      "serum nuit",
+      "reparation",
+      "hydratation",
+      "Soin Expert Nuit",
+      "Routine ciblee"
+    ],
+    "seoTags": [
+      "serum nuit",
+      "reparation",
+      "hydratation",
+      "anti-rides",
+      "soin expert nuit",
+      "beaute",
+      "routine"
+    ]
+  },
+  {
     "id": "auto_p_1780222829212_7272",
     "asin": "B00949CTQQ",
     "name": "Lotion Exfoliante Perfectrice 2% BHA",
